@@ -2,6 +2,7 @@ import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 function AboutPage() {
   // Team member images
@@ -25,136 +26,182 @@ function AboutPage() {
   ];
 
   // Portfolio work images
-  const portfolioItems = [
+  const portfolioImages = [
     {
       id: 1,
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuA1LqYVGn7vPK3xcmvn4PVbexQYNpzrGqIAEYuhRBiOzGn_5n1z6iJ64s9xP4Yqf9-Az7P2WA4Xxxh-uxOtwKku5lpRgkvlKJRm0QKGCqVlORkxtKnAC1HOurFbr27rSi5mDFWxYPo-1j1JO3-MydD8oXRscArSBk23krpaT27ZKitiqRFPT_ZBMkDCialczWPtzbhZtodTwAQQcAn7Y-5kMUN15e4iI6IWncRZE5utaa64skIQkbHFbhN2wItno2keWIHONpxRCms"
+      category: "Sticker Design",
+      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDadMGajpKCnV_QpEkz1a9nNtVp5W8zJeNX-ZMsDwBeNR_jNA6IU8QVvIWjEdHSAv4DIOFYNFDPD4B4Ka8v90kZkMG8GODLdat-HZlh_VD3GL4VU8xyyyTlL3ZzKffsA6LAxk_opiO2e9pqUJYgROE5aMiI_j-Li3-XHUgy1DRWdzu4mnnJQvC9uEJ__sQ8bLpmU4liB6-BjOd-Oz6gmMJFtp0Ep_zJA2Cgp3R31itDkpx5bG0zwsRRk9cWCAORW3_nXBUHj6UziuE",
     },
     {
       id: 2,
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuAPerSUmwwRHWlsLuDyx4FX75jqtvd2QmLn8Usddz6tOV0woULf9tmcbtpoj2kYbsPeZlLGqu-TiFhgdrXgeLXhnbat1wslsikxARxhQBe9wFmwZO-JWEpLcjEcp0Nx1aCEWcHh88j0QiK_G858lpgMCnUYTCYV__QDRkwXBdY4X3t9NwsT2FNB54-LQolI7WMy42QC3OZwqz7TnyFs0J8Hrcs-tAeQ4ZHA75s3-ihywkIfzPMw3SudVc-wtHg-rYZYqFBv0efwcD4"
+      category: "Polaroid Collection",
+      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBTtMU__8wBDSfqal1Qh9ysOep3H0PU_7jcxhln-fI52-AhNsEGrLcmPf7S7iHnE3lD3sHyR-532ZMKJsNZNcwboGju7KJ2GFHaun69shFy8mIgTdCAiKCiijzMGPJtAlY9_E26mmsbWy4I8Iv0lcr5grqnW_i4rJEpTkS8l9Nugf7lmy8WGB6vCiuMYjg_h3hgH92wV6z0Yvuiwr7gaJz9WkrMaILecQWfuNY37srecUzydb0UA4EGYit9SD3yl6mWj5RpfCIo_aA",
     },
     {
       id: 3,
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCeW0C8UUplRdgns4C6lqxO2ALmm5SRwilOiGQjOVBZqsJSnfzBbRvxcMIU5zVS0DnD8rUysH27In9f1O0QoXLpQeW9qc_B0mBIpCLmej0NjgD-M8r77ikZzenyU2G1HUIrW5fMo7ztPq8TAHjAhIYiItBP3MgscibZnsx9qY5v1yRjondijFr71CKebb-fVqQOhB9EEPKdkyv5cPl0qFARGUeKlzfKY6HHjiXSvU8f1mJhv6_stuBsckDf3pCAl0jPzxXTJ1hZgNU"
+      category: "Custom Stickers",
+      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuB3THooUxHsEwRAK110bdi9BefZJ3AtXgyKBUNNvpZeOrVZyOmVCwdgjEvZnWl4XWrIfrGJ888TnrgEg8fT1Rs6wUOxhexhq_8Yk5kzaAH2sz7dSBqHWpJxWISDvCsM8X7t5_xZdywkPTOiT-6h9V8b67aZY5trUO0yI4udxwxSDHQiCKheW92ZRLKID-5NAdzAipheNHSXgIiR2ZvT7YtEibTbb3f9I4i4X93uzyTKmkG3wwR1Qos6QJ_4Ybz1kYkWYzptoLcGo9o",
+    },
+    {
+      id: 4,
+      category: "Digital Illustrations",
+      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBuP0qoVBFRFrMkSoUYd9qXK0aYFDNvhYkItQ0X2P7BM9YoUBl2uucgyQbTreKj5hgBpQjEAEk6GqFfn9l0QhuNSKPBU_BKEHMOGKu3DQmfgfZIWZZ-HC3zayXKn5Mo2AEnxdaVkr_M6zVtRCFcueHttOsnsxVBSzrtpBLwlYbeSGFn2IAiIATAqxedmIbp9EUTteYUVFFAyogtZ0n1ztbyJzzNC0VUUT9Y5_6uOhJZc8GT3kP3m9wOhPFbMy1ksN8vJASFVZaI3BE",
     }
   ];
 
   return (
     <div className="relative flex min-h-screen flex-col bg-white overflow-x-hidden" style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}>
-      <Header />
+      <Header theme="light" />
       
       <main className="flex-1">
-        <div className="px-4 md:px-40 flex flex-1 justify-center py-5">
-          <div className="flex flex-col max-w-[960px] flex-1">
-            {/* About Us Header */}
-            <div className="flex flex-wrap justify-between gap-3 p-4">
-              <p className="text-[#181111] tracking-light text-[32px] font-bold leading-tight min-w-72">About Us</p>
-            </div>
+        <div className="px-4 md:px-6 py-10 max-w-6xl mx-auto">
+          <div className="mb-12">
+            <motion.h1 
+              className="text-[#181111] text-4xl md:text-5xl font-bold leading-tight mb-6"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              About Stix N Vibes
+            </motion.h1>
             
-            {/* Introduction */}
-            <p className="text-[#181111] text-base font-normal leading-normal pb-3 pt-1 px-4">
-              At Stix N Vibes, we're more than just a sticker and polaroid agency; we're a hub for creativity and self-expression. Our journey began with a simple idea: to
-              transform everyday objects into canvases of personal stories and memories. We believe that stickers and polaroids are not just decorative items but powerful tools for
-              communication and connection.
-            </p>
-            
-            {/* Our Story */}
-            <h2 className="text-[#181111] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Our Story</h2>
-            <p className="text-[#181111] text-base font-normal leading-normal pb-3 pt-1 px-4">
-              Founded in 2018, StixNVibes started as a passion project that quickly turned into something more. What began as creating custom stickers for friends and family
-              evolved into a small business focused on helping people express their individuality through vibrant stickers and digital art.
-              
-              Each design begins as a sketch before being digitally refined, drawing inspiration from pop culture, nature, urban landscapes, and the vibrant energy of everyday life.
-              The goal is to create pieces that resonate with people and help them express their unique personality.
-            </p>
-            
-            {/* Our Values */}
-            <h2 className="text-[#181111] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Our Values</h2>
-            <p className="text-[#181111] text-base font-normal leading-normal pb-3 pt-1 px-4">
-              StixNVibes is committed to:
-              <br /><br />
-              • <strong>Sustainability</strong> - Using eco-friendly materials whenever possible<br />
-              • <strong>Creativity</strong> - Pushing boundaries with unique and original designs<br />
-              • <strong>Quality</strong> - Creating products that are built to last using premium vinyl and eco-friendly materials<br />
-              • <strong>Community</strong> - Supporting and collaborating with other artists
-            </p>
-            
-            {/* Meet the Team */}
-            <h2 className="text-[#181111] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Meet the Team</h2>
-            <p className="text-[#181111] text-base font-normal leading-normal pb-3 pt-1 px-4">
-              Our team is a diverse group of artists, designers, and photography enthusiasts, each bringing their unique talents and perspectives to Stix N Vibes. From crafting
-              intricate sticker designs to curating stunning polaroid collections, we're united by our passion for creativity and our dedication to delivering exceptional products
-              and experiences.
-            </p>
-            
-            {/* Team Grid */}
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-              {teamMembers.map(member => (
-                <div key={member.id} className="flex flex-col gap-3">
-                  <div
-                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                    style={{ backgroundImage: `url("${member.imageUrl}")` }}
-                  ></div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Our Work */}
-            <h2 className="text-[#181111] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Our Work</h2>
-            <p className="text-[#181111] text-base font-normal leading-normal pb-3 pt-1 px-4">
-              Explore a selection of our favorite projects, showcasing the versatility and creativity of our stickers and polaroids. From personalized gifts to large-scale
-              installations, our work reflects our commitment to quality and innovation.
-            </p>
-            
-            {/* Portfolio Grid */}
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-              {portfolioItems.map(item => (
-                <div key={item.id} className="flex flex-col gap-3">
-                  <div
-                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                    style={{ backgroundImage: `url("${item.imageUrl}")` }}
-                  ></div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Call to Action */}
-            <div className="flex px-4 py-3 justify-center">
-              <Link
-                to="/projects"
-                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#e92932] text-white text-sm font-bold leading-normal tracking-[0.015em]"
-              >
-                <span className="truncate">View Our Work</span>
-              </Link>
-            </div>
-            
-            {/* Materials & Quality */}
-            <h2 className="text-[#181111] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Materials & Quality</h2>
-            <p className="text-[#181111] text-base font-normal leading-normal pb-3 pt-1 px-4">
-              We believe in creating products that last, which is why we use only premium vinyl and eco-friendly materials. Each sticker is water-resistant, UV-protected to prevent fading, and made to withstand the elements. Quality control is a priority, and we personally inspect every item before it ships.
-            </p>
-            
-            {/* Let's Connect */}
-            <h2 className="text-[#181111] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Let's Connect</h2>
-            <p className="text-[#181111] text-base font-normal leading-normal pb-3 pt-1 px-4">
-              We love collaborating with other creatives and businesses. Whether you're looking for custom designs or wholesale options, we're always open to new opportunities. Thanks for stopping by and taking the time to learn a bit about StixNVibes. We hope our designs bring as much joy to your spaces as they do to ours!
-            </p>
-            
-            {/* Contact Button */}
-            <div className="flex px-4 py-6 justify-center">
-              <Link
-                to="/contact"
-                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#e92932] text-white text-sm font-bold leading-normal tracking-[0.015em]"
-              >
-                <span className="truncate">Get In Touch</span>
-              </Link>
-            </div>
+            <motion.p 
+              className="text-[#886364] text-lg max-w-3xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              We are a creative studio specializing in custom stickers, polaroids, and digital designs that help you express your unique style and personality.
+            </motion.p>
           </div>
+          
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <div>
+              <h2 className="text-[#181111] text-2xl font-bold mb-4">Our Story</h2>
+              <p className="text-[#886364] mb-4">
+                Stix N Vibes was founded in 2021 with a simple mission: to create unique, high-quality stickers and designs that help people personalize their spaces and express themselves.
+              </p>
+              <p className="text-[#886364] mb-4">
+                What started as a small hobby during the pandemic quickly grew into a passionate business when we realized how much joy our creations brought to others.
+              </p>
+              <p className="text-[#886364]">
+                Today, we've expanded our offerings to include custom polaroid prints, digital illustrations, and more, while maintaining our commitment to quality and creativity.
+              </p>
+            </div>
+            <div className="rounded-xl overflow-hidden">
+              <img 
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6ffa8NDdt8UWJeEA_uVqqHq1DzVTVs9S5gOlF5BTa1_KxS9ZBachmHeb7fdavBQcYLPPE1hfMBZ9JHS0d_Gey69p4Zxa2lXixsP-LxtUynLxe1GTVkUxvoGbP0hgSb-1XB91OVkw6FYR_c6ICyMWeN2lUUDQpunIV6avi2FsC9EUspSaSpNcXbTYoP1GbcZVmL3DvnfQ2oPehh3DoPVdKXLHJ1X6JHjUeQ1WKHG03onu8HgzyxBbue7fNEIZFNKfrLcwlLLqqhQI"
+                alt="Our Studio" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="mb-16"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            <h2 className="text-[#181111] text-2xl font-bold mb-6">Our Team</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {teamMembers.map((member) => (
+                <motion.div
+                  key={member.id}
+                  className="bg-[#f4f0f0] rounded-xl overflow-hidden"
+                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                >
+                  <div className="aspect-square">
+                    <img 
+                      src={member.imageUrl} 
+                      alt="Team Member" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="mb-16"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            <h2 className="text-[#181111] text-2xl font-bold mb-6">Our Values</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-[#f4f0f0] p-6 rounded-xl">
+                <h3 className="text-[#181111] text-lg font-bold mb-2">Creativity</h3>
+                <p className="text-[#886364]">
+                  We believe in pushing the boundaries of design and expression, always seeking new ways to create unique and meaningful products.
+                </p>
+              </div>
+              <div className="bg-[#f4f0f0] p-6 rounded-xl">
+                <h3 className="text-[#181111] text-lg font-bold mb-2">Quality</h3>
+                <p className="text-[#886364]">
+                  We're committed to using premium materials and processes to ensure our stickers and prints last longer and look better.
+                </p>
+              </div>
+              <div className="bg-[#f4f0f0] p-6 rounded-xl">
+                <h3 className="text-[#181111] text-lg font-bold mb-2">Community</h3>
+                <p className="text-[#886364]">
+                  We value the connections we build with our customers and the community of creative individuals who share our passion.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
+          >
+            <h2 className="text-[#181111] text-2xl font-bold mb-6">Featured Work</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {portfolioImages.map((item) => (
+                <motion.div
+                  key={item.id}
+                  className="bg-[#f4f0f0] rounded-xl overflow-hidden"
+                  whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                >
+                  <div className="aspect-video">
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.category} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <p className="text-[#181111] font-medium">{item.category}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="flex justify-center mt-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
+            <Link
+              to="/contact"
+              className="bg-[#e92932] hover:bg-opacity-90 text-white px-6 py-3 rounded-full font-medium"
+            >
+              Get in Touch
+            </Link>
+          </motion.div>
         </div>
       </main>
       
-      <Footer />
+      <Footer theme="light" />
     </div>
   )
 }

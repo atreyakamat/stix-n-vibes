@@ -36,99 +36,97 @@ function ProjectsPage() {
       <Header />
       
       <main className="flex-1">
-        <div className="px-4 md:px-40 flex flex-1 justify-center py-5">
-          <div className="flex flex-col max-w-[960px] flex-1">
-            <motion.div 
-              className="flex flex-wrap justify-between gap-3 p-4"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="flex min-w-72 flex-col gap-3">
-                <motion.h1 
-                  className="text-[#181111] tracking-light text-[32px] font-bold leading-tight"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                >
-                  Our Projects
-                </motion.h1>
-                <motion.p 
-                  className="text-[#886364] text-sm font-normal leading-normal"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                >
-                  Explore our collection of creative stickers and polaroids, designed to add a personal touch to your space.
-                </motion.p>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="flex gap-3 p-3 flex-wrap pr-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              {categories.map((category, index) => (
-                <motion.div
-                  key={category}
-                  className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#f4f0f0] pl-4 pr-4"
-                  whileHover={{ scale: 1.05, backgroundColor: '#e5e1e1' }}
-                  whileTap={{ scale: 0.98 }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
-                >
-                  <p className="text-[#181111] text-sm font-medium leading-normal">{category}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-              {projects.map((project, index) => (
-                <motion.div 
-                  key={project.id} 
-                  className="flex flex-col gap-3 pb-3 bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -5 }}
-                >
-                  <Link to={`/projects/${project.id}`}>
-                    <div
-                      className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl"
-                      style={{ backgroundImage: `url("${project.imageUrl}")` }}
-                    >
-                      <div className="p-3">
-                        <span className="inline-block bg-[#e92932] text-white text-xs px-3 py-1 rounded-full">
-                          {project.tag}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-3">
-                      <h2 className="text-[#181111] text-base font-medium leading-normal">{project.title}</h2>
-                      <p className="text-[#886364] text-sm font-normal leading-normal">{project.description}</p>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-            
-            <motion.div 
-              className="flex px-4 py-6 justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9, duration: 0.5 }}
-            >
-              <Link
-                to="/contact"
-                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-[#e92932] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+        <div className="px-4 md:px-6 py-5 max-w-6xl mx-auto">
+          <motion.div 
+            className="flex flex-wrap justify-between gap-3 p-4"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex min-w-72 flex-col gap-3">
+              <motion.h1 
+                className="text-[#181111] tracking-light text-[32px] font-bold leading-tight"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
               >
-                <span className="truncate">Request Custom Order</span>
-              </Link>
-            </motion.div>
+                Our Products
+              </motion.h1>
+              <motion.p 
+                className="text-[#886364] text-sm font-normal leading-normal"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
+                Explore our collection of creative stickers and polaroids, designed to add a personal touch to your space.
+              </motion.p>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="flex gap-3 p-3 flex-wrap pr-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            {categories.map((category, index) => (
+              <motion.div
+                key={category}
+                className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#f4f0f0] pl-4 pr-4"
+                whileHover={{ scale: 1.05, backgroundColor: '#e5e1e1' }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
+              >
+                <p className="text-[#181111] text-sm font-medium leading-normal">{category}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+            {projects.map((project, index) => (
+              <motion.div 
+                key={project.id} 
+                className="flex flex-col gap-3 pb-3 bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
+                whileHover={{ y: -5 }}
+              >
+                <Link to={`/projects/${project.id}`}>
+                  <div
+                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl"
+                    style={{ backgroundImage: `url("${project.imageUrl}")` }}
+                  >
+                    <div className="p-3">
+                      <span className="inline-block bg-[#e92932] text-white text-xs px-3 py-1 rounded-full">
+                        {project.tag}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h2 className="text-[#181111] text-base font-medium leading-normal">{project.title}</h2>
+                    <p className="text-[#886364] text-sm font-normal leading-normal">{project.description}</p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
+          
+          <motion.div 
+            className="flex px-4 py-6 justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
+          >
+            <Link
+              to="/contact"
+              className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-[#e92932] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+            >
+              <span className="truncate">Request Custom Order</span>
+            </Link>
+          </motion.div>
         </div>
       </main>
       

@@ -64,8 +64,8 @@ function ContactPage() {
       <Header />
       
       <main className="flex-1">
-        <div className="px-4 md:px-40 flex flex-1 justify-center py-5">
-          <div className="flex flex-col max-w-[960px] flex-1">
+        <div className="px-4 md:px-6 flex flex-1 justify-center py-5">
+          <div className="flex flex-col max-w-[960px] w-full mx-auto">
             {/* Contact Us Header */}
             <motion.div 
               className="flex flex-wrap justify-between gap-3 p-4"
