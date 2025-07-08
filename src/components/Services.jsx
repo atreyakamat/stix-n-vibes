@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 
 function Services() {
   const services = [
@@ -7,66 +8,94 @@ function Services() {
       id: 'custom-stickers',
       title: 'Custom Stickers',
       description: 'Personalized stickers designed to match your unique style and vision.',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-        </svg>
-      )
+      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDadMGajpKCnV_QpEkz1a9nNtVp5W8zJeNX-ZMsDwBeNR_jNA6IU8QVvIWjEdHSAv4DIOFYNFDPD4B4Ka8v90kZkMG8GODLdat-HZlh_VD3GL4VU8xyyyTlL3ZzKffsA6LAxk_opiO2e9pqUJYgROE5aMiI_j-Li3-XHUgy1DRWdzu4mnnJQvC9uEJ__sQ8bLpmU4liB6-BjOd-Oz6gmMJFtp0Ep_zJA2Cgp3R31itDkpx5bG0zwsRRk9cWCAORW3_nXBUHj6UziuE',
+      tag: 'Wall Stickers'
     },
     {
       id: 'sticker-packs',
-      title: 'Sticker Packs',
+      title: 'Laptop Stickers - Tech Icons',
       description: 'Themed collections of stickers perfect for decorating laptops, notebooks, and more.',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg>
-      )
+      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBTtMU__8wBDSfqal1Qh9ysOep3H0PU_7jcxhln-fI52-AhNsEGrLcmPf7S7iHnE3lD3sHyR-532ZMKJsNZNcwboGju7KJ2GFHaun69shFy8mIgTdCAiKCiijzMGPJtAlY9_E26mmsbWy4I8Iv0lcr5grqnW_i4rJEpTkS8l9Nugf7lmy8WGB6vCiuMYjg_h3hgH92wV6z0Yvuiwr7gaJz9WkrMaILecQWfuNY37srecUzydb0UA4EGYit9SD3yl6mWj5RpfCIo_aA',
+      tag: 'Laptop Stickers'
     },
     {
       id: 'digital-art',
-      title: 'Digital Art',
+      title: 'Custom Polaroid Prints',
       description: 'One-of-a-kind digital illustrations available as downloads or prints.',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-      )
+      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB3THooUxHsEwRAK110bdi9BefZJ3AtXgyKBUNNvpZeOrVZyOmVCwdgjEvZnWl4XWrIfrGJ888TnrgEg8fT1Rs6wUOxhexhq_8Yk5kzaAH2sz7dSBqHWpJxWISDvCsM8X7t5_xZdywkPTOiT-6h9V8b67aZY5trUO0yI4udxwxSDHQiCKheW92ZRLKID-5NAdzAipheNHSXgIiR2ZvT7YtEibTbb3f9I4i4X93uzyTKmkG3wwR1Qos6QJ_4Ybz1kYkWYzptoLcGo9o',
+      tag: 'Polaroids'
     }
-  ]
+  ];
+
+  const categories = ['Wall Stickers', 'Laptop Stickers', 'Polaroids'];
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-800">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">What I Offer</h2>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            From personalized stickers to digital art, I create designs that express your individuality.
-          </p>
-          <div className="w-20 h-1 bg-primary-500 mx-auto mt-4"></div>
+    <section className="py-5">
+      <div className="flex flex-col max-w-[960px] flex-1">
+        {/* Header */}
+        <div className="flex flex-wrap justify-between gap-3 p-4">
+          <div className="flex min-w-72 flex-col gap-3">
+            <p className="text-[#181111] tracking-light text-[32px] font-bold leading-tight">Products</p>
+            <p className="text-[#886364] text-sm font-normal leading-normal">
+              Explore our curated collection of creative stickers and polaroids, designed to add a personal touch to your space and memories.
+            </p>
+          </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-          {services.map((service, index) => (
+        {/* Category Tags */}
+        <div className="flex gap-3 p-3 flex-wrap pr-4">
+          {categories.map((category) => (
             <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-gray-50 dark:bg-gray-700 p-8 rounded-lg text-center"
+              key={category}
+              className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#f4f0f0] pl-4 pr-4"
+              whileHover={{ scale: 1.05, backgroundColor: '#e5e1e1' }}
+              whileTap={{ scale: 0.98 }}
             >
-              <div className="flex justify-center mb-4">
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-              <p className="text-gray-600 dark:text-gray-300">{service.description}</p>
+              <p className="text-[#181111] text-sm font-medium leading-normal">{category}</p>
             </motion.div>
           ))}
         </div>
+        
+        {/* Products Grid */}
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+          {services.map((service) => (
+            <motion.div 
+              key={service.id} 
+              className="flex flex-col gap-3 pb-3"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5 }}
+            >
+              <div
+                className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                style={{ backgroundImage: `url("${service.imageUrl}")` }}
+              ></div>
+              <div>
+                <p className="text-[#181111] text-base font-medium leading-normal">{service.title}</p>
+                <p className="text-[#886364] text-sm font-normal leading-normal">{service.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        
+        {/* CTA Button */}
+        <div className="flex px-4 py-3 justify-center">
+          <motion.a
+            href="https://wa.me/1234567890" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#e92932] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <span className="truncate">Order via WhatsApp</span>
+          </motion.a>
+        </div>
       </div>
     </section>
-  )
+  );
 }
 
 export default Services
