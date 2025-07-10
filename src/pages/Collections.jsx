@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { motion } from 'framer-motion'
 
-function PortfolioPage() {
+function Collections() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedFilters, setSelectedFilters] = useState([])
 
@@ -123,7 +123,7 @@ function PortfolioPage() {
                   onClick={() => toggleFilter(filter)}
                   className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full pl-4 pr-4 transition-colors ${
                     selectedFilters.includes(filter)
-                      ? 'bg-[#f3e7e8] text-[#1b0e0e]'
+                      ? 'bg-[#e92932] text-white'
                       : 'bg-[#f3e7e8] text-[#1b0e0e] hover:bg-[#e7d0d1]'
                   }`}
                 >
@@ -233,4 +233,4 @@ function PortfolioPage() {
   )
 }
 
-export default PortfolioPage
+export default Collections

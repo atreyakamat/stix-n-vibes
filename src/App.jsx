@@ -3,8 +3,8 @@ import './App.css'
 
 // Pages
 import HomePage from './pages/HomePage'
-import ProjectsPage from './pages/ProjectsPage'
-import PortfolioPage from './pages/PortfolioPage'
+import Shop from './pages/Shop'
+import Collections from './pages/Collections'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
@@ -14,8 +14,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/portfolio" element={<PortfolioPage />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/collections" element={<Collections />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<NotFound />} />
