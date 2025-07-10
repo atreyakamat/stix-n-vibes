@@ -8,21 +8,21 @@ function Services() {
       id: 'custom-stickers',
       title: 'Custom Stickers',
       description: 'Personalized stickers designed to match your unique style and vision.',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDadMGajpKCnV_QpEkz1a9nNtVp5W8zJeNX-ZMsDwBeNR_jNA6IU8QVvIWjEdHSAv4DIOFYNFDPD4B4Ka8v90kZkMG8GODLdat-HZlh_VD3GL4VU8xyyyTlL3ZzKffsA6LAxk_opiO2e9pqUJYgROE5aMiI_j-Li3-XHUgy1DRWdzu4mnnJQvC9uEJ__sQ8bLpmU4liB6-BjOd-Oz6gmMJFtp0Ep_zJA2Cgp3R31itDkpx5bG0zwsRRk9cWCAORW3_nXBUHj6UziuE',
+      imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1974&auto=format&fit=crop',
       tag: 'Wall Stickers'
     },
     {
       id: 'sticker-packs',
       title: 'Laptop Stickers - Tech Icons',
       description: 'Themed collections of stickers perfect for decorating laptops, notebooks, and more.',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBTtMU__8wBDSfqal1Qh9ysOep3H0PU_7jcxhln-fI52-AhNsEGrLcmPf7S7iHnE3lD3sHyR-532ZMKJsNZNcwboGju7KJ2GFHaun69shFy8mIgTdCAiKCiijzMGPJtAlY9_E26mmsbWy4I8Iv0lcr5grqnW_i4rJEpTkS8l9Nugf7lmy8WGB6vCiuMYjg_h3hgH92wV6z0Yvuiwr7gaJz9WkrMaILecQWfuNY37srecUzydb0UA4EGYit9SD3yl6mWj5RpfCIo_aA',
+      imageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2670&auto=format&fit=crop',
       tag: 'Laptop Stickers'
     },
     {
       id: 'digital-art',
       title: 'Custom Polaroid Prints',
       description: 'One-of-a-kind digital illustrations available as downloads or prints.',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB3THooUxHsEwRAK110bdi9BefZJ3AtXgyKBUNNvpZeOrVZyOmVCwdgjEvZnWl4XWrIfrGJ888TnrgEg8fT1Rs6wUOxhexhq_8Yk5kzaAH2sz7dSBqHWpJxWISDvCsM8X7t5_xZdywkPTOiT-6h9V8b67aZY5trUO0yI4udxwxSDHQiCKheW92ZRLKID-5NAdzAipheNHSXgIiR2ZvT7YtEibTbb3f9I4i4X93uzyTKmkG3wwR1Qos6QJ_4Ybz1kYkWYzptoLcGo9o',
+      imageUrl: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=2669&auto=format&fit=crop',
       tag: 'Polaroids'
     }
   ];
@@ -35,7 +35,7 @@ function Services() {
         {/* Header */}
         <div className="flex flex-wrap justify-between gap-3 p-4">
           <div className="flex min-w-72 flex-col gap-3">
-            <p className="text-[#181111] tracking-light text-[32px] font-bold leading-tight">Products</p>
+            <p className="text-[#181111] tracking-light text-[32px] font-bold leading-tight">Our Services</p>
             <p className="text-[#886364] text-sm font-normal leading-normal">
               Explore our curated collection of creative stickers and polaroids, designed to add a personal touch to your space and memories.
             </p>
@@ -56,7 +56,7 @@ function Services() {
           ))}
         </div>
         
-        {/* Products Grid */}
+        {/* Services Grid */}
         <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
           {services.map((service) => (
             <motion.div 
@@ -82,16 +82,15 @@ function Services() {
         
         {/* CTA Button */}
         <div className="flex px-4 py-3 justify-center">
-          <motion.a
-            href="https://wa.me/1234567890" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#e92932] text-white text-sm font-bold leading-normal tracking-[0.015em]"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="truncate">Order via WhatsApp</span>
-          </motion.a>
+          <Link to="/products">
+            <motion.button
+              className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#e92932] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#d91922] transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="truncate">View All Products</span>
+            </motion.button>
+          </Link>
         </div>
       </div>
     </section>

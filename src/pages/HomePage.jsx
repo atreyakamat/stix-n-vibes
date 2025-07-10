@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import StickerFloatScene from '../components/StickerFloatScene'
 
 // Star rating component
 const StarRating = ({ rating, size = "20px" }) => {
@@ -85,14 +86,6 @@ const FacebookIcon = ({ size = "24px" }) => (
   </div>
 )
 
-// Shopping Cart icon
-const CartIcon = ({ size = "24px" }) => (
-  <div className="text-inherit" data-icon="ShoppingCart" data-size={size} data-weight="regular">
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" viewBox="0 0 256 256">
-      <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16h18L59.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,152,204a28,28,0,1,0,28-28H83.17a8,8,0,0,1-7.87-6.57L72.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,222.14,58.87ZM96,204a12,12,0,1,1-12-12A12,12,0,0,1,96,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,192,204Zm4-74.57A8,8,0,0,1,188.1,136H69.22L57.59,72H206.41Z"></path>
-    </svg>
-  </div>
-)
 
 // Heart/Favorite icon
 const HeartIcon = ({ size = "24px" }) => (
@@ -122,40 +115,13 @@ const Button = ({ children, color = "blue", className = "", ...props }) => {
   )
 }
 
-// Product card component
-const ProductCard = ({ image, name, price, rating }) => (
-  <div className="flex flex-col group cursor-pointer">
-    <div className="relative mb-3 overflow-hidden rounded-lg">
-      <img src={image} alt={name} className="aspect-square w-full object-cover transition-transform duration-300 hover:scale-105" />
-      <div className="absolute right-2 top-2 flex flex-col gap-2">
-        <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-[#111618] shadow-sm hover:text-[#e92932]">
-          <HeartIcon size="18px" />
-        </button>
-        <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-[#111618] shadow-sm hover:bg-[#111618] hover:text-white">
-          <CartIcon size="18px" />
-        </button>
-      </div>
-    </div>
-    <div className="flex flex-col p-2">
-      <div className="flex items-center gap-1">
-        <StarRating rating={rating} size="16px" />
-        <span className="text-[#617f89] text-sm">{rating.toFixed(1)}</span>
-      </div>
-      <h3 className="text-[#111618] text-sm font-medium leading-tight">{name}</h3>
-      <p className="text-[#111618] text-sm font-bold leading-tight">${price.toFixed(2)}</p>
-    </div>
-  </div>
-)
-
 // Main HomePage component
 function HomePage() {
-  // Sample products data
-  const featuredProducts = [
-    { id: 1, name: "3D Holographic Space Sticker", price: 4.99, rating: 4.8, image: "/assets/stickers/Adobe Express - file - 2025-02-03T053558.505.png" },
-    { id: 2, name: "Rainbow Panda Sticker", price: 3.49, rating: 4.7, image: "/assets/stickers/Adobe Express - file - 2025-02-03T053620.350.png" },
-    { id: 3, name: "Neon Butterfly Decal", price: 5.99, rating: 4.9, image: "/assets/stickers/Adobe Express - file - 2025-02-03T053656.087.png" },
-    { id: 4, name: "Vintage Camera Sticker", price: 4.49, rating: 4.6, image: "/assets/stickers/Adobe Express - file - 2025-02-03T053756.124.png" },
-  ];
+  const [dispensedSticker, setDispensedSticker] = useState(null);
+  
+  const handleStickerDispensed = (sticker) => {
+    setDispensedSticker(sticker);
+  };
   
   // Testimonials data
   const testimonials = [
@@ -190,7 +156,7 @@ function HomePage() {
         
         {/* Main Content */}
         <main className="flex flex-col items-center mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Hero Section */}
+          {/* Hero Section with Floating Stickers */}
           <section className="w-full mx-auto py-16 md:py-24 flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 text-center md:text-left md:pr-8">
               <motion.h1
@@ -199,7 +165,7 @@ function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                Express Yourself with <span className="text-[#e92932]">Unique</span> Stickers
+                Discover Your <span className="text-[#e92932]">Perfect</span> Sticker
               </motion.h1>
               <motion.p
                 className="text-lg text-gray-600 mb-8"
@@ -207,7 +173,8 @@ function HomePage() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
-                Handcrafted stickers for creatives, journalers, and anyone who loves adding personality to their belongings.
+                Explore our collection of handcrafted stickers designed with love for creative souls. 
+                Each design brings a unique touch to your personal style.
               </motion.p>
               <motion.div
                 className="flex flex-wrap justify-center md:justify-start gap-4"
@@ -215,29 +182,21 @@ function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <Button color="red" className="h-12 px-8 text-base">Shop Collection</Button>
+                <Link to="/products">
+                  <Button color="red" className="h-12 px-8 text-base">View Products</Button>
+                </Link>
                 <Button color="white" className="h-12 px-8 text-base">Learn More</Button>
               </motion.div>
             </div>
             <motion.div 
-              className="md:w-1/2 mt-8 md:mt-0"
+              className="md:w-1/2 mt-8 md:mt-0 flex items-center justify-center"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
+              style={{ height: "600px" }}
             >
-              <div className="relative">
-                <img 
-                  src="/assets/stickers/Adobe Express - file - 2025-02-03T053900.986.png" 
-                  alt="Featured Sticker" 
-                  className="w-full h-auto rounded-lg shadow-lg"
-                />
-                <div className="absolute -bottom-4 -right-4 w-24 h-24 rotate-12">
-                  <img 
-                    src="/assets/stickers/Adobe Express - file - 2025-02-03T053620.350.png" 
-                    alt="Decorative Sticker" 
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+              <div className="w-full h-full relative rounded-2xl shadow-xl overflow-hidden">
+                <StickerFloatScene />
               </div>
             </motion.div>
           </section>
@@ -264,29 +223,14 @@ function HomePage() {
                   </div>
                   <div className="p-4 text-center">
                     <h3 className="text-lg font-bold text-gray-900">{category.name}</h3>
-                    <Link to="/projects" className="text-sm text-[#e92932] hover:underline">Shop Now</Link>
+                    <Link to="/portfolio" className="text-sm text-[#e92932] hover:underline">View Collection</Link>
                   </div>
                 </div>
               ))}
             </div>
           </section>
           
-          {/* Featured Products */}
-          <section className="w-full py-16 my-8">
-            <div className="max-w-5xl mx-auto">
-              <div className="flex justify-between items-center mb-8 px-4">
-                <h2 className="text-2xl font-bold">Featured Products</h2>
-                <Link to="/products" className="text-[#e92932] hover:underline font-medium">View All</Link>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-4">
-                {featuredProducts.map((product) => (
-                  <div key={product.id} className="bg-white hover:shadow-md transition-shadow duration-300 rounded-lg overflow-hidden">
-                    <ProductCard {...product} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+
           
           {/* Artist Collaboration */}
           <section className="w-full py-16 my-8 bg-gray-50">
