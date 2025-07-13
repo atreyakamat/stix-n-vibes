@@ -145,7 +145,7 @@ export const CartProvider = ({ children }) => {
   }
 
   const generateWhatsAppMessage = () => {
-    const phoneNumber = "919876543210" // Replace with your actual WhatsApp number
+    const phoneNumber = "917744020601" // Replace with your actual WhatsApp number
     const items = state.items.map(item => {
       const type = item.type === 'collection' ? 'Pack' : 'Sticker'
       return `• ${item.title} ${type} ×${item.quantity} – ₹${item.price * item.quantity}`

@@ -364,7 +364,7 @@ function Shop() {
             Have a custom design in mind? Send us your artwork and we'll create premium stickers just for you!
           </p>
           <a
-            href="https://wa.me/919876543210?text=Hi! I'd like to create custom stickers. Can you help me with the process?"
+            href="https://wa.me/917744020601?text=Hi! I'd like to create custom stickers. Can you help me with the process?"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-white text-[#e92932] px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105"
