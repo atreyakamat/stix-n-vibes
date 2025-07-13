@@ -1,0 +1,122 @@
+[
+  {
+    "id": "vibe-check",
+    "title": "Vibe Check",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053558.505.png",
+    "price": 49,
+    "type": "Vinyl",
+    "tags": ["Trending", "Laptop"],
+    "collection": null,
+    "description": "Perfect for checking the vibes everywhere you go"
+  },
+  {
+    "id": "ghost-mode",
+    "title": "Ghost Mode",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053620.350.png",
+    "price": 59,
+    "type": "Waterproof",
+    "tags": ["Popular", "Aesthetic"],
+    "collection": null,
+    "description": "When you need to disappear but make it aesthetic"
+  },
+  {
+    "id": "peach-plush",
+    "title": "Peach Plush",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053656.087.png",
+    "price": 45,
+    "type": "Normal",
+    "tags": ["Cute", "Pastel"],
+    "collection": null,
+    "description": "Soft peach vibes for your journal"
+  },
+  {
+    "id": "neon-dreams",
+    "title": "Neon Dreams",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053756.124.png",
+    "price": 65,
+    "type": "Vinyl",
+    "tags": ["Artist Drop", "Neon"],
+    "collection": null,
+    "description": "Electric dreams in sticker form"
+  },
+  {
+    "id": "minimal-heart",
+    "title": "Minimal Heart",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053815.779.png",
+    "price": 39,
+    "type": "Normal",
+    "tags": ["Minimal", "Love"],
+    "collection": null,
+    "description": "Simple love, big impact"
+  },
+  {
+    "id": "coffee-vibes",
+    "title": "Coffee Vibes",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053819.449.png",
+    "price": 55,
+    "type": "Waterproof",
+    "tags": ["Cafe", "Trending"],
+    "collection": "cafe-collab",
+    "description": "For the caffeine addicts"
+  },
+  {
+    "id": "sunset-mood",
+    "title": "Sunset Mood",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053830.710.png",
+    "price": 52,
+    "type": "Vinyl",
+    "tags": ["Aesthetic", "Sunset"],
+    "collection": "soft-rebellion",
+    "description": "Chase sunsets, not people"
+  },
+  {
+    "id": "retro-wave",
+    "title": "Retro Wave",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053832.899.png",
+    "price": 68,
+    "type": "Vinyl",
+    "tags": ["Retro", "Popular"],
+    "collection": null,
+    "description": "80s nostalgia reimagined"
+  },
+  {
+    "id": "polaroid-frame",
+    "title": "Polaroid Frame (Custom)",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053848.102.png",
+    "price": 75,
+    "type": "Polaroid",
+    "tags": ["Custom", "Memory"],
+    "collection": null,
+    "description": "Add your photo for instant nostalgia"
+  },
+  {
+    "id": "space-cat",
+    "title": "Space Cat",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053850.243.png",
+    "price": 58,
+    "type": "Vinyl",
+    "tags": ["Space", "Cat", "Fun"],
+    "collection": "cosmic-collection",
+    "description": "Meow from outer space"
+  },
+  {
+    "id": "tokyo-nights",
+    "title": "Tokyo Nights",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053900.986.png",
+    "price": 62,
+    "type": "Waterproof",
+    "tags": ["Japan", "Neon", "City"],
+    "collection": null,
+    "description": "Neon-lit streets of Tokyo"
+  },
+  {
+    "id": "vintage-camera",
+    "title": "Vintage Camera",
+    "image": "/assets/stickers/Adobe Express - file - 2025-02-03T053905.328.png",
+    "price": 48,
+    "type": "Normal",
+    "tags": ["Vintage", "Photography"],
+    "collection": "cafe-collab",
+    "description": "For the film photography lovers"
+  }
+]

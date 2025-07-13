@@ -1,300 +1,453 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import { motion } from 'framer-motion'
+import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { useCart } from '../context/CartContext';
+import productsData from '../data/products.json';
 
 function Shop() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedFilters, setSelectedFilters] = useState([])
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [customNote, setCustomNote] = useState('');
+  const [sortBy, setSortBy] = useState('name'); // 'name', 'price-low', 'price-high', 'newest'
+  const [viewMode, setViewMode] = useState('grid'); // 'grid', 'list'
+  
+  const { addItem } = useCart();
 
-  // Filter options for shop
-  const filterOptions = [
-    'Wall Stickers',
-    'Laptop Stickers', 
-    'Vinyls',
-    'Polaroids',
-    'Custom',
-    'Mystery Packs'
-  ]
+  // Filter options
+  const filterOptions = ['Vinyl', 'Waterproof', 'Normal', 'Polaroid'];
+  const tagOptions = ['Trending', 'Popular', 'New', 'Artist Drop', 'Limited'];
 
-  // All products data
-  const allProducts = [
-    {
-      id: 1,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBUDsPG7eVRo4z-TKhCOmE8jsBCLoJSqGoe7_S7NF63ieITFMBcehjeNrDQXV98KeqgxyZGP2IgYsMiW6qyxDGgo7YR9t61DLG_7whwG82HLZvwqc6E_8bqLVIjASXJamuvkwBDQXrrrWxKgyzCNRWnR_FrU5PTdiDtqfWP4G29yM9gvyIyddryGCGoH20IQQsl4Srs4BxUeO8qHkSdzVFBE_KNXnK7dGFW-fRVo2JUs0R7Y5ueBdqZXyX_a-KACDVQsI1V_fDqeEs",
-      title: "Laptop Sticker Pack 1",
-      description: "Express yourself with our unique collection of stickers and polaroids.",
-      category: "Laptop Stickers",
-      price: "₹299"
-    },
-    {
-      id: 2,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBFNBxYywc1RzBipB7jY_MEu1fVY2HgTm6k5SuMYpdXA26ea9lvbuWGRnNd9VAN2tm0h94kzHwzzLc1ynJRSLK9f97fydCAH7cuAKiPPdQollCYmU__UF-8y16JxhQnZkjcVhdJ-oHhXizhp4nYwTkAOIa6jueyahx2bzSAizILf65fTiBMUQrD1FzDlJJLNXfZYn7_bEyPi0dAx1CS_9Bdet6U6rasP6cdhFQdT5nWgQ-p5qvm4oZAi0ccRzYjvbHvVS42TpTEco0",
-      title: "Wall Sticker Set 2",
-      description: "From laptop decals to wall art, find the perfect way to showcase your style.",
-      category: "Wall Stickers",
-      price: "₹399"
-    },
-    {
-      id: 3,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDwj16OrXypR6jlXIJUXj4UW4LYzWSsntoZdZOcVfwIZPInRgKiGudzZqo4dKva7u7Rchnu75SqJB8jPMkEG0ZXTbsgPiDiZT8cSxKkA-jsZgEd0GmZUSp3-_WF_Dg9gHnVASAyp3Wuo2jmAk_vVFWZ7LW6F7cOOqAhDhjM1qIUNy1e-V7g6ndAM5IjtoMueZmfGaCAdYZNZkUsjNn8KvUBshWmFn2QZa-Q7x_9Vb3ohcc8k6cqxZSPVccntvWN-pr-cOCYXybflW0",
-      title: "Custom Name Stickers",
-      description: "Personalize your belongings with custom name stickers.",
-      category: "Custom",
-      price: "₹199"
-    },
-    {
-      id: 4,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA2XKyoF_oKAIRWl-rKfa8CbNY6Bjv2ceMBgZLkdLdRRtAmzpM2oKRY7W0gR0H0QE-5-QUQR3H-x5w3NE8PhxzLyJoPbSWOwfjugIP6uJgRebvhGEyW4uCS0XClaGXPY8L4OvIWthTLudEhZdzcWW4WtJ-vKeE_nXVzagNZP4XwOjEfpKG9ZWdD4uoXFz7Fyr-Wl0vpbpHsXFPkSatoFBS2g3DS2iOq0eWUnCMi5H_e2X9r4v87FKtmiHu6cJXAZjESdDoUOQRDg1k",
-      title: "Glow-in-the-Dark Stars",
-      description: "Add a touch of magic with glow-in-the-dark stars.",
-      category: "Wall Stickers",
-      price: "₹249"
-    },
-    {
-      id: 5,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDEW2CQ4vGv7rldWdzS11YCPlo7noBwQEc7ItMUk-1E2vh-c2kA6hKlmr2Vgl7mehs3EfYC7nwCmmCiqjH7w_8HuoTwhTZipIjXyVLwvOJs0-UxIyOLyKt7_99TCRBLoy1OOHB8HNv0ngI5bxHIRkTTcpdEGq_cFVJUw9oYU6TUzqx97Z52-wzeWFTscKkoe0D1Pq5LjouUB5GXahDrcjIOFGr4wcvKF1ZjkN9EQG_oIvOqEn74bf6JwD6VsfR3iCugF8qXq_Gm_sY",
-      title: "Vinyl Decal - Mountain Range",
-      description: "Bring the outdoors in with a mountain range vinyl decal.",
-      category: "Vinyls",
-      price: "₹349"
-    },
-    {
-      id: 6,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCJr5HfIUdBKdQND-xZwotJowRPyoebMwVFlZ-_7xaoSKFPI0VCNcu8d2yqe96sFqvix460tdNWDFXnHrexqVDevumFuHGk4miyoKQtoGi0OgAXUUWR1nOGirfsTH884TBD4bX2-SYkdCixIyxKRBXbqxIXGs9XFxt7i1NLiNcxF20kqIkSryfIwv9jQEY9wwLqOAgPNxu1R8jhWUrQXq1PTANcpzHPnISjfE9XR1nrO6Zy7tAH90rUf5LMn5a5vhsvk8EeBDqs7kU",
-      title: "Polaroid Prints - Summer Memories",
-      description: "Capture your summer memories with polaroid prints.",
-      category: "Polaroids",
-      price: "₹149"
+  // Get all products not part of a collection
+  const allProducts = productsData.filter(product => !product.collection);
+
+  // Filtered and sorted products
+  const filteredProducts = useMemo(() => {
+    let filtered = allProducts.filter(product => {
+      const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          product.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+      const matchesFilters = selectedFilters.length === 0 ||
+                            selectedFilters.includes(product.type) ||
+                            selectedFilters.some(filter => product.tags.includes(filter));
+      
+      return matchesSearch && matchesFilters;
+    });
+
+    // Sort products
+    switch (sortBy) {
+      case 'price-low':
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case 'newest':
+        filtered.sort((a, b) => b.id.localeCompare(a.id)); // Assuming newer items have higher IDs
+        break;
+      case 'name':
+      default:
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        break;
     }
-  ]
 
-  // Filter and search logic
-  const filteredProducts = allProducts.filter(product => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesFilter = selectedFilters.length === 0 || selectedFilters.includes(product.category)
-    return matchesSearch && matchesFilter
-  })
+    return filtered;
+  }, [allProducts, searchTerm, selectedFilters, sortBy]);
 
   const toggleFilter = (filter) => {
     setSelectedFilters(prev =>
       prev.includes(filter)
         ? prev.filter(f => f !== filter)
         : [...prev, filter]
-    )
-  }
+    );
+  };
+
+  const handleAddToCart = (product, note = '') => {
+    addItem({ ...product, customNote: note });
+    setSelectedProduct(null);
+    setCustomNote('');
+  };
+
+  const surpriseMe = () => {
+    const randomProduct = allProducts[Math.floor(Math.random() * allProducts.length)];
+    addItem(randomProduct);
+  };
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#fcf8f8] overflow-x-hidden" 
-         style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}>
+    <div className="bg-[#fcf8f8] min-h-screen">
       <Header />
       
-      <main className="flex-1">
-        <div className="px-4 md:px-6 py-5 max-w-6xl mx-auto">
-          <motion.div 
-            className="flex flex-wrap justify-between gap-3 p-4"
-            initial={{ opacity: 0, y: -10 }}
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <motion.h1 
+            className="text-4xl md:text-5xl font-bold text-[#1b0e0f] mb-4"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
           >
-            <div className="flex min-w-72 flex-col gap-3">
-              <motion.h1 
-                className="text-[#1b0e0e] tracking-light text-[32px] font-bold leading-tight"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-              >
-                Shop All Products
-              </motion.h1>
-              <motion.p 
-                className="text-[#994d51] text-sm font-normal leading-normal"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-              >
-                Explore our diverse range of stickers and polaroids, from unique designs to custom creations. Find the perfect way to express your style.
-              </motion.p>
-            </div>
-          </motion.div>
+            Sticker Shop
+          </motion.h1>
+          <motion.p 
+            className="text-[#974e52] text-lg mb-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            Express yourself with our curated collection of premium stickers. From vinyl to waterproof, find the perfect way to personalize your world.
+          </motion.p>
           
-          {/* Search Bar */}
-          <div className="px-4 py-3">
-            <label className="flex flex-col min-w-40 h-12 w-full max-w-md">
-              <div className="flex w-full flex-1 items-stretch rounded-xl h-full">
-                <div className="text-[#994d51] flex border-none bg-[#f3e7e8] items-center justify-center pl-4 rounded-l-xl border-r-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                    <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z" />
-                  </svg>
-                </div>
+          {/* Surprise Me Button */}
+          <motion.button
+            onClick={surpriseMe}
+            className="bg-gradient-to-r from-[#e92932] to-[#ff6b9d] text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            ✨ Surprise Me!
+          </motion.button>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm mb-8">
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Search Bar */}
+            <div className="flex-1">
+              <div className="relative">
                 <input
-                  placeholder="Search products"
-                  className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#1b0e0e] focus:outline-0 focus:ring-0 border-none bg-[#f3e7e8] focus:border-none h-full placeholder:text-[#994d51] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                  type="text"
+                  placeholder="Search stickers by name or tag..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 border border-[#e7d0d1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#e92932] focus:border-transparent"
                 />
+                <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#974e52]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
               </div>
-            </label>
+            </div>
+
+            {/* Type Filters */}
+            <div className="flex flex-wrap gap-2">
+              {filterOptions.map(filter => (
+                <button
+                  key={filter}
+                  onClick={() => toggleFilter(filter)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    selectedFilters.includes(filter)
+                      ? 'bg-[#e92932] text-white'
+                      : 'bg-[#f3e7e8] text-[#974e52] hover:bg-[#e7d0d1]'
+                  }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+
+            {/* Tag Filters */}
+            <div className="flex flex-wrap gap-2">
+              {tagOptions.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => toggleFilter(tag)}
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                    selectedFilters.includes(tag)
+                      ? 'bg-[#42c4ef] text-white'
+                      : 'bg-[#f8f9fa] text-[#666] hover:bg-[#e9ecef]'
+                  }`}
+                >
+                  #{tag}
+                </button>
+              ))}
+            </div>
           </div>
           
-          {/* Filter Options */}
-          <motion.div 
-            className="flex gap-3 p-3 flex-wrap pr-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            {filterOptions.map((filter, index) => (
-              <motion.button
-                key={filter}
-                onClick={() => toggleFilter(filter)}
-                className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full pl-4 pr-4 transition-colors ${
-                  selectedFilters.includes(filter)
-                    ? 'bg-[#e92932] text-white'
-                    : 'bg-[#f3e7e8] text-[#1b0e0e] hover:bg-[#e7d0d1]'
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
-              >
-                <p className="text-sm font-medium leading-normal">{filter}</p>
-              </motion.button>
-            ))}
-          </motion.div>
-          
-          {/* Products Grid */}
-          <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-          >
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product, index) => (
-                <motion.div 
-                  key={product.id}
-                  className="flex flex-col gap-3 pb-3 bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -5 }}
+          {/* Active Filters */}
+          {selectedFilters.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="text-sm text-[#974e52]">Active filters:</span>
+              {selectedFilters.map(filter => (
+                <span
+                  key={filter}
+                  className="bg-[#e92932] text-white px-3 py-1 rounded-full text-xs flex items-center gap-1"
                 >
-                  <div
-                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl"
-                    style={{ backgroundImage: `url("${product.image}")` }}
+                  {filter}
+                  <button
+                    onClick={() => toggleFilter(filter)}
+                    className="hover:bg-white hover:bg-opacity-20 rounded-full p-0.5"
                   >
-                    <div className="p-3">
-                      <span className="inline-block bg-[#e92932] text-white text-xs px-3 py-1 rounded-full">
-                        {product.category}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <h2 className="text-[#1b0e0e] text-base font-medium leading-normal">{product.title}</h2>
-                    <p className="text-[#994d51] text-sm font-normal leading-normal">{product.description}</p>
-                    {product.price && (
-                      <p className="text-[#e92932] text-sm font-bold leading-normal mt-2">{product.price}</p>
-                    )}
-                  </div>
-                </motion.div>
-              ))
-            ) : (
-              <div className="col-span-full flex flex-col items-center justify-center py-12">
-                <div className="text-[#994d51] text-lg font-medium mb-2">No products found</div>
-                <p className="text-[#994d51] text-sm">Try adjusting your search or filters</p>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Design Your Own Section */}
-          <div className="px-4 py-8 border-t border-[#e7d0d1] mt-8">
-            <h2 className="text-[#1b0e0e] text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3 pt-5">Design Your Own</h2>
-            <div className="flex max-w-[480px] flex-wrap items-end gap-4 py-3">
-              <label className="flex flex-col min-w-40 flex-1">
-                <p className="text-[#1b0e0e] text-base font-medium leading-normal pb-2">Type of Paper</p>
-                <select
-                  className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#1b0e0e] focus:outline-0 focus:ring-0 border border-[#e7d0d1] bg-[#fcf8f8] focus:border-[#e7d0d1] h-14 placeholder:text-[#974e52] p-[15px] text-base font-normal leading-normal"
-                >
-                  <option value="">Select Paper Type</option>
-                  <option value="vinyl">Vinyl</option>
-                  <option value="matte">Matte</option>
-                  <option value="glossy">Glossy</option>
-                  <option value="transparent">Transparent</option>
-                </select>
-              </label>
-            </div>
-            <div className="flex max-w-[480px] flex-wrap items-end gap-4 py-3">
-              <label className="flex flex-col min-w-40 flex-1">
-                <p className="text-[#1b0e0e] text-base font-medium leading-normal pb-2">Quantity</p>
-                <input
-                  placeholder="Enter Quantity"
-                  className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#1b0e0e] focus:outline-0 focus:ring-0 border border-[#e7d0d1] bg-[#fcf8f8] focus:border-[#e7d0d1] h-14 placeholder:text-[#974e52] p-[15px] text-base font-normal leading-normal"
-                />
-              </label>
-            </div>
-            <div className="flex max-w-[480px] flex-wrap items-end gap-4 py-3">
-              <label className="flex flex-col min-w-40 flex-1">
-                <p className="text-[#1b0e0e] text-base font-medium leading-normal pb-2">Type of Cut</p>
-                <select
-                  className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#1b0e0e] focus:outline-0 focus:ring-0 border border-[#e7d0d1] bg-[#fcf8f8] focus:border-[#e7d0d1] h-14 placeholder:text-[#974e52] p-[15px] text-base font-normal leading-normal"
-                >
-                  <option value="">Select Cut Type</option>
-                  <option value="die-cut">Die Cut</option>
-                  <option value="kiss-cut">Kiss Cut</option>
-                  <option value="square">Square</option>
-                  <option value="circle">Circle</option>
-                </select>
-              </label>
-            </div>
-            <div className="flex flex-col py-4">
-              <div className="flex flex-col items-center gap-6 rounded-xl border-2 border-dashed border-[#e7d0d1] px-6 py-14">
-                <div className="flex max-w-[480px] flex-col items-center gap-2">
-                  <p className="text-[#1b0e0e] text-lg font-bold leading-tight tracking-[-0.015em] max-w-[480px] text-center">Upload Your Design</p>
-                  <p className="text-[#1b0e0e] text-sm font-normal leading-normal max-w-[480px] text-center">Create custom stickers and polaroids with your own images.</p>
-                </div>
-                <button
-                  className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f3e7e8] text-[#1b0e0e] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#e7d0d1] transition-colors"
-                >
-                  <span className="truncate">Upload Now</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex py-3 justify-center">
+                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 256 256">
+                      <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/>
+                    </svg>
+                  </button>
+                </span>
+              ))}
               <button
-                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#e82630] text-[#fcf8f8] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#d32f2f] transition-colors"
+                onClick={() => setSelectedFilters([])}
+                className="text-xs text-[#974e52] hover:text-[#e92932] underline"
               >
-                <span className="truncate">Get Quote</span>
+                Clear all
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Sort and View Controls */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-[#974e52]">
+              {filteredProducts.length} sticker{filteredProducts.length !== 1 ? 's' : ''} found
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            {/* Sort Dropdown */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-[#974e52]">Sort by:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="border border-[#e7d0d1] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#e92932] focus:border-transparent"
+              >
+                <option value="name">Name A-Z</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="newest">Newest First</option>
+              </select>
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="flex border border-[#e7d0d1] rounded-lg overflow-hidden">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 ${viewMode === 'grid' ? 'bg-[#e92932] text-white' : 'text-[#974e52] hover:bg-[#f3e7e8]'}`}
+              >
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48ZM104,136H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/>
+                </svg>
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 ${viewMode === 'list' ? 'bg-[#e92932] text-white' : 'text-[#974e52] hover:bg-[#f3e7e8]'}`}
+              >
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M228,128a12,12,0,0,1-12,12H40a12,12,0,0,1,0-24H216A12,12,0,0,1,228,128ZM40,76H216a12,12,0,0,0,0-24H40a12,12,0,0,0,0,24ZM216,180H40a12,12,0,0,0,0,24H216a12,12,0,0,0,0-24Z"/>
+                </svg>
               </button>
             </div>
           </div>
-          
-          {/* WhatsApp CTA */}
-          <motion.div 
-            className="flex justify-center py-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9, duration: 0.5 }}
-          >
-            <button
-              className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 bg-[#e92932] text-white text-base font-bold leading-normal tracking-[0.015em] min-w-0 px-6 gap-4 hover:bg-[#d32f2f] transition-colors"
+        </div>
+
+        {/* Products Grid */}
+        <div className={`grid gap-6 mb-12 ${
+          viewMode === 'grid' 
+            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+            : 'grid-cols-1'
+        }`}>
+          {filteredProducts.map((product, index) => (
+            <motion.div
+              key={product.id}
+              className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group ${
+                viewMode === 'list' ? 'flex' : ''
+              }`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ y: -5 }}
             >
-              <div className="text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                  <path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z" />
-                </svg>
+              <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-32 h-32 flex-shrink-0' : ''}`}>
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className={`object-cover group-hover:scale-110 transition-transform duration-300 ${
+                    viewMode === 'list' ? 'w-full h-full' : 'w-full h-48'
+                  }`}
+                />
+                {product.tags.includes('Popular') && (
+                  <span className="absolute top-3 left-3 bg-[#e92932] text-white px-2 py-1 rounded-full text-xs font-bold">
+                    🔥 Popular
+                  </span>
+                )}
+                {product.tags.includes('New') && (
+                  <span className="absolute top-3 right-3 bg-[#42c4ef] text-white px-2 py-1 rounded-full text-xs font-bold">
+                    ✨ New
+                  </span>
+                )}
+                {product.tags.includes('Artist Drop') && (
+                  <span className="absolute top-3 right-3 bg-[#ff6b9d] text-white px-2 py-1 rounded-full text-xs font-bold">
+                    🎨 Artist
+                  </span>
+                )}
               </div>
-              <span className="truncate">Chat with us on WhatsApp</span>
+              
+              <div className={`p-4 ${viewMode === 'list' ? 'flex-1 flex flex-col justify-between' : ''}`}>
+                <div>
+                  <div className={`flex items-start justify-between mb-2 ${viewMode === 'list' ? 'mb-1' : ''}`}>
+                    <h3 className="font-bold text-[#1b0e0f] text-lg">{product.title}</h3>
+                    <span className="text-[#e92932] font-bold text-lg">₹{product.price}</span>
+                  </div>
+                  
+                  <p className={`text-[#974e52] text-sm mb-3 ${viewMode === 'list' ? 'mb-2' : ''}`}>
+                    {product.description}
+                  </p>
+                  
+                  {/* Type and Tags */}
+                  <div className={`flex flex-wrap gap-1 mb-4 ${viewMode === 'list' ? 'mb-2' : ''}`}>
+                    <span className="bg-[#f3e7e8] text-[#974e52] px-2 py-1 rounded-full text-xs font-medium">
+                      {product.type}
+                    </span>
+                    {product.tags.slice(0, 2).map(tag => (
+                      <span key={tag} className="bg-[#e7f3ff] text-[#42c4ef] px-2 py-1 rounded-full text-xs">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className={`flex gap-2 ${viewMode === 'list' ? 'mt-auto' : ''}`}>
+                  {product.type === 'Polaroid' ? (
+                    <button
+                      onClick={() => setSelectedProduct(product)}
+                      className="flex-1 bg-[#e92932] text-white py-2 px-4 rounded-xl font-medium hover:bg-[#d61f27] transition-colors"
+                    >
+                      Customize
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className="flex-1 bg-[#e92932] text-white py-2 px-4 rounded-xl hover:bg-[#d61f27] transition-colors font-medium"
+                    >
+                      Add to Cart
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setSelectedProduct(product)}
+                    className="border border-[#e7d0d1] text-[#974e52] py-2 px-4 rounded-xl hover:bg-[#f3e7e8] transition-colors"
+                  >
+                    Details
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* No Results */}
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-bold text-[#1b0e0f] mb-2">No stickers found</h3>
+            <p className="text-[#974e52] mb-4">Try adjusting your search or filters</p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedFilters([]);
+              }}
+              className="bg-[#e92932] text-white px-6 py-2 rounded-xl hover:bg-[#d61f27] transition-colors"
+            >
+              Clear all filters
             </button>
+          </div>
+        )}
+
+        {/* Design Your Own Section */}
+        <motion.div 
+          className="bg-gradient-to-r from-[#e92932] to-[#ff6b9d] rounded-3xl p-8 text-white text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <h2 className="text-3xl font-bold mb-4">Design Your Own Stickers</h2>
+          <p className="text-lg mb-6 opacity-90 max-w-2xl mx-auto">
+            Have a custom design in mind? Send us your artwork and we'll create premium stickers just for you!
+          </p>
+          <a
+            href="https://wa.me/919876543210?text=Hi! I'd like to create custom stickers. Can you help me with the process?"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-white text-[#e92932] px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+          >
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+              <path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5L128,136a79.93,79.93,0,0,1-31.16-31.16l6.66-19.54a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,80.73,40a56.26,56.26,0,0,0-48.26,48.26c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,48.26-48.26A8,8,0,0,0,187.58,144.84Z"/>
+            </svg>
+            Start Custom Order
+          </a>
+        </motion.div>
+      </main>
+
+      {/* Custom Polaroid Modal */}
+      {selectedProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <motion.div 
+            className="bg-white rounded-2xl p-6 max-w-md w-full"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            <h3 className="text-xl font-bold text-[#1b0e0f] mb-4">
+              {selectedProduct.type === 'Polaroid' ? 'Customize' : 'Details:'} {selectedProduct.title}
+            </h3>
+            <img
+              src={selectedProduct.image}
+              alt={selectedProduct.title}
+              className="w-full h-40 object-cover rounded-xl mb-4"
+            />
+            
+            <div className="mb-4">
+              <p className="text-[#974e52] mb-3">{selectedProduct.description}</p>
+              <div className="flex flex-wrap gap-1 mb-3">
+                <span className="bg-[#f3e7e8] text-[#974e52] px-2 py-1 rounded-full text-xs font-medium">
+                  {selectedProduct.type}
+                </span>
+                {selectedProduct.tags.map(tag => (
+                  <span key={tag} className="bg-[#e7f3ff] text-[#42c4ef] px-2 py-1 rounded-full text-xs">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+              <div className="text-[#e92932] font-bold text-xl mb-4">₹{selectedProduct.price}</div>
+            </div>
+
+            {selectedProduct.type === 'Polaroid' && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-[#1b0e0f] mb-2">
+                  Special Instructions (optional)
+                </label>
+                <textarea
+                  value={customNote}
+                  onChange={(e) => setCustomNote(e.target.value)}
+                  placeholder="Tell us about your custom photo or any special requirements..."
+                  className="w-full p-3 border border-[#e7d0d1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#e92932] resize-none"
+                  rows={3}
+                />
+              </div>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setSelectedProduct(null);
+                  setCustomNote('');
+                }}
+                className="flex-1 border border-[#e7d0d1] text-[#974e52] py-2 px-4 rounded-xl hover:bg-[#f3e7e8] transition-colors"
+              >
+                {selectedProduct.type === 'Polaroid' ? 'Cancel' : 'Close'}
+              </button>
+              <button
+                onClick={() => handleAddToCart(selectedProduct, customNote)}
+                className="flex-1 bg-[#e92932] text-white py-2 px-4 rounded-xl hover:bg-[#d61f27] transition-colors"
+              >
+                Add to Cart - ₹{selectedProduct.price}
+              </button>
+            </div>
           </motion.div>
         </div>
-      </main>
-      
+      )}
+
       <Footer />
     </div>
-  )
+  );
 }
 
-export default Shop
+export default Shop;
