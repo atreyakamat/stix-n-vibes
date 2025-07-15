@@ -1,5 +1,21 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react'
 
+// Global material pricing configuration
+const MATERIAL_OPTIONS = {
+  paper: {
+    name: 'Paper Stickers',
+    priceMultiplier: 1,
+    waterproof: false,
+    tearResistant: false
+  },
+  vinyl: {
+    name: 'Vinyl Stickers', 
+    priceMultiplier: 1.6,
+    waterproof: true,
+    tearResistant: true
+  }
+}
+
 // Cart Context
 const CartContext = createContext()
 
@@ -12,16 +28,21 @@ const CART_ACTIONS = {
   ADD_COLLECTION: 'ADD_COLLECTION'
 }
 
+// Helper function to create unique item keys based on id, material, and type
+const getItemKey = (item) => `${item.id}-${item.material || 'default'}-${item.type || 'default'}`
+
 // Cart Reducer
 const cartReducer = (state, action) => {
   switch (action.type) {
     case CART_ACTIONS.ADD_ITEM:
-      const existingItem = state.items.find(item => item.id === action.payload.id)
+      const newItemKey = getItemKey(action.payload)
+      const existingItem = state.items.find(item => getItemKey(item) === newItemKey)
+      
       if (existingItem) {
         return {
           ...state,
           items: state.items.map(item =>
-            item.id === action.payload.id
+            getItemKey(item) === newItemKey
               ? { ...item, quantity: item.quantity + 1 }
               : item
           )
@@ -51,29 +72,29 @@ const cartReducer = (state, action) => {
       }
 
     case CART_ACTIONS.UPDATE_QUANTITY:
+      const targetKey = `${action.payload.id}-${action.payload.material || 'default'}-${action.payload.type || 'default'}`
+      
       if (action.payload.quantity <= 0) {
         return {
           ...state,
-          items: state.items.filter(item => 
-            !(item.id === action.payload.id && item.type === action.payload.type)
-          )
+          items: state.items.filter(item => getItemKey(item) !== targetKey)
         }
       }
       return {
         ...state,
         items: state.items.map(item =>
-          item.id === action.payload.id && item.type === action.payload.type
+          getItemKey(item) === targetKey
             ? { ...item, quantity: action.payload.quantity }
             : item
         )
       }
 
     case CART_ACTIONS.REMOVE_ITEM:
+      const removeKey = `${action.payload.id}-${action.payload.material || 'default'}-${action.payload.type || 'default'}`
+      
       return {
         ...state,
-        items: state.items.filter(item => 
-          !(item.id === action.payload.id && item.type === action.payload.type)
-        )
+        items: state.items.filter(item => getItemKey(item) !== removeKey)
       }
 
     case CART_ACTIONS.CLEAR_CART:
@@ -124,12 +145,32 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: CART_ACTIONS.ADD_COLLECTION, payload: collection })
   }
 
-  const updateQuantity = (id, quantity, type = 'product') => {
-    dispatch({ type: CART_ACTIONS.UPDATE_QUANTITY, payload: { id, quantity, type } })
+  // Material pricing utilities
+  const calculateMaterialPrice = (basePrice, material = 'paper') => {
+    if (!basePrice) return 0
+    return Math.round(basePrice * MATERIAL_OPTIONS[material].priceMultiplier)
   }
 
-  const removeItem = (id, type = 'product') => {
-    dispatch({ type: CART_ACTIONS.REMOVE_ITEM, payload: { id, type } })
+  const getMaterialOptions = () => MATERIAL_OPTIONS
+
+  const addItemWithMaterial = (item, material = 'paper') => {
+    const adjustedPrice = calculateMaterialPrice(item.basePrice || item.price, material)
+    const itemWithMaterial = {
+      ...item,
+      price: adjustedPrice,
+      material: material,
+      materialName: MATERIAL_OPTIONS[material].name,
+      basePrice: item.basePrice || item.price
+    }
+    dispatch({ type: CART_ACTIONS.ADD_ITEM, payload: { ...itemWithMaterial, type: 'product' } })
+  }
+
+  const updateQuantity = (id, quantity, type = 'product', material = null) => {
+    dispatch({ type: CART_ACTIONS.UPDATE_QUANTITY, payload: { id, quantity, type, material } })
+  }
+
+  const removeItem = (id, type = 'product', material = null) => {
+    dispatch({ type: CART_ACTIONS.REMOVE_ITEM, payload: { id, type, material } })
   }
 
   const clearCart = () => {
@@ -148,7 +189,27 @@ export const CartProvider = ({ children }) => {
     const phoneNumber = "917744020601" // Replace with your actual WhatsApp number
     const items = state.items.map(item => {
       const type = item.type === 'collection' ? 'Pack' : 'Sticker'
-      return `• ${item.title} ${type} ×${item.quantity} – ₹${item.price * item.quantity}`
+      let itemDescription = `• ${item.title} ${type}`
+      
+      // Add material information if present
+      if (item.material && item.type !== 'Collection') {
+        const materialInfo = MATERIAL_OPTIONS[item.material]
+        const materialName = materialInfo ? materialInfo.name : item.material
+        itemDescription += ` (${materialName})`
+        
+        // Add material benefits
+        if (materialInfo) {
+          const benefits = []
+          if (materialInfo.waterproof) benefits.push('Waterproof')
+          if (materialInfo.tearResistant) benefits.push('Tear-resistant')
+          if (benefits.length > 0) {
+            itemDescription += ` - ${benefits.join(', ')}`
+          }
+        }
+      }
+      
+      itemDescription += ` ×${item.quantity} – ₹${item.price * item.quantity}`
+      return itemDescription
     }).join('\n')
     
     const total = getTotalPrice()
@@ -162,13 +223,16 @@ export const CartProvider = ({ children }) => {
   const value = {
     items: state.items,
     addItem,
+    addItemWithMaterial,
     addCollection,
     updateQuantity,
     removeItem,
     clearCart,
     getItemCount,
     getTotalPrice,
-    generateWhatsAppMessage
+    generateWhatsAppMessage,
+    calculateMaterialPrice,
+    getMaterialOptions
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

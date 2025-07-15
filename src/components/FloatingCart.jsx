@@ -90,7 +90,7 @@ const FloatingCart = () => {
                     <div className="space-y-4">
                       {items.map((item) => (
                         <motion.div
-                          key={`${item.id}-${item.type}`}
+                          key={`${item.id}-${item.material || 'default'}-${item.type || 'default'}`}
                           className="flex items-center gap-4 p-3 border border-[#f3e7e8] rounded-lg"
                           layout
                         >
@@ -106,11 +106,28 @@ const FloatingCart = () => {
                                 <span className="text-xs text-[#e92932] ml-1">(Pack)</span>
                               )}
                             </h3>
-                            <p className="text-[#974e52] text-xs">₹{item.price} each</p>
+                            <div className="flex items-center gap-2">
+                              <p className="text-[#974e52] text-xs">₹{item.price} each</p>
+                              {item.material && item.type !== 'Collection' && (
+                                <div className="flex items-center gap-1">
+                                  <span className="text-xs">
+                                    {item.material === 'vinyl' ? '💧' : '📄'}
+                                  </span>
+                                  <span className="text-xs text-[#666] capitalize">
+                                    {item.material}
+                                  </span>
+                                  {item.material === 'vinyl' && (
+                                    <span className="bg-[#42c4ef] text-white px-1 py-0.5 rounded text-xs">
+                                      Waterproof
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <div className="flex items-center gap-2">
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1, item.type)}
+                              onClick={() => updateQuantity(item.id, item.quantity - 1, item.type, item.material)}
                               className="w-6 h-6 rounded-full bg-[#f3e7e8] flex items-center justify-center text-sm hover:bg-[#e7d0d1] transition-colors"
                             >
                               -
@@ -119,14 +136,14 @@ const FloatingCart = () => {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1, item.type)}
+                              onClick={() => updateQuantity(item.id, item.quantity + 1, item.type, item.material)}
                               className="w-6 h-6 rounded-full bg-[#f3e7e8] flex items-center justify-center text-sm hover:bg-[#e7d0d1] transition-colors"
                             >
                               +
                             </button>
                           </div>
                           <button
-                            onClick={() => removeItem(item.id, item.type)}
+                            onClick={() => removeItem(item.id, item.type, item.material)}
                             className="p-1 text-[#974e52] hover:text-[#e92932] transition-colors"
                           >
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 256 256">

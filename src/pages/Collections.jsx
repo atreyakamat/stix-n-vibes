@@ -10,7 +10,11 @@ function Collections() {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedStickers, setSelectedStickers] = useState([]);
   const [showIndividualView, setShowIndividualView] = useState(false);
-  const { addItem } = useCart();
+  const [selectedMaterial, setSelectedMaterial] = useState('paper');
+  const { addItem, addItemWithMaterial, calculateMaterialPrice, getMaterialOptions } = useCart();
+
+  // Get material options from cart context
+  const materialOptions = getMaterialOptions();
 
   // Get sticker details from products data
   const getStickers = (stickerIds) => {
@@ -33,11 +37,16 @@ function Collections() {
 
   const handleAddSelectedStickers = () => {
     selectedStickers.forEach(sticker => {
-      addItem(sticker);
+      if (sticker.type === 'Polaroid') {
+        addItem(sticker);
+      } else {
+        addItemWithMaterial(sticker, selectedMaterial);
+      }
     });
     setSelectedStickers([]);
     setShowIndividualView(false);
     setSelectedCollection(null);
+    setSelectedMaterial('paper');
   };
 
   const toggleStickerSelection = (sticker) => {
@@ -52,7 +61,13 @@ function Collections() {
   };
 
   const getSelectedTotal = () => {
-    return selectedStickers.reduce((total, sticker) => total + sticker.price, 0);
+    return selectedStickers.reduce((total, sticker) => {
+      if (sticker.type === 'Polaroid') {
+        return total + sticker.price;
+      } else {
+        return total + calculateMaterialPrice(sticker.price, selectedMaterial);
+      }
+    }, 0);
   };
 
   return (
@@ -298,7 +313,9 @@ function Collections() {
                             className="w-16 h-16 object-cover rounded-lg mx-auto mb-2"
                           />
                           <span className="text-sm text-[#1b0e0f] font-medium">{sticker?.title}</span>
-                          <div className="text-xs text-[#974e52] mt-1">₹{sticker?.price}</div>
+                          <div className="text-xs text-[#974e52] mt-1">
+                            ₹{calculateMaterialPrice(sticker?.price, selectedMaterial)}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -346,6 +363,53 @@ function Collections() {
             ) : (
               /* Individual Stickers View */
               <div>
+                {/* Material Selection for Individual Stickers */}
+                <div className="mb-6">
+                  <h4 className="text-lg font-bold text-[#1b0e0f] mb-3">
+                    🏷️ Choose Material for Individual Stickers:
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.entries(materialOptions).map(([key, material]) => (
+                      <div
+                        key={key}
+                        className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
+                          selectedMaterial === key
+                            ? 'border-[#e92932] bg-[#fff5f5]'
+                            : 'border-[#e7d0d1] hover:border-[#e92932]'
+                        }`}
+                        onClick={() => setSelectedMaterial(key)}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <h5 className="font-bold text-[#1b0e0f]">{material.name}</h5>
+                          <span className="text-sm text-[#974e52]">+{Math.round((material.priceMultiplier - 1) * 100)}%</span>
+                        </div>
+                        <p className="text-xs text-[#974e52] mb-2">
+                          {key === 'paper' ? 'Premium paper with vibrant colors' : 'Waterproof & tear-resistant vinyl'}
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {key === 'paper' ? (
+                            <>
+                              <span className="bg-[#f8f9fa] text-[#666] px-2 py-1 rounded text-xs">Cost Effective</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="bg-[#42c4ef] text-white px-2 py-1 rounded text-xs">💧 Waterproof</span>
+                              <span className="bg-[#28a745] text-white px-2 py-1 rounded text-xs">💪 Durable</span>
+                            </>
+                          )}
+                        </div>
+                        {selectedMaterial === key && (
+                          <div className="mt-2">
+                            <span className="bg-[#e92932] text-white px-2 py-1 rounded-full text-xs font-bold">
+                              ✓ Selected
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="mb-6">
                   <h4 className="text-lg font-bold text-[#1b0e0f] mb-3">
                     Select Individual Stickers:
@@ -375,7 +439,9 @@ function Collections() {
                             className="w-20 h-20 object-cover rounded-lg mx-auto mb-3"
                           />
                           <h5 className="text-sm font-medium text-[#1b0e0f] mb-1">{sticker?.title}</h5>
-                          <div className="text-[#e92932] font-bold">₹{sticker?.price}</div>
+                          <div className="text-[#e92932] font-bold">
+                            ₹{calculateMaterialPrice(sticker?.price, selectedMaterial)}
+                          </div>
                           
                           {selectedStickers.some(s => s.id === sticker?.id) && (
                             <div className="mt-2">

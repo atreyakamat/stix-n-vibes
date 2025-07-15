@@ -10,10 +10,14 @@ function Shop() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [customNote, setCustomNote] = useState('');
+  const [selectedMaterial, setSelectedMaterial] = useState('paper');
   const [sortBy, setSortBy] = useState('name'); // 'name', 'price-low', 'price-high', 'newest'
   const [viewMode, setViewMode] = useState('grid'); // 'grid', 'list'
   
-  const { addItem } = useCart();
+  const { addItem, addItemWithMaterial, calculateMaterialPrice, getMaterialOptions } = useCart();
+
+  // Get material options from cart context
+  const materialOptions = getMaterialOptions();
 
   // Filter options
   const filterOptions = ['Vinyl', 'Waterproof', 'Normal', 'Polaroid'];
@@ -63,15 +67,26 @@ function Shop() {
     );
   };
 
-  const handleAddToCart = (product, note = '') => {
-    addItem({ ...product, customNote: note });
+  const handleAddToCart = (product, note = '', material = 'paper') => {
+    if (product.type === 'Polaroid') {
+      // For polaroids, use the regular addItem (they handle their own material selection)
+      addItem({ ...product, customNote: note });
+    } else {
+      // For regular stickers, use material pricing
+      addItemWithMaterial({ ...product, customNote: note }, material);
+    }
     setSelectedProduct(null);
     setCustomNote('');
+    setSelectedMaterial('paper');
   };
 
   const surpriseMe = () => {
     const randomProduct = allProducts[Math.floor(Math.random() * allProducts.length)];
-    addItem(randomProduct);
+    if (randomProduct.type === 'Polaroid') {
+      addItem(randomProduct);
+    } else {
+      addItemWithMaterial(randomProduct, 'paper'); // Default to paper for surprise
+    }
   };
 
   return (
@@ -286,7 +301,14 @@ function Shop() {
                 <div>
                   <div className={`flex items-start justify-between mb-2 ${viewMode === 'list' ? 'mb-1' : ''}`}>
                     <h3 className="font-bold text-[#1b0e0f] text-lg">{product.title}</h3>
-                    <span className="text-[#e92932] font-bold text-lg">₹{product.price}</span>
+                    {product.type === 'Polaroid' ? (
+                      <span className="text-[#e92932] font-bold text-lg">₹{product.price}</span>
+                    ) : (
+                      <div className="text-right">
+                        <div className="text-[#e92932] font-bold text-lg">₹{calculateMaterialPrice(product.price, 'paper')}</div>
+                        <div className="text-[#974e52] text-xs">₹{calculateMaterialPrice(product.price, 'vinyl')} vinyl</div>
+                      </div>
+                    )}
                   </div>
                   
                   <p className={`text-[#974e52] text-sm mb-3 ${viewMode === 'list' ? 'mb-2' : ''}`}>
@@ -406,7 +428,57 @@ function Shop() {
                   </span>
                 ))}
               </div>
-              <div className="text-[#e92932] font-bold text-xl mb-4">₹{selectedProduct.price}</div>
+              
+              {selectedProduct.type !== 'Polaroid' ? (
+                <div className="mb-4">
+                  <label className="block text-sm font-bold text-[#1b0e0f] mb-3">
+                    🏷️ Choose Material Type
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {Object.entries(materialOptions).map(([key, material]) => (
+                      <div
+                        key={key}
+                        className={`border-2 rounded-xl p-3 cursor-pointer transition-all ${
+                          selectedMaterial === key
+                            ? 'border-[#e92932] bg-[#fff5f5]'
+                            : 'border-[#e7d0d1] hover:border-[#e92932]'
+                        }`}
+                        onClick={() => setSelectedMaterial(key)}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-bold text-[#1b0e0f] text-sm">{material.name}</h4>
+                          <span className="text-[#e92932] font-bold">
+                            ₹{calculateMaterialPrice(selectedProduct.price, key)}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#974e52] mb-2">{material.name === 'Paper Stickers' ? 'Premium paper with vibrant colors' : 'Waterproof & tear-resistant vinyl'}</p>
+                        <div className="flex flex-wrap gap-1">
+                          {key === 'paper' ? (
+                            <>
+                              <span className="bg-[#f8f9fa] text-[#666] px-2 py-1 rounded text-xs">Vibrant Colors</span>
+                              <span className="bg-[#f8f9fa] text-[#666] px-2 py-1 rounded text-xs">Cost Effective</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="bg-[#42c4ef] text-white px-2 py-1 rounded text-xs">💧 Waterproof</span>
+                              <span className="bg-[#28a745] text-white px-2 py-1 rounded text-xs">💪 Tear Resistant</span>
+                            </>
+                          )}
+                        </div>
+                        {selectedMaterial === key && (
+                          <div className="mt-2">
+                            <span className="bg-[#e92932] text-white px-2 py-1 rounded-full text-xs font-bold">
+                              ✓ Selected
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-[#e92932] font-bold text-xl mb-4">₹{selectedProduct.price}</div>
+              )}
             </div>
 
             {selectedProduct.type === 'Polaroid' && (
@@ -429,16 +501,17 @@ function Shop() {
                 onClick={() => {
                   setSelectedProduct(null);
                   setCustomNote('');
+                  setSelectedMaterial('paper');
                 }}
                 className="flex-1 border border-[#e7d0d1] text-[#974e52] py-2 px-4 rounded-xl hover:bg-[#f3e7e8] transition-colors"
               >
                 {selectedProduct.type === 'Polaroid' ? 'Cancel' : 'Close'}
               </button>
               <button
-                onClick={() => handleAddToCart(selectedProduct, customNote)}
+                onClick={() => handleAddToCart(selectedProduct, customNote, selectedMaterial)}
                 className="flex-1 bg-[#e92932] text-white py-2 px-4 rounded-xl hover:bg-[#d61f27] transition-colors"
               >
-                Add to Cart - ₹{selectedProduct.price}
+                Add to Cart - ₹{selectedProduct.type === 'Polaroid' ? selectedProduct.price : calculateMaterialPrice(selectedProduct.price, selectedMaterial)}
               </button>
             </div>
           </motion.div>
