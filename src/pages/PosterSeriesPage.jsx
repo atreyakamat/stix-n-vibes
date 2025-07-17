@@ -65,7 +65,7 @@ function PosterSeriesPage() {
     orientation: 'portrait'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { addItem } = useCart();
+  const { addItem } = useCart() || { addItem: () => console.warn('Cart context not available') };
 
   const toggleLike = (seriesId) => {
     setLikedSeries(prev => {
@@ -94,14 +94,23 @@ function PosterSeriesPage() {
   };
 
   const addToCart = (series) => {
-    addItem({
-      id: series.id,
-      title: series.title,
-      price: parseFloat(series.price.replace('$', '')),
-      image: series.images[0],
-      quantity: 1,
-      type: 'Poster Series'
-    });
+    if (!series || !addItem) {
+      console.warn('Unable to add to cart: missing series or cart function');
+      return;
+    }
+    
+    try {
+      addItem({
+        id: series.id,
+        title: series.title,
+        price: parseFloat((series.price || '$0').replace('$', '')),
+        image: series.images?.[0] || '/assets/stickers/ghost.png',
+        quantity: 1,
+        type: 'Poster Series'
+      });
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
   };
 
   const handleCustomFormChange = (field, value) => {
@@ -191,9 +200,9 @@ function PosterSeriesPage() {
       title: 'Chaos Energy',
       description: 'Embrace the beautiful mess of creativity with this explosive collection of abstract designs. Each poster captures the raw energy of artistic expression through bold colors, dynamic shapes, and spontaneous compositions that breathe life into any space.',
       images: [
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053900.986.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053936.483.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053916.536.png'
+        './assets/stickers/Adobe Express - file - 2025-02-03T053900.986.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053936.483.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053916.536.png'
       ],
       price: '$45',
       tags: ['Abstract', 'Colorful', 'Energy'],
@@ -205,9 +214,9 @@ function PosterSeriesPage() {
       title: 'Minimal Vibes',
       description: 'Clean lines, maximum impact. This sophisticated collection proves that sometimes less is more. Each poster features carefully balanced compositions with plenty of white space and subtle color palettes that enhance any modern interior.',
       images: [
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053558.505.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053620.350.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053656.087.png'
+        './assets/stickers/Adobe Express - file - 2025-02-03T053558.505.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053620.350.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053656.087.png'
       ],
       price: '$40',
       tags: ['Minimal', 'Clean', 'Modern'],
@@ -219,9 +228,9 @@ function PosterSeriesPage() {
       title: 'Retro Wave',
       description: 'Nostalgic feels with modern appeal. Transport yourself to the golden age of design with this collection that perfectly balances vintage aesthetics with contemporary sensibilities. Each piece is a love letter to the past with a fresh perspective.',
       images: [
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053756.124.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053815.779.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053819.449.png'
+        './assets/stickers/Adobe Express - file - 2025-02-03T053756.124.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053815.779.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053819.449.png'
       ],
       price: '$42',
       tags: ['Retro', 'Nostalgic', 'Wave'],
@@ -233,9 +242,9 @@ function PosterSeriesPage() {
       title: 'Nature Escape',
       description: 'Bring the outdoors to your space with this calming collection inspired by natural beauty. Each poster captures the serenity of nature through organic forms, earth tones, and peaceful compositions that create a sense of tranquility.',
       images: [
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053830.710.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053832.899.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053848.102.png'
+        './assets/stickers/Adobe Express - file - 2025-02-03T053830.710.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053832.899.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053848.102.png'
       ],
       price: '$38',
       tags: ['Nature', 'Organic', 'Peaceful'],
@@ -247,9 +256,9 @@ function PosterSeriesPage() {
       title: 'Urban Pulse',
       description: 'Feel the rhythm of the city with this dynamic collection that captures the energy and diversity of urban life. Bold graphics, street art influences, and contemporary typography come together to celebrate metropolitan culture.',
       images: [
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053850.243.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053905.328.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053928.422.png'
+        './assets/stickers/Adobe Express - file - 2025-02-03T053850.243.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053905.328.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053928.422.png'
       ],
       price: '$44',
       tags: ['Urban', 'Street Art', 'Contemporary'],
@@ -261,9 +270,9 @@ function PosterSeriesPage() {
       title: 'Dream State',
       description: 'Enter a world of imagination with this surreal collection that blurs the line between reality and dreams. Ethereal compositions, soft color gradients, and whimsical elements create a sense of wonder and possibility.',
       images: [
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053932.177.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053942.493.png',
-        '/assets/stickers/Adobe Express - file - 2025-02-03T053947.426.png'
+        './assets/stickers/Adobe Express - file - 2025-02-03T053932.177.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053942.493.png',
+        './assets/stickers/Adobe Express - file - 2025-02-03T053947.426.png'
       ],
       price: '$41',
       tags: ['Surreal', 'Dreamy', 'Whimsical'],
@@ -273,21 +282,21 @@ function PosterSeriesPage() {
   ];
 
   // Get all unique tags
-  const allTags = ['All', ...new Set(posterSeries.flatMap(series => series.tags))];
+  const allTags = ['All', ...new Set(posterSeries?.flatMap(series => series.tags || []) || [])];
 
   // Filter and sort series
-  const filteredAndSortedSeries = posterSeries
-    .filter(series => filterTag === 'All' || series.tags.includes(filterTag))
+  const filteredAndSortedSeries = (posterSeries || [])
+    .filter(series => filterTag === 'All' || (series.tags && series.tags.includes(filterTag)))
     .sort((a, b) => {
       switch (sortBy) {
         case 'popular':
-          return b.stats.likes - a.stats.likes;
+          return (b.stats?.likes || 0) - (a.stats?.likes || 0);
         case 'price-low':
-          return parseFloat(a.price.replace('$', '')) - parseFloat(b.price.replace('$', ''));
+          return parseFloat((a.price || '$0').replace('$', '')) - parseFloat((b.price || '$0').replace('$', ''));
         case 'price-high':
-          return parseFloat(b.price.replace('$', '')) - parseFloat(a.price.replace('$', ''));
+          return parseFloat((b.price || '$0').replace('$', '')) - parseFloat((a.price || '$0').replace('$', ''));
         case 'name':
-          return a.title.localeCompare(b.title);
+          return (a.title || '').localeCompare(b.title || '');
         default:
           return 0;
       }
@@ -376,12 +385,15 @@ function PosterSeriesPage() {
               {/* Series Images */}
               <div className="aspect-video bg-gray-100 p-4 relative">
                 <div className="grid grid-cols-3 gap-2 h-full">
-                  {series.images.map((image, imgIndex) => (
+                  {(series.images || []).map((image, imgIndex) => (
                     <div key={imgIndex} className="bg-white rounded-lg shadow-sm overflow-hidden group">
                       <img 
                         src={image} 
                         alt={`${series.title} ${imgIndex + 1}`}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          e.target.src = '/assets/stickers/ghost.png'; // Fallback image
+                        }}
                       />
                     </div>
                   ))}
@@ -408,10 +420,14 @@ function PosterSeriesPage() {
                   <span className="text-2xl font-bold text-[#e92932]">{series.price}</span>
                 </div>
                 
-                <p className="text-gray-600 mb-4 line-clamp-2">{series.description}</p>
+                <p className="text-gray-600 mb-4 line-clamp-2 overflow-hidden" style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical'
+                }}>{series.description}</p>
                 
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {series.tags.map((tag) => (
+                  {(series.tags || []).map((tag) => (
                     <span 
                       key={tag} 
                       className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
@@ -425,11 +441,11 @@ function PosterSeriesPage() {
                 <div className="flex items-center gap-4 mb-4 text-sm text-gray-500">
                   <div className="flex items-center gap-1">
                     <HeartIcon size="16px" />
-                    <span>{series.stats.likes}</span>
+                    <span>{series.stats?.likes || 0}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <ShareIcon size="16px" />
-                    <span>{series.stats.shares}</span>
+                    <span>{series.stats?.shares || 0}</span>
                   </div>
                 </div>
                 
@@ -969,11 +985,11 @@ function PosterSeriesPage() {
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <div className="flex items-center gap-1">
                       <HeartIcon size="16px" />
-                      <span>{selectedSeries.stats.likes} likes</span>
+                      <span>{selectedSeries.stats?.likes || 0} likes</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <ShareIcon size="16px" />
-                      <span>{selectedSeries.stats.shares} shares</span>
+                      <span>{selectedSeries.stats?.shares || 0} shares</span>
                     </div>
                   </div>
                 </div>
@@ -999,12 +1015,15 @@ function PosterSeriesPage() {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                {selectedSeries.images.map((image, index) => (
+                {(selectedSeries.images || []).map((image, index) => (
                   <div key={index} className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
                     <img 
                       src={image} 
                       alt={`${selectedSeries.title} ${index + 1}`}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.target.src = '/assets/stickers/ghost.png'; // Fallback image
+                      }}
                     />
                   </div>
                 ))}
@@ -1018,7 +1037,7 @@ function PosterSeriesPage() {
               <div className="mb-6">
                 <h4 className="text-lg font-semibold mb-3">Features</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {selectedSeries.features.map((feature, index) => (
+                  {(selectedSeries.features || []).map((feature, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-[#e92932] rounded-full"></div>
                       <span className="text-sm text-gray-700">{feature}</span>
@@ -1028,7 +1047,7 @@ function PosterSeriesPage() {
               </div>
               
               <div className="flex flex-wrap gap-2 mb-6">
-                {selectedSeries.tags.map((tag) => (
+                {(selectedSeries.tags || []).map((tag) => (
                   <span 
                     key={tag} 
                     className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
