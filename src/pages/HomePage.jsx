@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import StickerFloatScene from '../components/StickerFloatScene'
+import { Marquee } from '../components/MarqueeComponent'
 
 // Star rating component
 const StarRating = ({ rating, size = "20px" }) => {
@@ -123,25 +124,43 @@ function HomePage() {
     setDispensedSticker(sticker);
   };
   
-  // Testimonials data
+  // Testimonials data - will be replaced with Google Forms/Excel integration later
   const testimonials = [
     {
       id: 1,
-      name: "Alex Johnson",
-      text: "These stickers are amazing quality! They've survived through rain and multiple washes on my laptop. The holographic ones are especially eye-catching.",
+      name: "Alex J.",
+      text: "These stickers went through rain, coffee spills, and still slayed. Stuck on my laptop like trauma — forever.",
       rating: 5
     },
     {
       id: 2,
-      name: "Morgan Smith",
-      text: "I'm obsessed with the custom sticker I ordered. The colors are vibrant and the printing is crystal clear. Will definitely order more!",
+      name: "Morgan S.",
+      text: "Ordered a custom polaroid set and literally screamed. Colors? Perfect. Quality? Chef's kiss. Me? Obsessed.",
       rating: 5
     },
     {
       id: 3,
-      name: "Jamie Lee",
-      text: "Super fast shipping and the vinyl quality is top notch. These stickers have completely transformed my hydro flask!",
-      rating: 4
+      name: "Jamie L.",
+      text: "Slapped them on my hydro flask and it instantly had a personality. The quality is wild.",
+      rating: 5
+    },
+    {
+      id: 4,
+      name: "Casey R.",
+      text: "Waterproof stickers that actually work? Revolutionary. My laptop survived a whole semester.",
+      rating: 5
+    },
+    {
+      id: 5,
+      name: "Taylor M.",
+      text: "Die-cut precision is insane. Every detail came out perfect on my custom design.",
+      rating: 5
+    },
+    {
+      id: 6,
+      name: "Jordan K.",
+      text: "Bulk order for my small business was seamless. Quality stayed consistent across all 100 stickers.",
+      rating: 5
     }
   ];
   
@@ -165,16 +184,23 @@ function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                Discover Your <span className="text-[#e92932]">Perfect</span> Sticker
+                Stickers That Feel <span className="text-[#e92932]">Like You</span>
               </motion.h1>
               <motion.p
-                className="text-lg text-gray-600 mb-8"
+                className="text-lg text-gray-600 mb-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
-                Explore our collection of handcrafted stickers designed with love for creative souls. 
-                Each design brings a unique touch to your personal style.
+                From emotional chaos to aesthetic peace, our stickers are made for your vibe.
+              </motion.p>
+              <motion.p
+                className="text-lg text-gray-600 mb-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                Whether you're journaling, branding your cafe, or just being ✨ extra ✨ — we've got a sticker for that.
               </motion.p>
               <motion.div
                 className="flex flex-wrap justify-center md:justify-start gap-4"
@@ -182,10 +208,15 @@ function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <Link to="/products">
-                  <Button color="red" className="h-12 px-8 text-base">View Products</Button>
+                <Link to="/shop">
+                  <Button color="red" className="h-12 px-8 text-base">👉 Browse Stickers</Button>
                 </Link>
-                <Button color="white" className="h-12 px-8 text-base">Learn More</Button>
+                <Link to="/collections">
+                  <Button color="white" className="h-12 px-8 text-base">👉 Explore Collections</Button>
+                </Link>
+                <Link to="/custom">
+                  <Button color="blue" className="h-12 px-8 text-base">👉 Make Your Own</Button>
+                </Link>
               </motion.div>
             </div>
             <motion.div 
@@ -201,32 +232,93 @@ function HomePage() {
             </motion.div>
           </section>
           
-          {/* Categories Section */}
+          {/* Category Highlights Section */}
           <section className="w-full py-16 bg-gray-50 rounded-lg my-8">
-            <h2 className="text-2xl font-bold text-center mb-8">Browse Categories</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
-              {[
-                { name: "Holographic", image: "/assets/stickers/Adobe Express - file - 2025-02-03T053900.986.png" },
-                { name: "Waterproof", image: "/assets/stickers/Adobe Express - file - 2025-02-03T053936.483.png" },
-                { name: "Matte Finish", image: "/assets/stickers/Adobe Express - file - 2025-02-03T053916.536.png" },
-              ].map((category, i) => (
-                <div 
-                  key={category.name}
-                  className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+            <div className="max-w-5xl mx-auto px-4">
+              <h2 className="text-3xl font-bold text-center mb-4">Category Highlights</h2>
+              <p className="text-center text-gray-600 mb-12">Current Stix 'N' Vibes Shop</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Waterproof Stickers */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
-                  <div className="aspect-square overflow-hidden">
-                    <img 
-                      src={category.image} 
-                      alt={category.name} 
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" 
-                    />
+                  <div className="aspect-video bg-gradient-to-br from-blue-400 to-blue-600 p-6 flex items-center justify-center">
+                    <span className="text-6xl">💧</span>
                   </div>
-                  <div className="p-4 text-center">
-                    <h3 className="text-lg font-bold text-gray-900">{category.name}</h3>
-                    <Link to="/portfolio" className="text-sm text-[#e92932] hover:underline">View Collection</Link>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">Non-Tearable Waterproof</h3>
+                    <p className="text-gray-600 mb-1">Tough love.</p>
+                    <p className="text-gray-600 mb-6">These stickers survive rain, rage, and rough handling — ideal for water bottles, laptops, and real-life chaos.</p>
+                    <Link to="/shop">
+                      <Button color="blue" className="w-full">Shop Waterproofs</Button>
+                    </Link>
                   </div>
-                </div>
-              ))}
+                </motion.div>
+
+                {/* Polaroid Customs */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                >
+                  <div className="aspect-video bg-gradient-to-br from-pink-400 to-red-500 p-6 flex items-center justify-center">
+                    <span className="text-6xl">📸</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">Polaroid Customs</h3>
+                    <p className="text-gray-600 mb-1">Turn memories into stickable moments.</p>
+                    <p className="text-gray-600 mb-6">Send us your fave photos — we'll turn them into aesthetic polaroid-style stickers. Perfect for gifts, journaling, or flexing friendship.</p>
+                    <Link to="/polaroid">
+                      <Button color="red" className="w-full">Make Your Polaroid Set</Button>
+                    </Link>
+                  </div>
+                </motion.div>
+
+                {/* Paper Stickers */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                >
+                  <div className="aspect-video bg-gradient-to-br from-yellow-400 to-orange-500 p-6 flex items-center justify-center">
+                    <span className="text-6xl">🧻</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">Paper Stickers</h3>
+                    <p className="text-gray-600 mb-1">For soft-core chaos and everyday sticking.</p>
+                    <p className="text-gray-600 mb-6">Great for planners, scrapbooks, moodboards — or just for the ✨feels✨.</p>
+                    <Link to="/shop">
+                      <Button color="gray" className="w-full">Browse Paper Stickers</Button>
+                    </Link>
+                  </div>
+                </motion.div>
+
+                {/* 3-Poster Design Series */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                >
+                  <div className="aspect-video bg-gradient-to-br from-purple-400 to-indigo-600 p-6 flex items-center justify-center">
+                    <span className="text-6xl">🖼️</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">3-Poster Design Series</h3>
+                    <p className="text-gray-600 mb-1">One design. Three pieces. Maximum impact.</p>
+                    <p className="text-gray-600 mb-6">Perfect for cafes, walls, or personal space takeovers. Bold, balanced, and made to stand out.</p>
+                    <Link to="/poster-series">
+                      <Button color="white" className="w-full">View Poster Series</Button>
+                    </Link>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </section>
           
@@ -245,12 +337,20 @@ function HomePage() {
                 </div>
                 <div className="md:w-1/2">
                   <h2 className="text-2xl font-bold mb-4">
-                    Artist Collaborations
+                    🎨 Collabs That Stick
                   </h2>
-                  <p className="text-gray-700 mb-6">
-                    We partner with independent artists to bring you exclusive, limited-edition sticker designs. Each purchase directly supports the creator and their artistic journey.
+                  <p className="text-gray-700 mb-4">
+                    We team up with indie artists, illustrators, and chaos creators to drop limited-edition sticker collections you won't find anywhere else.
                   </p>
-                  <Button color="red">Explore Artist Series</Button>
+                  <p className="text-gray-700 mb-4">
+                    Each collab = their art + our vibe = stickers that slap.
+                  </p>
+                  <p className="text-gray-700 mb-6">
+                    Your support goes straight to the artist. Your stuff? Way cooler.
+                  </p>
+                  <Link to="/collabs">
+                    <Button color="red">Explore Collabs</Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -262,23 +362,28 @@ function HomePage() {
               <div className="flex flex-col-reverse md:flex-row gap-8 items-center">
                 <div className="md:w-1/2">
                   <h2 className="text-2xl font-bold mb-4">
-                    Create Custom Stickers
+                    ✂️ Make Your Own Magic
                   </h2>
+                  <p className="text-gray-700 mb-2">
+                    Got art? A logo? Your bestie's face?
+                  </p>
                   <p className="text-gray-700 mb-6">
-                    Turn your artwork, photos, or designs into high-quality stickers. Perfect for small businesses, events, or personal projects. Available in various sizes and finishes.
+                    Turn it into a high-quality, stickable masterpiece. Perfect for small businesses, events, or personal chaos.
                   </p>
                   <ul className="mb-6 space-y-2">
                     <li className="flex items-center gap-2">
-                      <ThumbsUp /> <span>Die-cut precision</span>
+                      <ThumbsUp /> <span>✂️ Die-cut or clean-cut</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <ThumbsUp /> <span>Weather-resistant options</span>
+                      <ThumbsUp /> <span>💧 Waterproof options</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <ThumbsUp /> <span>Bulk discounts available</span>
+                      <ThumbsUp /> <span>📦 Bulk discounts for the overthinkers</span>
                     </li>
                   </ul>
-                  <Button color="blue">Design Your Sticker</Button>
+                  <Link to="/custom">
+                    <Button color="blue">Design Your Sticker</Button>
+                  </Link>
                 </div>
                 <div className="md:w-1/2">
                   <img 
@@ -293,19 +398,29 @@ function HomePage() {
           
           {/* Testimonials */}
           <section className="w-full py-16 bg-gray-50 my-8">
-            <div className="max-w-5xl mx-auto px-4">
-              <h2 className="text-2xl font-bold text-center mb-12">What Our Customers Say</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="max-w-7xl mx-auto px-4">
+              <h2 className="text-3xl font-bold text-center mb-12">💖 What the Vibe Tribe Says</h2>
+              
+              <Marquee pauseOnHover className="[--duration:30s]">
                 {testimonials.map((testimonial) => (
                   <div
                     key={testimonial.id}
-                    className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+                    className="mx-4 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 min-w-[300px] max-w-[400px]"
                   >
-                    <StarRating rating={testimonial.rating} />
-                    <p className="mt-4 text-gray-700">{testimonial.text}</p>
-                    <p className="mt-4 font-medium text-gray-900">— {testimonial.name}</p>
+                    <div className="flex items-center mb-4">
+                      <StarRating rating={testimonial.rating} />
+                    </div>
+                    <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
+                    <p className="font-medium text-gray-900">— {testimonial.name}</p>
                   </div>
                 ))}
+              </Marquee>
+              
+              <div className="text-center mt-8">
+                <p className="text-gray-600 mb-4">Join the vibe tribe and share your story!</p>
+                <Button color="red" className="px-8">
+                  📝 Leave a Review
+                </Button>
               </div>
             </div>
           </section>
@@ -314,10 +429,13 @@ function HomePage() {
           <section className="w-full py-16 bg-[#42c4ef]/10 rounded-lg my-8">
             <div className="max-w-xl mx-auto text-center px-4">
               <h2 className="text-2xl font-bold mb-4">
-                Stay Connected
+                📦 Don't Miss a Drop
               </h2>
+              <p className="text-gray-700 mb-4">
+                New sticker drops, chaotic collabs, exclusive offers — straight to your inbox (no spam, just vibes).
+              </p>
               <p className="text-gray-700 mb-8">
-                Subscribe to our newsletter for new releases, special offers, and creative inspiration.
+                Stay in the loop, stay stuck.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <input 

@@ -11,6 +11,7 @@ function Header() {
     { to: '/', label: 'Home' },
     { to: '/shop', label: 'Shop' },
     { to: '/collections', label: 'Collections' },
+    { to: '/collabs', label: 'Collabs' },
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' }
   ];

@@ -255,6 +255,36 @@ function Shop() {
           </div>
         </div>
 
+        {/* Poster Series Spotlight */}
+        <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl p-8 mb-8 text-white">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="flex-1">
+              <h2 className="text-3xl font-bold mb-4">🖼️ 3-Poster Design Series</h2>
+              <p className="text-lg mb-2">One design. Three pieces. Maximum impact.</p>
+              <p className="text-purple-100 mb-6">Perfect for cafes, walls, or personal space takeovers. Bold, balanced, and made to stand out.</p>
+              <a
+                href="/poster-series"
+                className="inline-block bg-white text-purple-600 px-6 py-3 rounded-full font-medium hover:bg-purple-50 transition-colors"
+              >
+                View Poster Series →
+              </a>
+            </div>
+            <div className="w-full md:w-auto">
+              <div className="grid grid-cols-3 gap-2 w-48">
+                <div className="aspect-square bg-white/20 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">🎨</span>
+                </div>
+                <div className="aspect-square bg-white/20 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">✨</span>
+                </div>
+                <div className="aspect-square bg-white/20 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">🖼️</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Products Grid */}
         <div className={`grid gap-6 mb-12 ${
           viewMode === 'grid' 
