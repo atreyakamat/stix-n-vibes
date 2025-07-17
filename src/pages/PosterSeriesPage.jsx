@@ -200,9 +200,9 @@ function PosterSeriesPage() {
       title: 'Chaos Energy',
       description: 'Embrace the beautiful mess of creativity with this explosive collection of abstract designs. Each poster captures the raw energy of artistic expression through bold colors, dynamic shapes, and spontaneous compositions that breathe life into any space.',
       images: [
-        './assets/stickers/Adobe Express - file - 2025-02-03T053900.986.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053936.483.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053916.536.png'
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053900.986.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053936.483.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053916.536.png'
       ],
       price: '$45',
       tags: ['Abstract', 'Colorful', 'Energy'],
@@ -214,9 +214,9 @@ function PosterSeriesPage() {
       title: 'Minimal Vibes',
       description: 'Clean lines, maximum impact. This sophisticated collection proves that sometimes less is more. Each poster features carefully balanced compositions with plenty of white space and subtle color palettes that enhance any modern interior.',
       images: [
-        './assets/stickers/Adobe Express - file - 2025-02-03T053558.505.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053620.350.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053656.087.png'
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053558.505.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053620.350.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053656.087.png'
       ],
       price: '$40',
       tags: ['Minimal', 'Clean', 'Modern'],
@@ -228,9 +228,9 @@ function PosterSeriesPage() {
       title: 'Retro Wave',
       description: 'Nostalgic feels with modern appeal. Transport yourself to the golden age of design with this collection that perfectly balances vintage aesthetics with contemporary sensibilities. Each piece is a love letter to the past with a fresh perspective.',
       images: [
-        './assets/stickers/Adobe Express - file - 2025-02-03T053756.124.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053815.779.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053819.449.png'
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053756.124.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053815.779.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053819.449.png'
       ],
       price: '$42',
       tags: ['Retro', 'Nostalgic', 'Wave'],
@@ -242,9 +242,9 @@ function PosterSeriesPage() {
       title: 'Nature Escape',
       description: 'Bring the outdoors to your space with this calming collection inspired by natural beauty. Each poster captures the serenity of nature through organic forms, earth tones, and peaceful compositions that create a sense of tranquility.',
       images: [
-        './assets/stickers/Adobe Express - file - 2025-02-03T053830.710.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053832.899.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053848.102.png'
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053830.710.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053832.899.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053848.102.png'
       ],
       price: '$38',
       tags: ['Nature', 'Organic', 'Peaceful'],
@@ -256,9 +256,9 @@ function PosterSeriesPage() {
       title: 'Urban Pulse',
       description: 'Feel the rhythm of the city with this dynamic collection that captures the energy and diversity of urban life. Bold graphics, street art influences, and contemporary typography come together to celebrate metropolitan culture.',
       images: [
-        './assets/stickers/Adobe Express - file - 2025-02-03T053850.243.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053905.328.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053928.422.png'
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053850.243.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053905.328.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053928.422.png'
       ],
       price: '$44',
       tags: ['Urban', 'Street Art', 'Contemporary'],
@@ -270,9 +270,9 @@ function PosterSeriesPage() {
       title: 'Dream State',
       description: 'Enter a world of imagination with this surreal collection that blurs the line between reality and dreams. Ethereal compositions, soft color gradients, and whimsical elements create a sense of wonder and possibility.',
       images: [
-        './assets/stickers/Adobe Express - file - 2025-02-03T053932.177.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053942.493.png',
-        './assets/stickers/Adobe Express - file - 2025-02-03T053947.426.png'
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053932.177.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053942.493.png',
+        '/assets/stickers/Adobe Express - file - 2025-02-03T053947.426.png'
       ],
       price: '$41',
       tags: ['Surreal', 'Dreamy', 'Whimsical'],
