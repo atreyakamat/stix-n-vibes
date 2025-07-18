@@ -6,6 +6,24 @@ import { useCart } from '../context/CartContext';
 import collectionsData from '../data/collections.json';
 import productsData from '../data/products.json';
 
+// Floating Animation Component
+const FloatingElement = ({ children, delay = 0 }) => (
+  <motion.div
+    animate={{
+      y: [0, -15, 0],
+      rotate: [0, 2, -2, 0]
+    }}
+    transition={{
+      duration: 4,
+      repeat: Infinity,
+      delay: delay,
+      ease: "easeInOut"
+    }}
+  >
+    {children}
+  </motion.div>
+)
+
 function Collections() {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedStickers, setSelectedStickers] = useState([]);
@@ -71,28 +89,68 @@ function Collections() {
   };
 
   return (
-    <div className="bg-[#fcf8f8] min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-[#fcf8f8] via-[#faf9fb] to-[#f8f4f4] relative overflow-hidden">
+      {/* Background floating elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <FloatingElement delay={0}>
+          <div className="absolute top-20 left-10 text-4xl opacity-20">📚</div>
+        </FloatingElement>
+        <FloatingElement delay={1}>
+          <div className="absolute top-40 right-20 text-3xl opacity-30">✨</div>
+        </FloatingElement>
+        <FloatingElement delay={2}>
+          <div className="absolute bottom-40 left-20 text-5xl opacity-20">🎨</div>
+        </FloatingElement>
+        <FloatingElement delay={3}>
+          <div className="absolute bottom-60 right-10 text-4xl opacity-25">💫</div>
+        </FloatingElement>
+        <FloatingElement delay={0.5}>
+          <div className="absolute top-60 left-1/2 text-3xl opacity-15">🌟</div>
+        </FloatingElement>
+        <FloatingElement delay={2.5}>
+          <div className="absolute top-80 right-1/3 text-4xl opacity-20">🎭</div>
+        </FloatingElement>
+      </div>
+
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <motion.h1 
-            className="text-4xl md:text-5xl font-bold text-[#1b0e0f] mb-4"
-            initial={{ opacity: 0, y: 20 }}
+      {/* Beautiful Hero Section */}
+      <section className="relative pt-20 pb-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            Sticker Collections
-          </motion.h1>
-          <motion.p 
-            className="text-[#974e52] text-lg mb-8 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            Curated sticker packs designed for different vibes and occasions. Get more value with our themed collections.
-          </motion.p>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-[#e92932] via-[#ff6b9d] to-[#42c4ef] bg-clip-text text-transparent">
+                Curated Collections
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+              Discover our carefully crafted sticker collections. Each pack tells a story, captures a vibe, and brings your world to life.
+            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <div className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl px-6 py-3 text-gray-700">
+                📚 Themed Collections
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl px-6 py-3 text-gray-700">
+                ✨ Premium Quality
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl px-6 py-3 text-gray-700">
+                🎨 Artist Collaborations
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
+      </section>
+      
+      <main className="max-w-7xl mx-auto px-4 py-8">
 
         {/* Collections Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mb-12">

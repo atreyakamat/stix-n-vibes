@@ -1,382 +1,362 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
-// Custom button component
-const Button = ({ children, color = "blue", className = "", ...props }) => {
-  const colorClasses = {
-    blue: "bg-[#42c4ef] text-[#111618] hover:bg-[#2bb4e3]",
-    gray: "bg-[#f0f3f4] text-[#111618] hover:bg-[#e0e3e4]",
-    red: "bg-[#e92932] text-white hover:bg-[#d91922]",
-    white: "bg-white text-[#111618] border border-[#e0e3e4] hover:bg-[#f8f8f8]",
-  };
+// Icon components
+const HeartIcon = ({ size = "24px" }) => (
+  <div className="text-[#ff6b9d]" data-icon="Heart" data-size={size} data-weight="regular">
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" viewBox="0 0 256 256">
+      <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z" />
+    </svg>
+  </div>
+)
+
+const SparkleIcon = ({ size = "24px" }) => (
+  <div className="text-[#42c4ef]" data-icon="Sparkle" data-size={size} data-weight="regular">
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" viewBox="0 0 256 256">
+      <path d="M197.58,129.06l-51.61-19-19-51.65a15.92,15.92,0,0,0-29.88,0L78.07,110l-51.65,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0l19-51.61,51.65-19a15.92,15.92,0,0,0,0-29.88ZM140.39,163a15.87,15.87,0,0,0-9.43,9.43l-19,51.46L93,172.39A15.87,15.87,0,0,0,83.61,163h0L32.15,144l51.46-19A15.87,15.87,0,0,0,93,115.61l19-51.46,19,51.46a15.87,15.87,0,0,0,9.43,9.43l51.46,19ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z" />
+    </svg>
+  </div>
+)
+
+const PaletteIcon = ({ size = "24px" }) => (
+  <div className="text-[#9b59b6]" data-icon="Palette" data-size={size} data-weight="regular">
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" viewBox="0 0 256 256">
+      <path d="M200.77,53.89A103.27,103.27,0,0,0,128,24h-1.07A104,104,0,0,0,24,128c0,43,26.58,79.06,69.36,94.17A32,32,0,0,0,136,192a16,16,0,0,1,16-16h46.21a31.81,31.81,0,0,0,31.2-24.88,104.43,104.43,0,0,0,2.59-24A103.28,103.28,0,0,0,200.77,53.89ZM84,168a12,12,0,1,1,12-12A12,12,0,0,1,84,168Zm12-64a12,12,0,1,1-12-12A12,12,0,0,1,96,104Zm40-32a12,12,0,1,1-12-12A12,12,0,0,1,136,72Zm40,32a12,12,0,1,1-12-12A12,12,0,0,1,176,104Z"/>
+    </svg>
+  </div>
+)
+
+const Button = ({ children, variant = "primary", className = "", ...props }) => {
+  const baseClasses = "flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 text-base font-bold leading-normal tracking-[0.015em] transition-all duration-300 transform hover:scale-105"
+  
+  const variantClasses = {
+    primary: "bg-gradient-to-r from-[#e92932] to-[#ff6b9d] text-white hover:shadow-lg",
+    secondary: "bg-white border-2 border-[#e92932] text-[#e92932] hover:bg-[#e92932] hover:text-white",
+    outline: "border-2 border-white text-white hover:bg-white hover:text-[#e92932]"
+  }
 
   return (
-    <button
-      className={`flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 text-sm font-bold leading-normal tracking-[0.015em] transition-colors ${colorClasses[color]} ${className}`}
-      {...props}
-    >
-      {children}
+    <button className={`${baseClasses} ${variantClasses[variant]} ${className}`} {...props}>
+      <span className="truncate">{children}</span>
     </button>
   )
 }
 
-// Instagram Icon component
-const InstagramIcon = ({ size = "24px" }) => (
-  <div className="text-inherit" data-icon="InstagramLogo" data-size={size} data-weight="regular">
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" viewBox="0 0 256 256">
-      <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z" />
-    </svg>
-  </div>
+// Floating Animation Component
+const FloatingElement = ({ children, delay = 0 }) => (
+  <motion.div
+    animate={{
+      y: [0, -15, 0],
+      rotate: [0, 2, -2, 0]
+    }}
+    transition={{
+      duration: 4,
+      repeat: Infinity,
+      delay: delay,
+      ease: "easeInOut"
+    }}
+  >
+    {children}
+  </motion.div>
 )
-
-// Play icon for video posts
-const PlayIcon = ({ size = "48px" }) => (
-  <div className="text-white" data-icon="Play" data-size={size} data-weight="fill">
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" viewBox="0 0 256 256">
-      <path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z" />
-    </svg>
-  </div>
-)
-
-// Mock Instagram posts data - in real app, this would come from Instagram API
-const mockInstagramPosts = [
-  {
-    id: '1',
-    type: 'image',
-    media_url: '/assets/stickers/Adobe Express - file - 2025-02-03T053900.986.png',
-    caption: 'New holographic sticker drop! ✨ Perfect for your laptop setup #StickerVibes #Holographic',
-    timestamp: '2024-01-15T10:30:00Z',
-    likes: 247,
-    comments: 18,
-    artist: '@pixelartist',
-    permalink: 'https://instagram.com/p/example1'
-  },
-  {
-    id: '2',
-    type: 'video',
-    media_url: '/assets/stickers/Adobe Express - file - 2025-02-03T053936.483.png',
-    caption: 'Behind the scenes: Creating our latest chaos collection 🎨 #BehindTheScenes #ArtProcess',
-    timestamp: '2024-01-14T15:45:00Z',
-    likes: 389,
-    comments: 32,
-    artist: '@chaoscreator',
-    permalink: 'https://instagram.com/reel/example2'
-  },
-  {
-    id: '3',
-    type: 'image',
-    media_url: '/assets/stickers/Adobe Express - file - 2025-02-03T053916.536.png',
-    caption: 'Minimalist vibes for your journal 📖 Available now in our shop',
-    timestamp: '2024-01-13T09:15:00Z',
-    likes: 156,
-    comments: 12,
-    artist: '@minimalvibes',
-    permalink: 'https://instagram.com/p/example3'
-  },
-  {
-    id: '4',
-    type: 'video',
-    media_url: '/assets/stickers/Adobe Express - file - 2025-02-03T053558.505.png',
-    caption: 'Time-lapse: From sketch to sticker in 60 seconds ⏱️ #Timelapse #StickerMaking',
-    timestamp: '2024-01-12T16:20:00Z',
-    likes: 512,
-    comments: 45,
-    artist: '@studioflow',
-    permalink: 'https://instagram.com/reel/example4'
-  },
-  {
-    id: '5',
-    type: 'image',
-    media_url: '/assets/stickers/Adobe Express - file - 2025-02-03T053620.350.png',
-    caption: 'Retro wave aesthetic never goes out of style 🌊 #RetroWave #Aesthetic',
-    timestamp: '2024-01-11T12:00:00Z',
-    likes: 278,
-    comments: 23,
-    artist: '@retrowave80s',
-    permalink: 'https://instagram.com/p/example5'
-  },
-  {
-    id: '6',
-    type: 'image',
-    media_url: '/assets/stickers/Adobe Express - file - 2025-02-03T053656.087.png',
-    caption: 'Nature-inspired designs for the outdoor enthusiast 🌲 #NatureVibes #Outdoors',
-    timestamp: '2024-01-10T14:30:00Z',
-    likes: 334,
-    comments: 28,
-    artist: '@naturecollective',
-    permalink: 'https://instagram.com/p/example6'
-  }
-];
-
-// Instagram post component
-const InstagramPost = ({ post, index }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
-  // Determine grid size based on index for bento layout
-  const getBentoSize = (index) => {
-    const pattern = index % 6;
-    switch (pattern) {
-      case 0: return 'col-span-2 row-span-2'; // Large square
-      case 1: return 'col-span-1 row-span-1'; // Small square
-      case 2: return 'col-span-1 row-span-2'; // Tall rectangle
-      case 3: return 'col-span-2 row-span-1'; // Wide rectangle
-      case 4: return 'col-span-1 row-span-1'; // Small square
-      case 5: return 'col-span-1 row-span-1'; // Small square
-      default: return 'col-span-1 row-span-1';
-    }
-  };
-
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 1) return '1 day ago';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
-    return date.toLocaleDateString();
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className={`relative group cursor-pointer overflow-hidden rounded-lg ${getBentoSize(index)}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => window.open(post.permalink, '_blank')}
-    >
-      {/* Image/Video container */}
-      <div className="relative w-full h-full bg-gray-100">
-        <img 
-          src={post.media_url} 
-          alt={post.caption.substring(0, 50)}
-          className="w-full h-full object-cover"
-        />
-        
-        {/* Video indicator */}
-        {post.type === 'video' && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="bg-black bg-opacity-50 rounded-full p-3">
-              <PlayIcon size="32px" />
-            </div>
-          </div>
-        )}
-        
-        {/* Hover overlay */}
-        <div className={`absolute inset-0 bg-black bg-opacity-0 transition-all duration-300 ${
-          isHovered ? 'bg-opacity-70' : ''
-        }`}>
-          {isHovered && (
-            <div className="absolute inset-0 p-4 flex flex-col justify-between text-white">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <InstagramIcon size="20px" />
-                  <span className="text-sm font-medium">{post.artist}</span>
-                </div>
-                <div className="text-xs opacity-75">
-                  {formatDate(post.timestamp)}
-                </div>
-              </div>
-              
-              <div>
-                <p className="text-sm mb-3 line-clamp-3">
-                  {post.caption}
-                </p>
-                <div className="flex items-center space-x-4 text-xs">
-                  <span>❤️ {post.likes}</span>
-                  <span>💬 {post.comments}</span>
-                  <span>📱 View on IG</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
-};
 
 function CollabPage() {
-  const [posts, setPosts] = useState(mockInstagramPosts);
-  const [loading, setLoading] = useState(false);
-  const [instagramUrl, setInstagramUrl] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState('All Posts')
+  
+  const showcaseItems = [
+    {
+      id: 1,
+      type: 'image',
+      title: 'New waterproof drop! ✨ Minimalist and moody.',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2670&auto=format&fit=crop',
+      artist: '@minimal_maven'
+    },
+    {
+      id: 2,
+      type: 'video',
+      title: 'Behind-the-scenes chaos: turning late-night doodles into sticker art.',
+      image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?q=80&w=2670&auto=format&fit=crop',
+      artist: '@doodle_wizard'
+    },
+    {
+      id: 3,
+      type: 'video',
+      title: 'Sketch to sticker in 60 seconds: creative time-lapse from our latest drop.',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2670&auto=format&fit=crop',
+      artist: '@speed_sketcher'
+    },
+    {
+      id: 4,
+      type: 'image',
+      title: 'Retro-wave reboot: 80s vibes that belong on your water bottle.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2670&auto=format&fit=crop',
+      artist: '@retro_revival'
+    },
+    {
+      id: 5,
+      type: 'image',
+      title: 'Nature x nostalgia: outdoor aesthetics with soul.',
+      image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2671&auto=format&fit=crop',
+      artist: '@wild_wanderer'
+    },
+    {
+      id: 6,
+      type: 'image',
+      title: 'Journal-core: soft stickers that go perfectly with your playlist and breakdowns.',
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2670&auto=format&fit=crop',
+      artist: '@journal_vibes'
+    }
+  ]
 
-  const handleSubmitInstagram = async (e) => {
-    e.preventDefault();
-    if (!instagramUrl.trim()) return;
-    
-    setLoading(true);
-    
-    // Simulate API call - in real app, this would fetch from Instagram API
-    setTimeout(() => {
-      // Mock adding new post
-      const newPost = {
-        id: Date.now().toString(),
-        type: 'image',
-        media_url: '/assets/stickers/Adobe Express - file - 2025-02-03T053756.124.png',
-        caption: `New post from ${instagramUrl}`,
-        timestamp: new Date().toISOString(),
-        likes: Math.floor(Math.random() * 500),
-        comments: Math.floor(Math.random() * 50),
-        artist: '@newartist',
-        permalink: instagramUrl
-      };
-      
-      setPosts(prev => [newPost, ...prev]);
-      setInstagramUrl('');
-      setLoading(false);
-    }, 2000);
-  };
+  const filteredItems = selectedFilter === 'All Posts' 
+    ? showcaseItems 
+    : showcaseItems.filter(item => 
+        selectedFilter === '📸 Images' ? item.type === 'image' : item.type === 'video'
+      )
 
-  const filteredPosts = selectedFilter === 'all' 
-    ? posts 
-    : posts.filter(post => post.type === selectedFilter);
+  const filterCounts = {
+    'All Posts': showcaseItems.length,
+    '📸 Images': showcaseItems.filter(item => item.type === 'image').length,
+    '🎬 Videos': showcaseItems.filter(item => item.type === 'video').length
+  }
 
   return (
-    <div className="min-h-screen w-full bg-white" style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}>
+    <div className="min-h-screen w-full bg-gradient-to-br from-[#fcf8f8] via-[#faf9fb] to-[#f8f4f4] overflow-x-hidden" style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}>
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 py-16">
+      <main className="flex flex-col items-center mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+        <motion.div 
+          className="w-full my-12 text-center relative"
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12"
+          transition={{ duration: 1 }}
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            🎨 <span className="text-[#e92932]">Collabs</span> That Stick
-          </h1>
-          <p className="text-xl text-gray-600 mb-2">
-            We team up with indie artists, illustrators, and chaos creators
-          </p>
-          <p className="text-lg text-gray-500">
-            Each collab = their art + our vibe = stickers that slap
-          </p>
-        </motion.div>
-
-        {/* Instagram URL Input */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="bg-gray-50 rounded-lg p-6 mb-8"
-        >
-          <h2 className="text-xl font-bold mb-4">📱 Add Instagram Content</h2>
-          <form onSubmit={handleSubmitInstagram} className="flex flex-col sm:flex-row gap-4">
-            <input
-              type="url"
-              value={instagramUrl}
-              onChange={(e) => setInstagramUrl(e.target.value)}
-              placeholder="Paste Instagram post or reel URL here..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e92932] focus:border-transparent"
-              required
-            />
-            <Button 
-              type="submit" 
-              color="red" 
-              className={`px-8 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={loading}
-            >
-              {loading ? '🔄 Loading...' : '✨ Add Content'}
-            </Button>
-          </form>
-          <p className="text-sm text-gray-500 mt-2">
-            Paste any Instagram post or reel URL to add it to our collaboration showcase
-          </p>
-        </motion.div>
-
-        {/* Filter Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-wrap gap-3 mb-8"
-        >
-          <button
-            onClick={() => setSelectedFilter('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              selectedFilter === 'all'
-                ? 'bg-[#e92932] text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            All Posts ({posts.length})
-          </button>
-          <button
-            onClick={() => setSelectedFilter('image')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              selectedFilter === 'image'
-                ? 'bg-[#42c4ef] text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            📸 Images ({posts.filter(p => p.type === 'image').length})
-          </button>
-          <button
-            onClick={() => setSelectedFilter('video')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              selectedFilter === 'video'
-                ? 'bg-[#42c4ef] text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            🎬 Videos ({posts.filter(p => p.type === 'video').length})
-          </button>
-        </motion.div>
-
-        {/* Bento Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[200px]"
-        >
-          {filteredPosts.map((post, index) => (
-            <InstagramPost key={post.id} post={post} index={index} />
-          ))}
-        </motion.div>
-
-        {/* Empty State */}
-        {filteredPosts.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🎨</div>
-            <h3 className="text-xl font-bold mb-2">No posts found</h3>
-            <p className="text-gray-500">Try adjusting your filters or add some Instagram content!</p>
+          {/* Floating Elements Background */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <FloatingElement delay={0}>
+              <div className="absolute top-10 left-10 text-4xl opacity-20">🎨</div>
+            </FloatingElement>
+            <FloatingElement delay={1}>
+              <div className="absolute top-20 right-20 text-3xl opacity-20">✨</div>
+            </FloatingElement>
+            <FloatingElement delay={2}>
+              <div className="absolute bottom-20 left-20 text-5xl opacity-20">🤝</div>
+            </FloatingElement>
+            <FloatingElement delay={1.5}>
+              <div className="absolute top-1/2 right-10 text-3xl opacity-20">🖼️</div>
+            </FloatingElement>
           </div>
-        )}
 
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          <motion.h1 
+            className="text-5xl md:text-7xl font-black text-[#1b0e0f] mb-6 relative z-10"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            🎨 <span className="bg-gradient-to-r from-[#e92932] to-[#ff6b9d] bg-clip-text text-transparent">Collabs That Stick</span>
+          </motion.h1>
+          
+          <motion.div 
+            className="text-lg md:text-xl text-[#666] max-w-4xl mx-auto leading-relaxed relative z-10 space-y-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <p>We team up with indie artists, illustrators, doodle wizards, and chaos creators to bring unique sticker drops to life.</p>
+            <p className="text-2xl font-bold text-[#e92932]">Each collab = your art + our vibe → stickers that slap emotionally and visually.</p>
+            <p>No limits, no gatekeeping — just expressive design and creators getting the credit (and the love) they deserve.</p>
+          </motion.div>
+        </motion.div>
+
+        {/* Artist Showcase Section */}
+        <motion.section 
+          className="w-full py-16"
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center mt-16 bg-gradient-to-r from-[#e92932] to-[#ff6b9d] rounded-lg p-8 text-white"
         >
-          <h2 className="text-2xl font-bold mb-4">Ready to Collaborate?</h2>
-          <p className="text-lg mb-6">
-            Got art that needs to stick? Let's create something amazing together!
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button color="white" className="px-8">
-              📧 Get in Touch
-            </Button>
-            <Button color="blue" className="px-8">
-              🎨 Submit Your Art
-            </Button>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#1b0e0f] mb-6">�️ Artist Showcase</h2>
+            <p className="text-xl text-[#666] max-w-2xl mx-auto">
+              Real creators. Real drops. Real messy magic.
+            </p>
           </div>
-        </motion.div>
+
+          {/* Content Filter */}
+          <motion.div 
+            className="flex justify-center mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            <div className="bg-white rounded-2xl p-2 shadow-lg border border-[#e7d0d1]">
+              <div className="flex gap-2">
+                {Object.entries(filterCounts).map(([filter, count]) => (
+                  <button
+                    key={filter}
+                    onClick={() => setSelectedFilter(filter)}
+                    className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                      selectedFilter === filter
+                        ? 'bg-gradient-to-r from-[#e92932] to-[#ff6b9d] text-white shadow-lg'
+                        : 'text-[#666] hover:bg-[#f8f9fa] hover:text-[#e92932]'
+                    }`}
+                  >
+                    {filter} ({count})
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Showcase Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredItems.map((item, index) => (
+              <motion.div
+                key={item.id}
+                className="bg-white rounded-3xl overflow-hidden shadow-lg border border-[#e7d0d1] hover:shadow-xl transition-all duration-300 group"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 + index * 0.1 }}
+                whileHover={{ y: -5, scale: 1.02 }}
+              >
+                <div className="relative aspect-square overflow-hidden">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  {item.type === 'video' && (
+                    <div className="absolute top-4 right-4 bg-white/90 rounded-full p-2">
+                      <svg className="w-6 h-6 text-[#e92932]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                    <p className="text-white font-semibold text-sm">{item.artist}</p>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <p className="text-[#666] leading-relaxed">{item.title}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* What We Handle Section */}
+        <motion.section 
+          className="w-full py-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.5 }}
+        >
+          <div className="bg-white rounded-3xl p-12 shadow-xl border border-[#e7d0d1]">
+            <h3 className="text-3xl font-bold text-[#1b0e0f] mb-8 text-center">We Handle Everything</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <motion.div 
+                className="text-center p-6 rounded-2xl bg-gradient-to-br from-[#e92932]/10 to-[#ff6b9d]/10 hover:from-[#e92932]/20 hover:to-[#ff6b9d]/20 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                <div className="text-4xl mb-4">👨‍🎨</div>
+                <h4 className="font-bold text-[#1b0e0f] mb-2">Artist Credits</h4>
+                <p className="text-[#666] text-sm">Full exposure and proper attribution</p>
+              </motion.div>
+              
+              <motion.div 
+                className="text-center p-6 rounded-2xl bg-gradient-to-br from-[#42c4ef]/10 to-[#9b59b6]/10 hover:from-[#42c4ef]/20 hover:to-[#9b59b6]/20 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                <div className="text-4xl mb-4">🖨️</div>
+                <h4 className="font-bold text-[#1b0e0f] mb-2">Quality Printing</h4>
+                <p className="text-[#666] text-sm">Premium materials and vibrant colors</p>
+              </motion.div>
+              
+              <motion.div 
+                className="text-center p-6 rounded-2xl bg-gradient-to-br from-[#28a745]/10 to-[#42c4ef]/10 hover:from-[#28a745]/20 hover:to-[#42c4ef]/20 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                <div className="text-4xl mb-4">📦</div>
+                <h4 className="font-bold text-[#1b0e0f] mb-2">Packaging & Shipping</h4>
+                <p className="text-[#666] text-sm">From our studio to fan love</p>
+              </motion.div>
+              
+              <motion.div 
+                className="text-center p-6 rounded-2xl bg-gradient-to-br from-[#ff9500]/10 to-[#e92932]/10 hover:from-[#ff9500]/20 hover:to-[#e92932]/20 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                <div className="text-4xl mb-4">💰</div>
+                <h4 className="font-bold text-[#1b0e0f] mb-2">Revenue Sharing</h4>
+                <p className="text-[#666] text-sm">Fair deals and payout options</p>
+              </motion.div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* CTA Section */}
+        <motion.section 
+          className="w-full py-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 2 }}
+        >
+          <div className="bg-gradient-to-br from-[#e92932] via-[#ff6b9d] to-[#42c4ef] rounded-3xl p-12 text-white text-center shadow-2xl">
+            <motion.h2 
+              className="text-4xl md:text-5xl font-black mb-6"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 2.2 }}
+            >
+              🤝 Ready to Collaborate?
+            </motion.h2>
+            <motion.div 
+              className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed space-y-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.4 }}
+            >
+              <p>Got art that deserves to be stuck everywhere?</p>
+              <p className="font-bold">Want your designs turned into real, tangible, vibe-heavy stickers?</p>
+              <p className="text-lg opacity-90">Let's make cool stuff together.</p>
+            </motion.div>
+            
+            <motion.div
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.6 }}
+            >
+              <Link to="/contact">
+                <Button variant="outline" className="text-xl px-8 py-4 shadow-lg hover:shadow-xl">
+                  📧 Get in Touch
+                </Button>
+              </Link>
+              <Link to="/submit-art">
+                <Button variant="outline" className="text-xl px-8 py-4 shadow-lg hover:shadow-xl">
+                  🎨 Submit Your Art
+                </Button>
+              </Link>
+            </motion.div>
+            
+            <motion.p 
+              className="text-lg opacity-80 mt-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.8 }}
+            >
+              For partnerships, drop ideas, or full-blown chaos — we're here for it all.
+            </motion.p>
+          </div>
+        </motion.section>
       </main>
-      
+
       <Footer />
     </div>
-  );
+  )
 }
 
-export default CollabPage;
+export default CollabPage

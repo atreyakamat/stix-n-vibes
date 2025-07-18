@@ -12,7 +12,9 @@ import ContactPage from './pages/ContactPage'
 import CustomPage from './pages/CustomPage'
 import PolaroidPage from './pages/PolaroidPage'
 import PosterSeriesPage from './pages/PosterSeriesPage'
+import SinglePostersPage from './pages/SinglePostersPage'
 import CollabPage from './pages/CollabPage'
+import SubmitArtPage from './pages/SubmitArtPage'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -26,7 +28,9 @@ function App() {
           <Route path="/custom" element={<CustomPage />} />
           <Route path="/polaroid" element={<PolaroidPage />} />
           <Route path="/poster-series" element={<PosterSeriesPage />} />
+          <Route path="/single-posters" element={<SinglePostersPage />} />
           <Route path="/collabs" element={<CollabPage />} />
+          <Route path="/submit-art" element={<SubmitArtPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<NotFound />} />
