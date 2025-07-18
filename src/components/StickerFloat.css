@@ -53,20 +53,7 @@
   }
 }
 
-/* Pulse animation for added fun */
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.sticker-float-container:hover {
-  animation: pulse 2s ease-in-out infinite;
-}
+/* Removed hover effects for more natural autonomous animation */
 
 /* Parallax effect on mouse move */
 .parallax-container {

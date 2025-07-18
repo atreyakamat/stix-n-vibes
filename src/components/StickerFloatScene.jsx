@@ -1,17 +1,30 @@
 import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
-import { PerspectiveCamera, OrbitControls, useCursor } from '@react-three/drei';
+import { PerspectiveCamera, OrbitControls } from '@react-three/drei';
 import { TextureLoader } from 'three';
 import * as THREE from 'three';
 import './StickerFloat.css';
 
-// Enhanced floating sticker with hover interaction and boundary checking
+// Enhanced floating sticker with creative autonomous movement
 const FloatingSticker = ({ position, rotation, texturePath, speed, amplitude, scale = 1, layer = 'main' }) => {
   const meshRef = useRef();
   const [texture, setTexture] = useState(null);
   const startPosition = useRef(position);
-  const [hovered, setHovered] = useState(false);
   const { size } = useThree();
+  
+  // Creative movement properties
+  const movementPattern = useRef({
+    orbitalSpeed: 0.1 + Math.random() * 0.4,
+    orbitalRadius: 0.3 + Math.random() * 0.7,
+    verticalBob: 0.2 + Math.random() * 0.5,
+    rotationSpeed: 0.05 + Math.random() * 0.2,
+    scale: 0.8 + Math.random() * 0.4,
+    phase: Math.random() * Math.PI * 2,
+    drift: {
+      x: (Math.random() - 0.5) * 0.002,
+      y: (Math.random() - 0.5) * 0.001
+    }
+  });
   
   // Load texture with error handling
   useEffect(() => {
@@ -28,9 +41,6 @@ const FloatingSticker = ({ position, rotation, texturePath, speed, amplitude, sc
     );
   }, [texturePath]);
   
-  // Change cursor on hover
-  useCursor(hovered);
-  
   // Calculate aspect ratio and responsive scale
   useEffect(() => {
     if (texture && texture.image && meshRef.current) {
@@ -46,10 +56,11 @@ const FloatingSticker = ({ position, rotation, texturePath, speed, amplitude, sc
     }
   }, [texture, scale, size]);
   
-  // Enhanced float animation with boundary checking
+  // Enhanced creative autonomous animation
   useFrame((state) => {
     if (meshRef.current && texture) {
       const time = state.clock.elapsedTime;
+      const pattern = movementPattern.current;
       
       // Calculate boundary limits based on camera frustum
       const aspect = size.width / size.height;
@@ -62,7 +73,7 @@ const FloatingSticker = ({ position, rotation, texturePath, speed, amplitude, sc
       const boundaryX = (width / 2) - 1.5;
       const boundaryY = (height / 2) - 1.5;
       
-      // Layer-specific movement patterns
+      // Layer-specific movement multipliers
       let movementMultiplier = 1;
       switch (layer) {
         case 'main':
@@ -76,52 +87,59 @@ const FloatingSticker = ({ position, rotation, texturePath, speed, amplitude, sc
           break;
       }
       
-      // Enhanced floating motion with circular patterns
-      const floatY = startPosition.current[1] + 
-        Math.sin(time * speed * movementMultiplier) * amplitude;
-      const floatX = startPosition.current[0] + 
-        Math.cos(time * speed * 0.7 * movementMultiplier) * (amplitude * 0.5);
+      // Creative autonomous movement patterns
+      const orbitalAngle = time * pattern.orbitalSpeed * movementMultiplier + pattern.phase;
+      const verticalBob = Math.sin(time * speed * 2 + pattern.phase) * pattern.verticalBob;
+      const horizontalSway = Math.cos(time * speed * 1.3 + pattern.phase) * 0.3;
+      const depthOscillation = Math.sin(time * speed * 0.8 + pattern.phase) * 0.4;
       
-      // Smooth boundary wrapping
-      let newX = floatX;
-      let newY = floatY;
-      let newZ = startPosition.current[2] + 
-        Math.sin(time * speed * 0.5) * 0.2;
+      // Complex orbital movement
+      const orbitalX = Math.cos(orbitalAngle) * pattern.orbitalRadius;
+      const orbitalY = Math.sin(orbitalAngle * 0.7) * pattern.orbitalRadius * 0.5;
       
-      // Wrap positions smoothly
+      // Drift movement for natural floating
+      startPosition.current[0] += pattern.drift.x;
+      startPosition.current[1] += pattern.drift.y;
+      
+      // Calculate final position
+      let newX = startPosition.current[0] + orbitalX + horizontalSway;
+      let newY = startPosition.current[1] + orbitalY + verticalBob;
+      let newZ = startPosition.current[2] + depthOscillation;
+      
+      // Smooth boundary wrapping with creative repositioning
       if (Math.abs(newX) > boundaryX) {
         newX = newX > 0 ? -boundaryX + 0.5 : boundaryX - 0.5;
         startPosition.current[0] = newX;
+        // Change movement pattern on boundary hit for variety
+        pattern.orbitalSpeed = 0.1 + Math.random() * 0.4;
+        pattern.phase = Math.random() * Math.PI * 2;
       }
       
       if (Math.abs(newY) > boundaryY) {
         newY = newY > 0 ? -boundaryY + 0.5 : boundaryY - 0.5;
         startPosition.current[1] = newY;
+        // Change movement pattern on boundary hit for variety
+        pattern.verticalBob = 0.2 + Math.random() * 0.5;
+        pattern.phase = Math.random() * Math.PI * 2;
       }
       
       meshRef.current.position.set(newX, newY, newZ);
       
-      // Enhanced rotation with layer-specific speeds
+      // Creative multi-axis rotation
       meshRef.current.rotation.z = rotation[2] + 
-        Math.sin(time * (speed * 0.5 * movementMultiplier)) * 0.15;
-      meshRef.current.rotation.x = Math.sin(time * speed * 0.3) * 0.1;
+        Math.sin(time * pattern.rotationSpeed * movementMultiplier + pattern.phase) * 0.3;
+      meshRef.current.rotation.x = Math.sin(time * speed * 0.4 + pattern.phase) * 0.15;
+      meshRef.current.rotation.y = Math.cos(time * speed * 0.6 + pattern.phase) * 0.1;
       
-      // Hover scale effect
+      // Autonomous scale pulsing for liveliness
       if (texture.image) {
         const aspectRatio = texture.image.width / texture.image.height;
         const isMobile = size.width < 768;
         const responsiveScale = isMobile ? scale * 0.8 : scale;
+        const pulseFactor = 1 + Math.sin(time * 1.5 + pattern.phase) * 0.1; // Subtle pulsing
         
-        meshRef.current.scale.x = THREE.MathUtils.lerp(
-          meshRef.current.scale.x,
-          hovered ? responsiveScale * aspectRatio * 1.3 : responsiveScale * aspectRatio,
-          0.1
-        );
-        meshRef.current.scale.y = THREE.MathUtils.lerp(
-          meshRef.current.scale.y,
-          hovered ? responsiveScale * 1.3 : responsiveScale,
-          0.1
-        );
+        meshRef.current.scale.x = responsiveScale * aspectRatio * pattern.scale * pulseFactor;
+        meshRef.current.scale.y = responsiveScale * pattern.scale * pulseFactor;
       }
     }
   });
@@ -133,8 +151,6 @@ const FloatingSticker = ({ position, rotation, texturePath, speed, amplitude, sc
       ref={meshRef} 
       position={position} 
       rotation={rotation}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
     >
       <planeGeometry args={[1, 1]} />
       <meshBasicMaterial 
@@ -149,28 +165,34 @@ const FloatingSticker = ({ position, rotation, texturePath, speed, amplitude, sc
   );
 };
 
-// Fun floating particles for extra visual appeal
+// Enhanced floating particles with creative autonomous movement
 const FloatingParticles = () => {
   const { size } = useThree();
-  const particleCount = size.width < 768 ? 15 : 25;
+  const particleCount = size.width < 768 ? 20 : 35;
   
   const particles = Array.from({ length: particleCount }, (_, i) => ({
     id: i,
     position: [
+      (Math.random() - 0.5) * 10,
       (Math.random() - 0.5) * 8,
-      (Math.random() - 0.5) * 6,
-      (Math.random() - 0.5) * 4
+      (Math.random() - 0.5) * 6
     ],
-    speed: 0.1 + Math.random() * 0.3,
-    size: 0.05 + Math.random() * 0.1,
+    speed: 0.05 + Math.random() * 0.25,
+    size: 0.03 + Math.random() * 0.08,
+    orbitalRadius: 0.5 + Math.random() * 1.5,
+    phase: Math.random() * Math.PI * 2,
     color: [
       '#e92932',
       '#42c4ef',
       '#FCE9F1',
       '#FDF6F3',
       '#ff6b9d',
-      '#4ecdc4'
-    ][Math.floor(Math.random() * 6)]
+      '#4ecdc4',
+      '#f39c12',
+      '#9b59b6',
+      '#e74c3c',
+      '#1abc9c'
+    ][Math.floor(Math.random() * 10)]
   }));
 
   return (
@@ -181,6 +203,8 @@ const FloatingParticles = () => {
           position={particle.position}
           speed={particle.speed}
           size={particle.size}
+          orbitalRadius={particle.orbitalRadius}
+          phase={particle.phase}
           color={particle.color}
         />
       ))}
@@ -188,26 +212,81 @@ const FloatingParticles = () => {
   );
 };
 
-// Individual floating particle
-const FloatingParticle = ({ position, speed, size, color }) => {
+// Enhanced individual floating particle with creative movement
+const FloatingParticle = ({ position, speed, size, orbitalRadius, phase, color }) => {
   const meshRef = useRef();
   const startPosition = useRef(position);
+  const movementPattern = useRef({
+    spiralSpeed: 0.02 + Math.random() * 0.08,
+    verticalWave: 0.1 + Math.random() * 0.3,
+    horizontalWave: 0.1 + Math.random() * 0.2,
+    rotationSpeed: 0.5 + Math.random() * 1.5,
+    scaleVariation: 0.3 + Math.random() * 0.4,
+    drift: {
+      x: (Math.random() - 0.5) * 0.001,
+      y: (Math.random() - 0.5) * 0.0005,
+      z: (Math.random() - 0.5) * 0.001
+    }
+  });
   
   useFrame((state) => {
     if (meshRef.current) {
       const time = state.clock.elapsedTime;
-      meshRef.current.position.y = startPosition.current[1] + 
-        Math.sin(time * speed) * 0.5;
-      meshRef.current.position.x = startPosition.current[0] + 
-        Math.cos(time * speed * 0.7) * 0.3;
-      meshRef.current.rotation.z = time * speed * 0.5;
+      const pattern = movementPattern.current;
+      
+      // Complex spiral and wave movement
+      const spiralAngle = time * pattern.spiralSpeed + phase;
+      const verticalWave = Math.sin(time * speed + phase) * pattern.verticalWave;
+      const horizontalWave = Math.cos(time * speed * 1.3 + phase) * pattern.horizontalWave;
+      const depthWave = Math.sin(time * speed * 0.8 + phase) * 0.2;
+      
+      // Orbital movement with spiral
+      const orbitalX = Math.cos(spiralAngle) * orbitalRadius * (0.5 + Math.sin(time * 0.5 + phase) * 0.3);
+      const orbitalY = Math.sin(spiralAngle * 0.7) * orbitalRadius * 0.3;
+      const orbitalZ = Math.sin(spiralAngle * 0.5) * 0.5;
+      
+      // Apply drift for natural floating
+      startPosition.current[0] += pattern.drift.x;
+      startPosition.current[1] += pattern.drift.y;
+      startPosition.current[2] += pattern.drift.z;
+      
+      // Boundary wrapping for particles
+      if (Math.abs(startPosition.current[0]) > 6) {
+        startPosition.current[0] = startPosition.current[0] > 0 ? -6 : 6;
+      }
+      if (Math.abs(startPosition.current[1]) > 5) {
+        startPosition.current[1] = startPosition.current[1] > 0 ? -5 : 5;
+      }
+      if (Math.abs(startPosition.current[2]) > 4) {
+        startPosition.current[2] = startPosition.current[2] > 0 ? -4 : 4;
+      }
+      
+      // Set final position
+      meshRef.current.position.set(
+        startPosition.current[0] + orbitalX + horizontalWave,
+        startPosition.current[1] + orbitalY + verticalWave,
+        startPosition.current[2] + orbitalZ + depthWave
+      );
+      
+      // Creative rotation
+      meshRef.current.rotation.x = time * pattern.rotationSpeed;
+      meshRef.current.rotation.y = time * pattern.rotationSpeed * 0.7;
+      meshRef.current.rotation.z = time * pattern.rotationSpeed * 0.5;
+      
+      // Dynamic scale variation
+      const scaleVariation = 1 + Math.sin(time * 2 + phase) * pattern.scaleVariation;
+      meshRef.current.scale.setScalar(scaleVariation);
     }
   });
 
   return (
     <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[size, 8, 8]} />
-      <meshBasicMaterial color={color} transparent opacity={0.6} />
+      <sphereGeometry args={[size, 6, 6]} />
+      <meshBasicMaterial 
+        color={color} 
+        transparent 
+        opacity={0.4 + Math.sin(Date.now() * 0.001 + phase) * 0.2}
+      />
     </mesh>
   );
 };
