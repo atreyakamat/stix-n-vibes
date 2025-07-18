@@ -211,55 +211,169 @@ function AboutPage() {
         >
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-[#1b0e0f] mb-6">🧠 Meet the Founders</h2>
+            <p className="text-lg text-[#666] max-w-2xl mx-auto">
+              Two creative minds from Goa bringing stickers, vibes, and a whole lot of passion to life.
+            </p>
           </div>
 
-          {/* Atreya Kamat */}
-          <motion.div 
-            className="bg-white rounded-3xl p-8 mb-8 shadow-lg border border-[#e7d0d1] hover:shadow-xl transition-all duration-300"
-            whileHover={{ y: -5 }}
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 2.2 }}
-          >
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="w-32 h-32 bg-gradient-to-br from-[#e92932] to-[#ff6b9d] rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
-                AK
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-bold text-[#1b0e0f] mb-2">Atreya Kamat</h3>
-                <p className="text-[#974e52] text-lg mb-4 font-semibold">Engineer. Entrepreneur. Chaos-turned-structure guy.</p>
-                <p className="text-[#666] leading-relaxed mb-4">
-                  Atreya's the builder brain — juggling businesses, systems, and sticker drop strategies while being a student himself.
+          {/* Business Card Style Founders */}
+          <div className="flex flex-col md:flex-row gap-6 justify-center items-center max-w-5xl mx-auto px-4">
+            
+            {/* Atreya Kamat - Business Card */}
+            <motion.div 
+              className="bg-white rounded-3xl p-6 shadow-2xl border border-[#e7d0d1] hover:shadow-3xl transition-all duration-300 w-full md:w-72 h-96 flex flex-col justify-between relative overflow-hidden group"
+              whileHover={{ y: -8, rotateY: 3, scale: 1.02 }}
+              initial={{ opacity: 0, x: -50, rotate: -2 }}
+              animate={{ opacity: 1, x: 0, rotate: 0 }}
+              transition={{ delay: 2.2, type: "spring", bounce: 0.3 }}
+            >
+              {/* Cute Background Elements */}
+              <div className="absolute top-2 right-2 text-2xl opacity-20 group-hover:opacity-40 transition-opacity">🚀</div>
+              <div className="absolute bottom-2 left-2 text-xl opacity-15 group-hover:opacity-30 transition-opacity">⚡</div>
+              <div className="absolute top-1/2 right-1 text-lg opacity-10 group-hover:opacity-25 transition-opacity">💡</div>
+              
+              {/* Fun Background Pattern */}
+              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#e92932]/15 to-transparent rounded-bl-full"></div>
+              <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-[#ff6b9d]/15 to-transparent rounded-tr-full"></div>
+              
+              {/* Header */}
+              <div className="text-center relative z-10">
+                <motion.div 
+                  className="w-16 h-16 bg-gradient-to-br from-[#e92932] to-[#ff6b9d] rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg mx-auto mb-3 group-hover:animate-bounce"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  🧠
+                </motion.div>
+                <h3 className="text-xl font-bold text-[#1b0e0f] mb-1">Atreya Kamat</h3>
+                <div className="h-0.5 w-12 bg-gradient-to-r from-[#e92932] to-[#ff6b9d] rounded mx-auto mb-2"></div>
+                <p className="text-[#974e52] text-xs font-semibold uppercase tracking-wider">
+                  The Chaos Wizard 🎯
                 </p>
-                <div className="bg-gradient-to-r from-[#e92932] to-[#ff6b9d] text-white px-6 py-3 rounded-full inline-block font-bold">
-                  "I make ideas stick — literally."
-                </div>
               </div>
-            </div>
-          </motion.div>
 
-          {/* Kritik Sawant */}
-          <motion.div 
-            className="bg-white rounded-3xl p-8 shadow-lg border border-[#e7d0d1] hover:shadow-xl transition-all duration-300"
-            whileHover={{ y: -5 }}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 2.4 }}
-          >
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="w-32 h-32 bg-gradient-to-br from-[#42c4ef] to-[#9b59b6] rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
-                KS
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-bold text-[#1b0e0f] mb-2">Kritik Sawant</h3>
-                <p className="text-[#974e52] text-lg mb-4 font-semibold">MBBS student at GMC Goa. Movie nerd. People-person.</p>
-                <p className="text-[#666] leading-relaxed mb-4">
-                  Kritik handles day-to-day vibes, customer chaos, and drop sanity — all while studying medicine.
-                </p>
-                <div className="bg-gradient-to-r from-[#42c4ef] to-[#9b59b6] text-white px-6 py-3 rounded-full inline-block font-bold">
-                  "Science in the books. Stickers in the wild."
+              {/* Cute Content */}
+              <div className="flex-1 flex flex-col justify-center relative z-10 space-y-2">
+                <div className="bg-gradient-to-r from-[#fcf8f8] to-[#faf9fb] rounded-2xl p-3 border-l-4 border-[#e92932]">
+                  <p className="text-[#666] text-xs leading-relaxed text-center">
+                    Engineering student by day 📚, startup ninja by night 🥷. Turns coffee into code!
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-2 text-[#e92932] text-xs font-semibold bg-white rounded-full px-2 py-1 shadow-sm">
+                    <span className="animate-pulse">🔥</span>
+                    <span>Chaos → Structure</span>
+                  </div>
+                </div>
+                
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-1 text-xs text-[#666]">
+                    <span>⏰</span>
+                    <span>Powered by Dreams</span>
+                  </div>
                 </div>
               </div>
+
+              {/* Funny Quote Footer */}
+              <div className="bg-gradient-to-r from-[#e92932] to-[#ff6b9d] text-white px-3 py-2 rounded-2xl text-center relative z-10">
+                <p className="text-xs font-bold">
+                  "Ideas stick — literally!" 🎯✨
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Kritik Sawant - Business Card */}
+            <motion.div 
+              className="bg-white rounded-3xl p-6 shadow-2xl border border-[#e7d0d1] hover:shadow-3xl transition-all duration-300 w-full md:w-72 h-96 flex flex-col justify-between relative overflow-hidden group"
+              whileHover={{ y: -8, rotateY: -3, scale: 1.02 }}
+              initial={{ opacity: 0, x: 50, rotate: 2 }}
+              animate={{ opacity: 1, x: 0, rotate: 0 }}
+              transition={{ delay: 2.4, type: "spring", bounce: 0.3 }}
+            >
+              {/* Cute Background Elements */}
+              <div className="absolute top-2 left-2 text-2xl opacity-20 group-hover:opacity-40 transition-opacity">🎬</div>
+              <div className="absolute bottom-2 right-2 text-xl opacity-15 group-hover:opacity-30 transition-opacity">🩺</div>
+              <div className="absolute top-1/2 left-1 text-lg opacity-10 group-hover:opacity-25 transition-opacity">❤️</div>
+              
+              {/* Fun Background Pattern */}
+              <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-[#42c4ef]/15 to-transparent rounded-br-full"></div>
+              <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl from-[#9b59b6]/15 to-transparent rounded-tl-full"></div>
+              
+              {/* Header */}
+              <div className="text-center relative z-10">
+                <motion.div 
+                  className="w-16 h-16 bg-gradient-to-br from-[#42c4ef] to-[#9b59b6] rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg mx-auto mb-3 group-hover:animate-bounce"
+                  whileHover={{ rotate: -360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  🎭
+                </motion.div>
+                <h3 className="text-xl font-bold text-[#1b0e0f] mb-1">Kritik Sawant</h3>
+                <div className="h-0.5 w-12 bg-gradient-to-r from-[#42c4ef] to-[#9b59b6] rounded mx-auto mb-2"></div>
+                <p className="text-[#974e52] text-xs font-semibold uppercase tracking-wider">
+                  The Vibe Doctor 🌟
+                </p>
+              </div>
+
+              {/* Cute Content */}
+              <div className="flex-1 flex flex-col justify-center relative z-10 space-y-2">
+                <div className="bg-gradient-to-r from-[#fcf8f8] to-[#faf9fb] rounded-2xl p-3 border-l-4 border-[#42c4ef]">
+                  <p className="text-[#666] text-xs leading-relaxed text-center">
+                    Future doctor 👨‍⚕️, current movie critic 🍿. Saves lives & spreads joy!
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-2 text-[#42c4ef] text-xs font-semibold bg-white rounded-full px-2 py-1 shadow-sm">
+                    <span className="animate-pulse">💫</span>
+                    <span>People-person</span>
+                  </div>
+                </div>
+                
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-1 text-xs text-[#666]">
+                    <span>📍</span>
+                    <span>GMC Goa & Your Heart</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Funny Quote Footer */}
+              <div className="bg-gradient-to-r from-[#42c4ef] to-[#9b59b6] text-white px-3 py-2 rounded-2xl text-center relative z-10">
+                <p className="text-xs font-bold">
+                  "Science in books. Stickers in wild." 🔬🎨
+                </p>
+              </div>
+            </motion.div>
+
+          </div>
+
+          {/* Fun Partnership Story */}
+          <motion.div 
+            className="text-center mt-8 max-w-4xl mx-auto px-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.6 }}
+          >
+            <div className="bg-gradient-to-r from-[#fcf8f8] via-white to-[#faf9fb] rounded-3xl p-6 border border-[#e7d0d1] relative overflow-hidden">
+              {/* Cute decorative elements */}
+              <div className="absolute top-2 left-4 text-lg opacity-30">🤝</div>
+              <div className="absolute top-2 right-4 text-lg opacity-30">✨</div>
+              <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-lg opacity-20">💕</div>
+              
+              <h3 className="text-lg font-bold text-[#1b0e0f] mb-3 flex items-center justify-center gap-2">
+                <span>🎪</span>
+                <span>The Dynamic Duo</span>
+                <span>🎪</span>
+              </h3>
+              <p className="text-[#666] leading-relaxed text-sm">
+                One builds systems with precision 🔧, the other spreads joy with compassion 💝. 
+                Together they create <span className="font-bold text-[#e92932]">organized chaos</span> and 
+                <span className="font-bold text-[#42c4ef]"> creative magic</span>! 
+                <br /><br />
+                <span className="text-xs italic">⚡ Powered by friendship, fueled by passion! ⚡</span>
+              </p>
             </div>
           </motion.div>
         </motion.section>
