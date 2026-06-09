@@ -1,177 +1,280 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Send, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react'
-import { WordsPullUpMultiStyle } from '../components/WordsPullUpMultiStyle'
+import React, { useState, useRef } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { User, Send, Check, ChevronRight, Sparkles, MessageCircle, Package, Palette, Building2 } from 'lucide-react'
+import { SectionHeading } from '../components/SectionHeading'
+import { ContactButtons } from '../components/ContactButtons'
 import { Footer } from '../components/Footer'
 
-export default function Inquiries() {
-  const [step, setStep] = useState(1);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [inquiryType, setInquiryType] = useState("Vibe Check");
-  const [message, setMessage] = useState("");
-  const [isSent, setIsSent] = useState(false);
-  const [copied, setCopied] = useState(false);
+const serviceOptions = [
+  { id: 'packs', label: 'Sticker Packs', icon: Package, desc: 'Buy curated sticker collections' },
+  { id: 'custom', label: 'Custom Orders', icon: Palette, desc: 'Upload your design, we print' },
+  { id: 'b2b', label: 'Brand Collab', icon: Building2, desc: 'Bulk B2B sticker partnerships' },
+  { id: 'other', label: 'Something Else', icon: Sparkles, desc: 'Ask us anything' },
+]
 
-  const totalSteps = 3;
-  const handleNext = (e) => { e.preventDefault(); if (step < totalSteps) setStep(step + 1); };
-  const handleBack = () => { if (step > 1) setStep(step - 1); };
-  const handleFormSubmit = (e) => { e.preventDefault(); setIsSent(true); setCopied(false); };
-  const progressPercent = (step / totalSteps) * 100;
+export default function Inquiries() {
+  const [step, setStep] = useState(1)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+    service: '',
+  })
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-60px' })
+
+  const handleServiceSelect = (serviceId) => {
+    setFormData({ ...formData, service: serviceId })
+    setStep(2)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (!formData.name || !formData.email || !formData.message) return
+    setIsSubmitted(true)
+
+    const serviceName = serviceOptions.find(s => s.id === formData.service)?.label || 'General'
+    const text = `Hey Stix and Vibes! Inquiry:\n\nName: ${formData.name}\nEmail: ${formData.email}\nService: ${serviceName}\n\nMessage:\n${formData.message}\n\nLet's vibe! 🌴`
+    window.open(`https://wa.me/917744020601?text=${encodeURIComponent(text)}`, '_blank')
+  }
+
+  const handleBack = () => {
+    if (step > 1) setStep(step - 1)
+  }
 
   return (
-    <div className="min-h-screen select-none flex flex-col">
-      
-      {/* Header — Beige */}
-      <section className="bg-beige pt-32 pb-8 px-6 relative z-10">
+    <div className="min-h-screen select-none">
+      {/* Header */}
+      <section className="bg-cream pt-28 sm:pt-32 pb-8 px-6 relative z-10">
         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
-        <div className="relative z-10 max-w-6xl mx-auto text-center">
-          <span className="text-gray-400 text-[10px] sm:text-xs tracking-[0.3em] uppercase font-bold block mb-4">
-            Get in touch
-          </span>
-          
-          <WordsPullUpMultiStyle
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <SectionHeading
+            label="Get in Touch"
             segments={[
-              { text: "Send us a message. ", className: "text-gray-900 font-normal" },
-              { text: "We stick with you, ", className: "italic font-serif text-electricBlue" },
-              { text: "no matter what.", className: "text-gray-900 font-normal" }
+              { text: 'Let\'s talk ', className: 'text-brand-dark font-normal' },
+              { text: 'stickers.', className: 'italic font-serif text-electricBlue' },
             ]}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.0] max-w-3xl mx-auto mb-4"
+            subtitle="Whether it's a quick question, a bulk order, or a brand collab — we're here to help."
+            headingSize="text-3xl sm:text-4xl md:text-5xl"
           />
         </div>
       </section>
 
-      {/* Wizard — White card on beige */}
-      <section className="bg-beige flex-grow flex flex-col justify-start py-10 px-6 relative z-10">
-        <div className="w-full max-w-xl mx-auto">
-          <div className="bg-white border border-black/5 rounded-3xl p-8 sm:p-10 shadow-lg relative overflow-hidden">
+      {/* Quick Contact */}
+      <section className="bg-cream px-6 pb-6 relative z-10">
+        <div className="max-w-3xl mx-auto">
+          <ContactButtons className="justify-center" variant="full" />
+        </div>
+      </section>
 
-            {isSent ? (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8 space-y-6">
-                <div className="size-20 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+      {/* Form Wizard */}
+      <section ref={ref} className="bg-cream pb-20 px-6 relative z-10">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={isInView ? { y: 0, opacity: 1 } : {}}
+          transition={{ duration: 0.6 }}
+          className="max-w-2xl mx-auto bg-white border border-black/5 rounded-sticker p-6 sm:p-10 shadow-card"
+        >
+          {/* Progress */}
+          <div className="flex items-center gap-2 mb-8">
+            {[1, 2, 3].map((s) => (
+              <React.Fragment key={s}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                  step >= s
+                    ? 'bg-brand-dark text-white'
+                    : isSubmitted && s === 3
+                      ? 'bg-emerald-500 text-white'
+                      : 'bg-cream-300 text-brand-muted border border-black/5'
+                }`}>
+                  {isSubmitted && s === 3 ? <Check className="w-3.5 h-3.5" /> : s}
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">Message Sent!</h3>
-                <p className="text-gray-500 text-xs sm:text-sm leading-relaxed max-w-sm mx-auto">
-                  Thank you, <span className="text-gray-900 font-bold">{name}</span>. Your inquiry has been compiled. Copy it and paste it into your preferred channel:
+                {s < 3 && (
+                  <div className={`flex-1 h-[2px] rounded ${step > s ? 'bg-brand-dark' : 'bg-cream-300'} transition-colors`} />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+
+          <AnimatePresence mode="wait">
+            {isSubmitted ? (
+              /* ─── SUCCESS ───────────────────────────────── */
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center py-8 space-y-5"
+              >
+                <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto">
+                  <Check className="w-8 h-8 text-emerald-500" />
+                </div>
+                <h3 className="text-2xl font-bold text-brand-dark">Message Sent!</h3>
+                <p className="text-brand-muted text-sm max-w-md mx-auto">
+                  Your inquiry has been sent via WhatsApp. Our team typically responds within a few hours.
                 </p>
-
-                <button type="button"
-                  onClick={() => {
-                    const text = `Hey Stix and Vibes! ⚡ Inquiry:\n\n- Name: ${name}\n- Email: ${email}\n- Type: ${inquiryType}\n- Message: ${message}\n\nLet's catch a vibe! 🌴`;
-                    navigator.clipboard.writeText(text).then(() => setCopied(true)).catch(() => {});
-                  }}
-                  className={`w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
-                    copied ? 'bg-emerald-500 text-white' : 'bg-black text-white hover:bg-gray-800'
-                  }`}>
-                  <span>{copied ? "📋 Copied!" : "Copy Inquiry"}</span>
-                </button>
-
-                <div className="grid grid-cols-3 gap-2 text-[10px] font-mono mt-4">
-                  <a href="https://wa.me/917744020601" target="_blank" rel="noopener noreferrer" className="bg-beige border border-black/5 p-2.5 rounded-lg text-center hover:bg-gray-100 text-emerald-600 transition-all block">💬 WhatsApp</a>
-                  <a href="https://instagram.com/stixnvibes" target="_blank" rel="noopener noreferrer" className="bg-beige border border-black/5 p-2.5 rounded-lg text-center hover:bg-gray-100 text-pink-500 transition-all block">📸 Instagram</a>
-                  <a href="mailto:hello@stixnvibes.com" className="bg-beige border border-black/5 p-2.5 rounded-lg text-center hover:bg-gray-100 text-gray-700 transition-all block">✉️ Email</a>
-                </div>
-
-                <button onClick={() => { setIsSent(false); setStep(1); setName(""); setEmail(""); setMessage(""); }}
-                  className="bg-beige text-gray-600 hover:text-gray-900 border border-black/5 font-semibold text-xs px-6 py-3 rounded-full uppercase tracking-wider transition-all duration-300 w-full mt-4 cursor-pointer">
-                  Send Another Message
+                <button
+                  onClick={() => { setIsSubmitted(false); setStep(1); setFormData({ name: '', email: '', message: '', service: '' }) }}
+                  className="bg-cream text-brand-dark hover:bg-cream-300 border border-black/5 font-semibold text-xs px-6 py-3 rounded-full uppercase tracking-wider transition-all cursor-pointer"
+                >
+                  Send Another
                 </button>
               </motion.div>
+            ) : step === 1 ? (
+              /* ─── STEP 1: SERVICE SELECTION ─────────────── */
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-5"
+              >
+                <div>
+                  <h3 className="text-lg font-bold text-brand-dark mb-1">What are you looking for?</h3>
+                  <p className="text-brand-muted text-xs">Select the option that best describes your interest.</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {serviceOptions.map((svc) => {
+                    const Icon = svc.icon
+                    const isSelected = formData.service === svc.id
+                    return (
+                      <button
+                        key={svc.id}
+                        onClick={() => handleServiceSelect(svc.id)}
+                        className={`rounded-xl p-4 text-left border transition-all cursor-pointer group flex items-start gap-3 ${
+                          isSelected
+                            ? 'bg-cream border-brand-dark/20 shadow-sm'
+                            : 'bg-cream-50 border-black/5 hover:border-black/10 hover:bg-cream'
+                        }`}
+                      >
+                        <div className="w-9 h-9 bg-white border border-black/5 rounded-xl flex items-center justify-center shrink-0 text-electricBlue group-hover:scale-110 transition-transform">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="text-brand-dark font-bold text-sm">{svc.label}</h4>
+                          <p className="text-brand-muted text-[10px] mt-0.5">{svc.desc}</p>
+                        </div>
+                      </button>
+                    )
+                  })}
+                </div>
+              </motion.div>
+            ) : step === 2 ? (
+              /* ─── STEP 2: PERSONAL INFO ─────────────────── */
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-5"
+              >
+                <div>
+                  <h3 className="text-lg font-bold text-brand-dark mb-1">Tell us about yourself</h3>
+                  <p className="text-brand-muted text-xs">So we know who we're vibing with.</p>
+                </div>
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <label className="text-[9px] uppercase tracking-wider text-brand-muted font-semibold block">Your Name</label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted/40" />
+                      <input
+                        type="text"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Full name"
+                        className="w-full bg-cream-50 border border-black/8 pl-10 pr-4 py-3 rounded-xl text-sm placeholder:text-cream-500 text-brand-dark focus:outline-none focus:border-electricBlue"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] uppercase tracking-wider text-brand-muted font-semibold block">Email Address</label>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="hello@example.com"
+                      className="w-full bg-cream-50 border border-black/8 px-4 py-3 rounded-xl text-sm placeholder:text-cream-500 text-brand-dark focus:outline-none focus:border-electricBlue"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3 pt-3">
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className="px-5 py-3 rounded-xl text-xs font-semibold text-brand-muted border border-black/5 hover:bg-cream transition-all cursor-pointer"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => formData.name && formData.email && setStep(3)}
+                    disabled={!formData.name || !formData.email}
+                    className="flex-1 bg-brand-dark text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-brand-charcoal disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                  >
+                    Continue
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </motion.div>
             ) : (
-              <form onSubmit={handleFormSubmit} className="space-y-8">
-                {/* Progress */}
-                <div className="w-full bg-beige h-1.5 rounded-full overflow-hidden relative">
-                  <motion.div initial={{ width: "33%" }} animate={{ width: `${progressPercent}%` }} className="bg-black h-full rounded-full" />
-                </div>
+              /* ─── STEP 3: MESSAGE ───────────────────────── */
+              <motion.div
+                key="step3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <h3 className="text-lg font-bold text-brand-dark mb-1">What's on your mind?</h3>
+                    <p className="text-brand-muted text-xs">Tell us about your project, idea, or question.</p>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] uppercase tracking-wider text-brand-muted font-semibold block">Your Message</label>
+                    <textarea
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Describe your project, quantity needs, timeline, or any questions..."
+                      rows={5}
+                      className="w-full bg-cream-50 border border-black/8 px-4 py-3 rounded-xl text-sm placeholder:text-cream-500 text-brand-dark focus:outline-none focus:border-electricBlue resize-none leading-relaxed"
+                    />
+                  </div>
 
-                <AnimatePresence mode="wait">
-                  {step === 1 && (
-                    <motion.div key="step-1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-                      <div className="space-y-1">
-                        <span className="text-electricBlue font-mono text-[10px] uppercase tracking-wider block">Your details</span>
-                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">What should we call you?</h3>
-                      </div>
-                      <div className="space-y-4">
-                        <div className="space-y-1">
-                          <label className="text-[10px] uppercase font-mono text-gray-400">Name</label>
-                          <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name"
-                            className="w-full bg-beige border border-black/10 p-4 rounded-xl text-sm placeholder:text-gray-300 text-gray-900 focus:outline-none focus:border-electricBlue" />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[10px] uppercase font-mono text-gray-400">Email</label>
-                          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="hello@example.com"
-                            className="w-full bg-beige border border-black/10 p-4 rounded-xl text-sm placeholder:text-gray-300 text-gray-900 focus:outline-none focus:border-electricBlue" />
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
+                  {/* Summary */}
+                  <div className="bg-cream-50 border border-black/5 rounded-xl p-4 text-xs text-brand-muted space-y-1">
+                    <div className="flex justify-between"><span>Service:</span><span className="text-brand-dark font-semibold">{serviceOptions.find(s => s.id === formData.service)?.label}</span></div>
+                    <div className="flex justify-between"><span>Name:</span><span className="text-brand-dark font-semibold">{formData.name}</span></div>
+                    <div className="flex justify-between"><span>Email:</span><span className="text-brand-dark font-semibold">{formData.email}</span></div>
+                  </div>
 
-                  {step === 2 && (
-                    <motion.div key="step-2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-                      <div className="space-y-1">
-                        <span className="text-neonGreen font-mono text-[10px] uppercase tracking-wider block">Inquiry type</span>
-                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">What's this about?</h3>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {["Vibe Check", "Custom Collaboration", "Bulk Business Order", "Something Else"].map((type) => (
-                          <button key={type} type="button" onClick={() => setInquiryType(type)}
-                            className={`p-4 rounded-xl border text-left text-xs uppercase tracking-wider font-mono transition-all duration-300 ${
-                              inquiryType === type ? 'bg-black text-white border-black font-bold' : 'bg-beige border-black/5 hover:border-black/10 text-gray-500'
-                            }`}>
-                            {type}
-                          </button>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {step === 3 && (
-                    <motion.div key="step-3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-                      <div className="space-y-1">
-                        <span className="text-neonYellow font-mono text-[10px] uppercase tracking-wider block">Your message</span>
-                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">Tell us more</h3>
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] uppercase font-mono text-gray-400">Message</label>
-                        <textarea required rows={4} value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write your message here..."
-                          className="w-full bg-beige border border-black/10 p-4 rounded-xl text-sm placeholder:text-gray-300 text-gray-900 focus:outline-none focus:border-electricBlue resize-none" />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Navigation */}
-                <div className="pt-6 border-t border-black/5 flex justify-between items-center gap-4">
-                  {step > 1 ? (
-                    <button type="button" onClick={handleBack}
-                      className="bg-beige text-gray-600 hover:text-gray-900 border border-black/5 px-6 py-3.5 rounded-xl font-semibold text-xs uppercase tracking-wider transition-colors duration-300 flex items-center gap-2">
-                      <ChevronLeft className="w-4 h-4" />
-                      <span>Back</span>
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="px-5 py-3 rounded-xl text-xs font-semibold text-brand-muted border border-black/5 hover:bg-cream transition-all cursor-pointer"
+                    >
+                      Back
                     </button>
-                  ) : (<div />)}
-                  
-                  {step < totalSteps ? (
-                    <button type="button" onClick={handleNext} disabled={step === 1 && (!name || !email)}
-                      className="bg-black text-white disabled:opacity-40 disabled:pointer-events-none hover:bg-gray-800 px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center gap-2">
-                      <span>Next</span>
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  ) : (
-                    <button type="submit" disabled={!message}
-                      className="bg-black text-white disabled:opacity-40 disabled:pointer-events-none hover:bg-gray-800 px-8 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center gap-2">
-                      <span>Send Message</span>
+                    <button
+                      type="submit"
+                      disabled={!formData.message}
+                      className="flex-1 bg-brand-dark text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-brand-charcoal disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-sticker"
+                    >
                       <Send className="w-3.5 h-3.5" />
+                      Request a Quote
                     </button>
-                  )}
-                </div>
-              </form>
+                  </div>
+                </form>
+              </motion.div>
             )}
-          </div>
-        </div>
+          </AnimatePresence>
+        </motion.div>
       </section>
 
       <Footer />
     </div>
-  );
+  )
 }

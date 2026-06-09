@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── BASE RESET ────────────────────────────────────────── */
 * {
-  font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', system-ui, sans-serif;
   box-sizing: border-box;
 }
 
@@ -13,7 +14,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #F5F2E7;
-  color: #212121;
+  color: #1A1A1A;
 }
 
 body {
@@ -30,9 +31,9 @@ body {
   flex-direction: column;
 }
 
-/* Custom Scrollbar */
+/* ─── SCROLLBAR ─────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -40,82 +41,63 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #212121;
-  border: 2px solid #F5F2E7;
+  background: #D4CDBA;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #000000;
+  background: #B8B09C;
 }
 
-/* Dark section scrollbar override */
-.bg-black ::-webkit-scrollbar-track,
-.bg-gray-900 ::-webkit-scrollbar-track {
-  background: #000000;
-}
-
-.bg-black ::-webkit-scrollbar-thumb,
-.bg-gray-900 ::-webkit-scrollbar-thumb {
-  background: #DEDBC8;
-  border-color: #000000;
-}
-
-/* Selection style */
+/* ─── SELECTION ─────────────────────────────────────────── */
 ::selection {
   background-color: #3EAEFF;
   color: #ffffff;
 }
 
-/* Font utilities */
+/* ─── FONT UTILITIES ────────────────────────────────────── */
 .font-script {
   font-family: 'Pacifico', cursive;
 }
 
-/* Background utilities */
-.bg-beige {
-  background-color: #F5F2E7;
+.font-serif-italic {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
 }
 
-/* Custom SVG Noise Utilities & Sticker Aesthetics */
+/* ─── STICKER DESIGN SYSTEM ─────────────────────────────── */
 @layer utilities {
-  .noise-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  }
 
+  /* Paper grain noise overlay */
+  .noise-overlay,
   .bg-noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* Tactile Sticker Borders and Dashed Outlines */
+  /* Paper texture background */
+  .paper-texture {
+    background-color: #F5F2E7;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  /* Sticker dashed cut borders */
   .sticker-dashed-cut {
-    border: 2px dashed rgba(222, 219, 200, 0.2);
+    border: 2px dashed rgba(0, 0, 0, 0.08);
     transition: border-color 0.4s ease, box-shadow 0.4s ease;
   }
 
   .sticker-dashed-cut:hover {
-    border-color: rgba(222, 219, 200, 0.8);
-    box-shadow: 0 0 15px rgba(222, 219, 200, 0.15);
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   }
 
-  /* Light variant for beige sections */
-  .sticker-dashed-cut-light {
-    border: 2px dashed rgba(0, 0, 0, 0.1);
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
-  }
-
-  .sticker-dashed-cut-light:hover {
-    border-color: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
-  }
-
-  /* Moving Vinyl Metallic Glossy Sheen Effect */
-  .vinyl-sheen-shine {
+  /* Vinyl sheen shine effect */
+  .vinyl-sheen {
     position: relative;
     overflow: hidden;
   }
 
-  .vinyl-sheen-shine::after {
+  .vinyl-sheen::after {
     content: '';
     position: absolute;
     top: 0;
@@ -125,7 +107,7 @@ body {
     background: linear-gradient(
       to right,
       rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.13) 50%,
+      rgba(255, 255, 255, 0.15) 50%,
       rgba(255, 255, 255, 0) 100%
     );
     transform: skewX(-25deg);
@@ -133,52 +115,133 @@ body {
     z-index: 10;
   }
 
-  .vinyl-sheen-shine:hover::after {
-    animation: sheen-slide 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  .vinyl-sheen:hover::after {
+    animation: sheen-slide 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Die-cut border effect */
+  .die-cut-border {
+    border-radius: 1.5rem;
+    border: 2px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .die-cut-border:hover {
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
   }
 }
 
-/* Liquid glass text effect for hero wordmark */
+/* ─── LIQUID GLASS WORDMARK ─────────────────────────────── */
 .liquid-glass {
-  background: linear-gradient(135deg, #3EAEFF 0%, #7BC8FF 40%, #3EAEFF 60%, #1A8FDF 100%);
+  background: linear-gradient(
+    135deg,
+    #3EAEFF 0%,
+    #7BC8FF 25%,
+    #3EAEFF 50%,
+    #1A8FDF 75%,
+    #5CB8FF 100%
+  );
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 4px 12px rgba(62, 174, 255, 0.35));
+  filter: drop-shadow(0 4px 16px rgba(62, 174, 255, 0.35)) drop-shadow(0 1px 3px rgba(62, 174, 255, 0.2));
+  animation: liquid-flow 4s ease-in-out infinite;
 }
 
+@keyframes liquid-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ─── PEEL CORNER EFFECT ────────────────────────────────── */
+.peel-corner {
+  position: relative;
+}
+
+.peel-corner::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(
+    225deg,
+    #F5F2E7 0%,
+    #F5F2E7 50%,
+    rgba(0, 0, 0, 0.03) 50%,
+    rgba(0, 0, 0, 0.06) 100%
+  );
+  border-radius: 0 0 1.5rem 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 5;
+}
+
+.peel-corner:hover::before {
+  opacity: 1;
+}
+
+/* ─── KEYFRAME ANIMATIONS ───────────────────────────────── */
 @keyframes sheen-slide {
-  0% {
-    left: -150%;
-  }
-  100% {
-    left: 150%;
-  }
+  0% { left: -150%; }
+  100% { left: 150%; }
 }
 
-@keyframes float-gentle {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-12px) rotate(3deg);
-  }
-  50% {
-    transform: translateY(-6px) rotate(-2deg);
-  }
-  75% {
-    transform: translateY(-18px) rotate(4deg);
-  }
+/* ─── STICKER CHARACTER FLOAT ───────────────────────────── */
+.sticker-character {
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-@keyframes float-drift {
-  0%, 100% {
-    transform: translateY(0px) translateX(0px);
+.sticker-character:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* ─── MOBILE STICKY CTA BAR ────────────────────────────── */
+.mobile-sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  padding: 0.75rem 1rem;
+  background: rgba(245, 242, 231, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ─── ACCESSIBILITY ─────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #3EAEFF;
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-  33% {
-    transform: translateY(-20px) translateX(10px);
-  }
-  66% {
-    transform: translateY(-8px) translateX(-8px);
+
+  .liquid-glass {
+    animation: none;
+    background-position: 0% 50%;
   }
 }

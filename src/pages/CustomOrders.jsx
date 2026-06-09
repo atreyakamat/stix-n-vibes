@@ -1,175 +1,152 @@
 import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, HelpCircle, Laptop, Settings, Layers, CheckCircle } from 'lucide-react'
-import { WordsPullUpMultiStyle } from '../components/WordsPullUpMultiStyle'
+import { Upload, Settings, Layers, Droplets, Hash, CheckCircle, MessageCircle, Camera, Mail, Monitor, Zap } from 'lucide-react'
+import { SectionHeading } from '../components/SectionHeading'
 import { Footer } from '../components/Footer'
 
 export default function CustomOrders() {
-  const [stickerType, setStickerType] = useState("die-cut");
-  const [size, setSize] = useState("3x3");
-  const [finish, setFinish] = useState("matte");
-  const [quantity, setQuantity] = useState(100);
-  const [uploadedImage, setUploadedImage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const fileInputRef = useRef(null);
+  const [stickerType, setStickerType] = useState('die-cut')
+  const [size, setSize] = useState('3x3')
+  const [finish, setFinish] = useState('matte')
+  const [quantity, setQuantity] = useState(100)
+  const [uploadedImage, setUploadedImage] = useState('')
+  const [isSuccess, setIsSuccess] = useState(false)
+  const fileInputRef = useRef(null)
 
   const preloadedTemplates = [
-    {
-      name: "Cyber skull",
-      url: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85"
-    },
-    {
-      name: "Smile drop",
-      url: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171741_ed9845ab-f5b2-4018-8ce7-07cc01823522.png&w=1280&q=85"
-    },
-    {
-      name: "Cosmic orb",
-      url: "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85"
-    }
-  ];
+    { name: 'Laptop Pack', url: '/images/packs/laptop-pack.png' },
+    { name: 'Daily Vibes', url: '/images/packs/daily-vibes-pack.png' },
+    { name: 'Goa Series', url: '/images/packs/goa-pack.png' },
+  ]
 
-  const [selectedPreview, setSelectedPreview] = useState(preloadedTemplates[0].url);
+  const [selectedPreview, setSelectedPreview] = useState(preloadedTemplates[0].url)
 
   const getUnitPrice = () => {
-    let base = 30;
-    if (stickerType === "kiss-cut") base = 25;
-    let sizeMult = 1.0;
-    if (size === "2x2") sizeMult = 0.8;
-    if (size === "3x3") sizeMult = 1.0;
-    if (size === "4x4") sizeMult = 1.4;
-    if (size === "custom") sizeMult = 1.8;
-    let baseWithSize = base * sizeMult;
-    if (finish === "glossy") baseWithSize += 6;
-    if (finish === "extra-glossy") baseWithSize += 10;
-    let discount = 1.0;
-    if (quantity >= 1000) discount = 0.50;
-    else if (quantity >= 500) discount = 0.65;
-    else if (quantity >= 250) discount = 0.80;
-    else if (quantity >= 100) discount = 0.90;
-    return baseWithSize * discount;
-  };
+    let base = stickerType === 'kiss-cut' ? 25 : 30
+    const sizeMultipliers = { '2x2': 0.8, '3x3': 1.0, '4x4': 1.4, custom: 1.8 }
+    let price = base * (sizeMultipliers[size] || 1.0)
+    if (finish === 'glossy') price += 6
+    if (finish === 'extra-glossy') price += 10
+    if (quantity >= 1000) price *= 0.5
+    else if (quantity >= 500) price *= 0.65
+    else if (quantity >= 250) price *= 0.8
+    else if (quantity >= 100) price *= 0.9
+    return price
+  }
 
-  const unitPrice = getUnitPrice();
-  const subtotal = unitPrice * quantity;
-  
+  const unitPrice = getUnitPrice()
+  const subtotal = unitPrice * quantity
+
   const handleFileUpload = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = () => {
-        setUploadedImage(reader.result);
-        setSelectedPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+        setUploadedImage(reader.result)
+        setSelectedPreview(reader.result)
+      }
+      reader.readAsDataURL(file)
     }
-  };
-
-  const triggerFileSelect = () => { fileInputRef.current.click(); };
+  }
 
   const handleOrderSubmit = (e) => {
-    e.preventDefault();
-    setIsSuccess(true);
-    const text = `Hey Stix and Vibes! ⚡ I want to Place the Vibe! Here is my Custom Sticker Configuration:\n\n` +
-      `- Cut Type: ${stickerType === "die-cut" ? "Die-Cut Sticker" : "Kiss-Cut Sticker"}\n` +
-      `- Dimensions: ${size === "2x2" ? '2" x 2"' : size === "3x3" ? '3" x 3"' : size === "4x4" ? '4" x 4"' : 'Custom Sizing'}\n` +
-      `- Surface Finish: ${finish.replace("-", " ").toUpperCase()}\n` +
-      `- Order Quantity: ${quantity} units\n` +
-      `- Unit Rate: ₹${unitPrice.toFixed(2)}\n` +
-      `- Total Estimated Subtotal: ₹${subtotal.toLocaleString('en-IN')}\n\n` +
-      `Let's get this rolling! 🌴`;
-    const encodedText = encodeURIComponent(text);
-    const whatsappUrl = `https://wa.me/917744020601?text=${encodedText}`;
-    window.open(whatsappUrl, '_blank');
-  };
+    e.preventDefault()
+    setIsSuccess(true)
+    const text = `Hey Stix and Vibes! I'd like to Place the Vibe!\n\n` +
+      `Cut Type: ${stickerType === 'die-cut' ? 'Die-Cut' : 'Kiss-Cut'}\n` +
+      `Size: ${size === '2x2' ? '2"x2"' : size === '3x3' ? '3"x3"' : size === '4x4' ? '4"x4"' : 'Custom'}\n` +
+      `Finish: ${finish.replace('-', ' ').toUpperCase()}\n` +
+      `Quantity: ${quantity} units\n` +
+      `Unit: ₹${unitPrice.toFixed(2)} | Total: ₹${subtotal.toLocaleString('en-IN')}\n\n` +
+      `Let's go! 🌴`
+    window.open(`https://wa.me/917744020601?text=${encodeURIComponent(text)}`, '_blank')
+  }
+
+  const sizeOptions = [
+    { id: '2x2', label: '2" × 2"', desc: 'Pocket Size' },
+    { id: '3x3', label: '3" × 3"', desc: 'Standard' },
+    { id: '4x4', label: '4" × 4"', desc: 'Statement' },
+    { id: 'custom', label: 'Custom', desc: 'Bespoke' },
+  ]
 
   return (
     <div className="min-h-screen select-none">
-      
-      {/* Header — Beige */}
-      <section className="bg-beige pt-32 pb-12 px-6 relative z-10">
+      {/* Header */}
+      <section className="bg-cream pt-28 sm:pt-32 pb-8 px-6 relative z-10">
         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
-        <div className="relative z-10 max-w-6xl mx-auto text-center">
-          <span className="text-gray-400 text-[10px] sm:text-xs tracking-[0.3em] uppercase font-bold block mb-6">
-            Custom configurator
-          </span>
-          
-          <WordsPullUpMultiStyle
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <SectionHeading
+            label="Custom Configurator"
             segments={[
-              { text: "Configure your custom stickers. ", className: "text-gray-900 font-normal" },
-              { text: "Uploaded by you, ", className: "italic font-serif text-electricBlue" },
-              { text: "cut by us.", className: "text-gray-900 font-normal" }
+              { text: 'Configure your stickers. ', className: 'text-brand-dark font-normal' },
+              { text: 'Uploaded by you, ', className: 'italic font-serif text-electricBlue' },
+              { text: 'cut by us.', className: 'text-brand-dark font-normal' },
             ]}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.0] max-w-5xl mx-auto mb-6"
+            subtitle="Upload your design, configure dimensions, specify finishes, and preview with instant volume-based pricing."
+            headingSize="text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
           />
-
-          <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            Upload your design, configure dimensions, specify finishes, and preview your custom sticker with instant volume-based pricing in INR (₹).
-          </p>
         </div>
       </section>
 
-      {/* Configurator — Dark */}
-      <section className="bg-black py-16 px-6 relative z-10">
-        <div className="absolute inset-0 bg-noise opacity-[0.06] pointer-events-none" />
-        <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Side: Control Panel Form (7 cols) */}
-          <form onSubmit={handleOrderSubmit} className="lg:col-span-7 bg-[#101010] border border-white/5 rounded-[2rem] p-6 sm:p-10 space-y-8 relative overflow-hidden group">
+      {/* Configurator */}
+      <section className="bg-cream pb-20 px-6 relative z-10">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+          {/* ─── LEFT: Control Panel ───────────────────────────── */}
+          <form onSubmit={handleOrderSubmit} className="lg:col-span-7 bg-white border border-black/5 rounded-sticker p-6 sm:p-8 space-y-7 shadow-card">
 
             {isSuccess ? (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-12 space-y-6"
+                className="text-center py-10 space-y-5"
               >
-                <div className="size-20 bg-emerald-500/10 border border-emerald-500/20 text-[#DEDBC8] rounded-full flex items-center justify-center mx-auto text-4xl shadow-xl">
-                  <CheckCircle className="w-10 h-10 text-emerald-400" />
+                <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto">
+                  <CheckCircle className="w-8 h-8 text-emerald-500" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#E1E0CC]">Configuration Locked</h3>
-                <p className="text-gray-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
-                  Your custom sticker configuration has been locked and uploaded! Our crew will perform a pre-flight sanity check and reach out on your email or WhatsApp to confirm your manual mock-ups.
+                <h3 className="text-2xl font-bold text-brand-dark">Configuration Locked</h3>
+                <p className="text-brand-muted text-sm max-w-md mx-auto">
+                  Your custom sticker configuration is being sent via WhatsApp. Our team will confirm your mock-ups shortly.
                 </p>
-                <button 
+                <button
                   type="button"
                   onClick={() => setIsSuccess(false)}
-                  className="bg-[#161616] text-[#E1E0CC] hover:bg-[#DEDBC8] hover:text-black border border-white/5 hover:border-black font-semibold text-xs sm:text-sm px-6 py-3 rounded-full uppercase tracking-wider transition-all duration-300"
+                  className="bg-cream text-brand-dark hover:bg-cream-300 border border-black/5 font-semibold text-xs px-6 py-3 rounded-full uppercase tracking-wider transition-all cursor-pointer"
                 >
-                  Configure Another Vibe
+                  Configure Another
                 </button>
               </motion.div>
             ) : (
               <>
                 {/* Step 1: Upload */}
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-4">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm uppercase tracking-widest font-mono text-gray-500">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-xs uppercase tracking-widest font-semibold text-brand-muted">
                     <Upload className="w-4 h-4 text-electricBlue" />
                     <span>1. Choose or upload design</span>
                   </div>
-                  
-                  <div 
-                    onClick={triggerFileSelect}
-                    className="border border-dashed border-white/10 hover:border-electricBlue/50 bg-black/40 rounded-2xl p-6 sm:p-10 text-center cursor-pointer transition-colors duration-300 group/drop flex flex-col items-center justify-center gap-2"
+                  <div
+                    onClick={() => fileInputRef.current.click()}
+                    className="border-2 border-dashed border-black/8 hover:border-electricBlue/40 bg-cream-50 rounded-xl p-6 sm:p-8 text-center cursor-pointer transition-colors group/drop"
                   >
                     <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="image/*" className="hidden" />
-                    <div className="size-12 rounded-full bg-[#161616] border border-white/10 flex items-center justify-center text-gray-500 group-hover/drop:text-[#E1E0CC] transition-colors duration-300">
+                    <div className="w-11 h-11 rounded-full bg-white border border-black/5 flex items-center justify-center mx-auto text-brand-muted group-hover/drop:text-electricBlue transition-colors">
                       <Upload className="w-5 h-5" />
                     </div>
-                    <h4 className="font-bold text-xs sm:text-sm mt-2 text-[#E1E0CC]">Drag & Drop your graphic</h4>
-                    <p className="text-gray-500 text-[10px] sm:text-xs">PNG, JPG or SVG formats (Transparent background preferred)</p>
+                    <h4 className="font-bold text-sm mt-3 text-brand-dark">Drop your graphic here</h4>
+                    <p className="text-brand-muted text-xs mt-1">PNG, JPG or SVG (transparent bg preferred)</p>
                   </div>
-
-                  <div className="flex items-center gap-3 mt-4 bg-black/40 p-3 rounded-xl border border-white/5">
-                    <span className="text-[10px] uppercase font-mono tracking-wider text-gray-500 shrink-0">TEST TEMPLATE:</span>
+                  <div className="flex items-center gap-3 bg-cream-50 p-3 rounded-xl border border-black/5">
+                    <span className="text-[10px] uppercase tracking-wider text-brand-muted font-semibold shrink-0">Templates:</span>
                     <div className="flex gap-2">
                       {preloadedTemplates.map((tp) => (
                         <button
                           key={tp.name}
                           type="button"
-                          onClick={() => { setSelectedPreview(tp.url); setUploadedImage(""); }}
-                          className={`text-[10px] px-3 py-1.5 rounded-full border transition-all ${
+                          onClick={() => { setSelectedPreview(tp.url); setUploadedImage('') }}
+                          className={`text-[10px] px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                             selectedPreview === tp.url && !uploadedImage
-                              ? 'bg-[#DEDBC8] text-black border-[#DEDBC8]' 
-                              : 'bg-[#161616] text-gray-400 border-white/5 hover:border-white/10'
+                              ? 'bg-brand-dark text-white border-brand-dark'
+                              : 'bg-white text-brand-muted border-black/5 hover:border-black/10'
                           }`}
                         >
                           {tp.name}
@@ -177,212 +154,239 @@ export default function CustomOrders() {
                       ))}
                     </div>
                   </div>
-                </motion.div>
+                </div>
 
-                {/* Step 2: Dimensions */}
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-4 pt-4 border-t border-white/5">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm uppercase tracking-widest font-mono text-gray-500">
+                {/* Step 2: Size */}
+                <div className="space-y-3 pt-4 border-t border-black/5">
+                  <div className="flex items-center gap-2 text-xs uppercase tracking-widest font-semibold text-brand-muted">
                     <Settings className="w-4 h-4 text-neonGreen" />
                     <span>2. Select Dimensions</span>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {[
-                      { id: "2x2", label: '2" x 2"', desc: "Pocket Size" },
-                      { id: "3x3", label: '3" x 3"', desc: "Standard Vibe" },
-                      { id: "4x4", label: '4" x 4"', desc: "Heavy Statement" },
-                      { id: "custom", label: "Custom", desc: "Bespoke Scale" }
-                    ].map((sz) => (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {sizeOptions.map((sz) => (
                       <button
                         key={sz.id}
                         type="button"
                         onClick={() => setSize(sz.id)}
-                        className={`rounded-xl p-3 text-left border transition-all duration-300 ${
-                          size === sz.id ? 'bg-[#161616] border-[#DEDBC8]' : 'bg-black/20 border-white/5 hover:border-white/10'
+                        className={`rounded-xl p-3 text-left border transition-all cursor-pointer ${
+                          size === sz.id
+                            ? 'bg-cream border-brand-dark/20 shadow-sm'
+                            : 'bg-cream-50 border-black/5 hover:border-black/10'
                         }`}
                       >
-                        <h4 className="font-bold text-xs sm:text-sm text-[#E1E0CC]">{sz.label}</h4>
-                        <p className="text-gray-500 text-[9px] mt-0.5 leading-none">{sz.desc}</p>
+                        <h4 className="font-bold text-sm text-brand-dark">{sz.label}</h4>
+                        <p className="text-brand-muted text-[10px] mt-0.5">{sz.desc}</p>
                       </button>
                     ))}
                   </div>
-                </motion.div>
+                </div>
 
                 {/* Step 3: Cut Type */}
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="space-y-4 pt-4 border-t border-white/5">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm uppercase tracking-widest font-mono text-gray-500">
+                <div className="space-y-3 pt-4 border-t border-black/5">
+                  <div className="flex items-center gap-2 text-xs uppercase tracking-widest font-semibold text-brand-muted">
                     <Layers className="w-4 h-4 text-neonYellow" />
-                    <span>3. Select Cut Geometry</span>
+                    <span>3. Cut Geometry</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button type="button" onClick={() => setStickerType("die-cut")}
-                      className={`rounded-2xl p-5 text-left border transition-all duration-300 ${stickerType === "die-cut" ? 'bg-[#161616] border-[#DEDBC8]' : 'bg-black/20 border-white/5 hover:border-white/10'}`}>
-                      <h4 className="font-bold text-sm text-[#E1E0CC]">Die-Cut Stickers</h4>
-                      <p className="text-gray-500 text-xs mt-1 leading-normal">Cut directly through the backing paper, matching the exact shape of your graphic.</p>
-                    </button>
-                    <button type="button" onClick={() => setStickerType("kiss-cut")}
-                      className={`rounded-2xl p-5 text-left border transition-all duration-300 ${stickerType === "kiss-cut" ? 'bg-[#161616] border-[#DEDBC8]' : 'bg-black/20 border-white/5 hover:border-white/10'}`}>
-                      <h4 className="font-bold text-sm text-[#E1E0CC]">Kiss-Cut Stickers</h4>
-                      <p className="text-gray-500 text-xs mt-1 leading-normal">Cut only through the vinyl layer, leaving a square protective backing sheet around it.</p>
-                    </button>
-                  </div>
-                </motion.div>
-
-                {/* Step 4: Finish */}
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="space-y-4 pt-4 border-t border-white/5">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm uppercase tracking-widest font-mono text-gray-500">
-                    <Layers className="w-4 h-4 text-electricBlue" />
-                    <span>4. Choose Premium Finish</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    {["matte", "glossy", "extra-glossy"].map((f) => (
-                      <button key={f} type="button" onClick={() => setFinish(f)}
-                        className={`rounded-xl p-4 text-center border uppercase tracking-wider font-mono text-xs transition-all duration-300 ${
-                          finish === f ? 'bg-[#DEDBC8] text-black border-[#DEDBC8] font-bold' : 'bg-black/20 border-white/5 hover:border-white/10 text-gray-400'
-                        }`}>
-                        {f.replace("-", " ")}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {[
+                      { id: 'die-cut', title: 'Die-Cut Stickers', desc: 'Cut through backing to match your graphic\'s exact shape.' },
+                      { id: 'kiss-cut', title: 'Kiss-Cut Stickers', desc: 'Cut vinyl layer only, leaving protective square backing.' },
+                    ].map((cut) => (
+                      <button
+                        key={cut.id}
+                        type="button"
+                        onClick={() => setStickerType(cut.id)}
+                        className={`rounded-xl p-4 text-left border transition-all cursor-pointer ${
+                          stickerType === cut.id
+                            ? 'bg-cream border-brand-dark/20 shadow-sm'
+                            : 'bg-cream-50 border-black/5 hover:border-black/10'
+                        }`}
+                      >
+                        <h4 className="font-bold text-sm text-brand-dark">{cut.title}</h4>
+                        <p className="text-brand-muted text-xs mt-1 leading-relaxed">{cut.desc}</p>
                       </button>
                     ))}
                   </div>
-                </motion.div>
+                </div>
+
+                {/* Step 4: Finish */}
+                <div className="space-y-3 pt-4 border-t border-black/5">
+                  <div className="flex items-center gap-2 text-xs uppercase tracking-widest font-semibold text-brand-muted">
+                    <Droplets className="w-4 h-4 text-electricBlue" />
+                    <span>4. Premium Finish</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['matte', 'glossy', 'extra-glossy'].map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() => setFinish(f)}
+                        className={`rounded-xl p-3 text-center uppercase tracking-wider text-xs font-semibold transition-all cursor-pointer border ${
+                          finish === f
+                            ? 'bg-brand-dark text-white border-brand-dark'
+                            : 'bg-cream-50 border-black/5 hover:border-black/10 text-brand-muted'
+                        }`}
+                      >
+                        {f.replace('-', ' ')}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
                 {/* Step 5: Quantity */}
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="space-y-4 pt-4 border-t border-white/5">
-                  <div className="flex justify-between items-center text-xs sm:text-sm uppercase tracking-widest font-mono text-gray-500">
+                <div className="space-y-3 pt-4 border-t border-black/5">
+                  <div className="flex justify-between items-center text-xs uppercase tracking-widest font-semibold text-brand-muted">
                     <div className="flex items-center gap-2">
-                      <span className="text-neonGreen text-xs font-mono">⚡</span>
-                      <span>5. Quantity & Volume</span>
+                      <Hash className="w-4 h-4 text-neonGreen" />
+                      <span>5. Quantity</span>
                     </div>
-                    <span className="text-[#DEDBC8] font-sans font-bold text-base">{quantity} units</span>
+                    <span className="text-brand-dark text-base font-bold font-sans">{quantity} units</span>
                   </div>
-                  <input type="range" min="50" max="2000" step="50" value={quantity}
+                  <input
+                    type="range"
+                    min="50"
+                    max="2000"
+                    step="50"
+                    value={quantity}
                     onChange={(e) => setQuantity(parseInt(e.target.value))}
-                    className="w-full accent-[#DEDBC8] bg-neutral-800 h-1.5 rounded-full cursor-pointer" />
-                  <div className="flex justify-between text-[10px] text-gray-500 font-mono">
-                    <span>MIN: 50</span>
-                    <span>TIERS: 250 (20% off) / 500 (35% off) / 1000+ (50% off)</span>
-                    <span>MAX: 2000</span>
+                    className="w-full accent-brand-dark h-1.5 rounded-full cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[10px] text-brand-muted">
+                    <span>50</span>
+                    <span>100 (10% off) · 250 (20%) · 500 (35%) · 1000+ (50%)</span>
+                    <span>2000</span>
                   </div>
-                </motion.div>
+                </div>
 
                 {/* Summary */}
-                <div className="pt-6 border-t border-white/5 space-y-3">
-                  <span className="text-gray-500 text-[10px] uppercase font-mono tracking-widest block">Order Configuration Summary</span>
-                  <div className="bg-black/60 rounded-xl p-4 border border-white/5 text-xs font-mono space-y-2 text-gray-400">
-                    <div className="flex justify-between"><span>CUT GEOMETRY:</span><span className="text-[#E1E0CC] font-bold">{stickerType === "die-cut" ? "DIE-CUT" : "KISS-CUT"}</span></div>
-                    <div className="flex justify-between"><span>DIMENSIONS:</span><span className="text-[#E1E0CC] font-bold">{size === "2x2" ? '2" x 2"' : size === "3x3" ? '3" x 3"' : size === "4x4" ? '4" x 4"' : 'Custom'}</span></div>
-                    <div className="flex justify-between"><span>SURFACE FINISH:</span><span className="text-[#E1E0CC] font-bold uppercase">{finish.replace("-", " ")}</span></div>
-                    <div className="flex justify-between"><span>ORDER VOLUME:</span><span className="text-[#E1E0CC] font-bold">{quantity} UNITS</span></div>
-                    <div className="flex justify-between pt-2 border-t border-white/5 text-[10px]">
-                      <span>BULK DISCOUNT:</span>
-                      <span className="text-neonGreen font-bold">
-                        {quantity >= 1000 ? "50% OFF" : quantity >= 500 ? "35% OFF" : quantity >= 250 ? "20% OFF" : quantity >= 100 ? "10% OFF" : "BASE LEVEL"}
+                <div className="pt-5 border-t border-black/5 space-y-3">
+                  <span className="text-brand-muted text-[10px] uppercase tracking-widest font-semibold block">Summary</span>
+                  <div className="bg-cream-50 rounded-xl p-4 border border-black/5 text-xs space-y-1.5 text-brand-muted">
+                    <div className="flex justify-between"><span>Cut:</span><span className="text-brand-dark font-bold">{stickerType === 'die-cut' ? 'Die-Cut' : 'Kiss-Cut'}</span></div>
+                    <div className="flex justify-between"><span>Size:</span><span className="text-brand-dark font-bold">{size === '2x2' ? '2"×2"' : size === '3x3' ? '3"×3"' : size === '4x4' ? '4"×4"' : 'Custom'}</span></div>
+                    <div className="flex justify-between"><span>Finish:</span><span className="text-brand-dark font-bold capitalize">{finish.replace('-', ' ')}</span></div>
+                    <div className="flex justify-between"><span>Quantity:</span><span className="text-brand-dark font-bold">{quantity}</span></div>
+                    <div className="flex justify-between pt-2 border-t border-black/5">
+                      <span>Discount:</span>
+                      <span className="text-emerald-600 font-bold">
+                        {quantity >= 1000 ? '50% OFF' : quantity >= 500 ? '35% OFF' : quantity >= 250 ? '20% OFF' : quantity >= 100 ? '10% OFF' : 'Base'}
                       </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Submit */}
-                <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div className="pt-5 border-t border-black/5 flex flex-col sm:flex-row justify-between items-center gap-4">
                   <div className="text-center sm:text-left">
-                    <span className="text-gray-500 text-[10px] uppercase font-mono tracking-widest block">Estimated Total</span>
-                    <div className="flex items-baseline justify-center sm:justify-start gap-1">
-                      <span className="text-[#E1E0CC] font-bold text-3xl">₹{subtotal.toLocaleString('en-IN')}</span>
-                      <span className="text-gray-500 text-xs font-mono">(₹{unitPrice.toFixed(2)} / unit)</span>
+                    <span className="text-brand-muted text-[10px] uppercase tracking-widest font-semibold block">Estimated Total</span>
+                    <div className="flex items-baseline justify-center sm:justify-start gap-1.5">
+                      <span className="text-brand-dark font-bold text-2xl sm:text-3xl">₹{subtotal.toLocaleString('en-IN')}</span>
+                      <span className="text-brand-muted text-xs">(₹{unitPrice.toFixed(2)}/unit)</span>
                     </div>
                   </div>
-                  <button type="submit"
-                    className="w-full sm:w-auto bg-[#DEDBC8] text-black font-bold uppercase tracking-wider text-xs sm:text-sm px-8 py-4 rounded-xl hover:bg-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer select-none">
-                    <span>Place the Vibe</span>
-                    <span>⚡</span>
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto bg-brand-dark text-white font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-xl hover:bg-brand-charcoal transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sticker"
+                  >
+                    Place the Vibe
+                    <Zap className="w-4 h-4" />
                   </button>
                 </div>
               </>
             )}
           </form>
 
-          {/* Right Side: Preview (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-[#101010] border border-white/5 rounded-[2rem] p-6 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-tr from-electricBlue/5 via-neonGreen/5 to-transparent pointer-events-none" />
-              <div className="flex items-center gap-2 mb-6 text-gray-500 text-xs font-mono uppercase tracking-wider">
-                <Laptop className="w-4 h-4 text-electricBlue" />
-                <span>Live hardware preview</span>
+          {/* ─── RIGHT: Preview & Contact ──────────────────────── */}
+          <div className="lg:col-span-5 space-y-5">
+            {/* Live Preview */}
+            <div className="bg-white border border-black/5 rounded-sticker p-6 sm:p-8 flex flex-col items-center shadow-card">
+              <div className="flex items-center gap-2 mb-5 text-brand-muted text-xs font-semibold uppercase tracking-wider">
+                <Monitor className="w-4 h-4 text-electricBlue" />
+                <span>Live Preview</span>
               </div>
 
-              <div className="relative w-full max-w-[320px] aspect-[16/10] bg-neutral-900 border-4 border-neutral-800 rounded-xl flex items-center justify-center shadow-2xl p-4 overflow-hidden">
-                <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none" />
-                <motion.div style={{ transformStyle: 'preserve-3d' }} whileHover={{ rotateY: 10, rotateX: -10 }} className="relative cursor-grab z-10 shrink-0">
-                  <div className={`flex items-center justify-center relative rounded-full transition-all duration-500 ${
-                    size === "2x2" ? 'w-24 h-24' : size === "3x3" ? 'w-36 h-36' : size === "4x4" ? 'w-44 h-44' : 'w-40 h-40'
+              {/* Laptop mockup */}
+              <div className="relative w-full max-w-[300px] aspect-[16/10] bg-cream-300/40 border-2 border-cream-400 rounded-xl flex items-center justify-center p-4 overflow-hidden">
+                <div className="absolute inset-0 bg-noise opacity-[0.04] pointer-events-none" />
+                <motion.div
+                  style={{ transformStyle: 'preserve-3d' }}
+                  whileHover={{ rotateY: 8, rotateX: -6 }}
+                  className="relative cursor-grab z-10"
+                >
+                  <div className={`flex items-center justify-center relative rounded-full transition-all duration-500 border-2 ${
+                    size === '2x2' ? 'w-20 h-20' : size === '3x3' ? 'w-32 h-32' : size === '4x4' ? 'w-40 h-40' : 'w-36 h-36'
                   } ${
-                    finish === "extra-glossy" ? 'bg-neutral-800 border-4 border-white shadow-[0_0_20px_rgba(255,255,255,0.4)]' 
-                    : finish === "glossy" ? 'bg-neutral-800 border-4 border-white shadow-xl'
-                    : 'bg-neutral-800 border-2 border-white/80'
-                  }`} style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.6)' }}>
-                    {(finish === "glossy" || finish === "extra-glossy") && (
-                      <motion.div animate={{ x: [-150, 150] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none z-20" />
+                    finish === 'extra-glossy'
+                      ? 'bg-white border-brand-dark/20 shadow-[0_8px_30px_rgba(0,0,0,0.15)]'
+                      : finish === 'glossy'
+                        ? 'bg-white border-brand-dark/15 shadow-xl'
+                        : 'bg-white border-brand-dark/10 shadow-lg'
+                  }`}>
+                    {(finish === 'glossy' || finish === 'extra-glossy') && (
+                      <motion.div
+                        animate={{ x: [-150, 150] }}
+                        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 pointer-events-none z-20 rounded-full"
+                      />
                     )}
-                    <img src={selectedPreview} alt="Custom Sticker Preview"
-                      className={`w-full h-full object-contain rounded-full bg-neutral-900/60 p-2 ${finish !== "matte" ? 'brightness-110 contrast-105' : ''}`} />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent rotate-45 pointer-events-none" />
+                    <img
+                      src={selectedPreview}
+                      alt="Custom Sticker Preview"
+                      className="w-full h-full object-contain rounded-full p-2"
+                    />
                   </div>
                 </motion.div>
-                <div className="absolute bottom-3 right-4 text-[8px] font-mono text-gray-700">STIX VIBES CORP.</div>
               </div>
-              <div className="w-[340px] h-3 bg-neutral-800 border-b-2 border-neutral-700 rounded-b-lg shadow-xl" />
+              <div className="w-[320px] h-2.5 bg-cream-300 rounded-b-lg mt-0" />
 
-              <div className="w-full grid grid-cols-3 gap-2 mt-6 pt-6 border-t border-white/5 text-center text-xs font-mono text-gray-500">
+              {/* Preview meta */}
+              <div className="w-full grid grid-cols-3 gap-2 mt-5 pt-5 border-t border-black/5 text-center text-xs text-brand-muted">
                 <div>
-                  <span className="block text-[10px] text-gray-600 uppercase">CUT</span>
-                  <span className="text-[#E1E0CC] font-bold block mt-0.5">{stickerType === "die-cut" ? "Die-Cut" : "Kiss-Cut"}</span>
+                  <span className="block text-[10px] uppercase tracking-wider">Cut</span>
+                  <span className="text-brand-dark font-bold block mt-0.5">{stickerType === 'die-cut' ? 'Die-Cut' : 'Kiss-Cut'}</span>
                 </div>
                 <div>
-                  <span className="block text-[10px] text-gray-600 uppercase">SIZE</span>
-                  <span className="text-[#E1E0CC] font-bold block mt-0.5">{size === "2x2" ? '2" x 2"' : size === "3x3" ? '3" x 3"' : size === "4x4" ? '4" x 4"' : 'Custom'}</span>
+                  <span className="block text-[10px] uppercase tracking-wider">Size</span>
+                  <span className="text-brand-dark font-bold block mt-0.5">{size === '2x2' ? '2"×2"' : size === '3x3' ? '3"×3"' : size === '4x4' ? '4"×4"' : 'Custom'}</span>
                 </div>
                 <div>
-                  <span className="block text-[10px] text-gray-600 uppercase">FINISH</span>
-                  <span className="text-[#E1E0CC] font-bold block mt-0.5 capitalize">{finish.replace("-", " ")}</span>
+                  <span className="block text-[10px] uppercase tracking-wider">Finish</span>
+                  <span className="text-brand-dark font-bold block mt-0.5 capitalize">{finish.replace('-', ' ')}</span>
                 </div>
               </div>
             </div>
 
-            {/* Manual Contact Block */}
-            <div className="bg-[#101010] border border-white/5 rounded-[2rem] p-6 sm:p-8 space-y-6 relative overflow-hidden group">
-              <div className="flex items-center gap-2 text-gray-500 text-xs font-mono uppercase tracking-wider">
-                <HelpCircle className="w-4 h-4 text-neonYellow" />
-                <span>Or order manually</span>
-              </div>
-              <h3 className="text-[#E1E0CC] font-bold text-lg">Direct Booking</h3>
-              <p className="text-gray-400 text-xs leading-relaxed">
-                Have a specific request or prefer booking manually? Reach out on our verified channels:
+            {/* Direct Contact */}
+            <div className="bg-white border border-black/5 rounded-sticker p-6 shadow-card space-y-4">
+              <h3 className="text-brand-dark font-bold text-sm">Prefer direct booking?</h3>
+              <p className="text-brand-muted text-xs leading-relaxed">
+                Have a specific request? Reach out on our verified channels.
               </p>
-              <div className="space-y-3">
-                <a href="https://wa.me/917744020601" target="_blank" rel="noopener noreferrer" 
-                  className="flex items-center gap-3 p-3 bg-black/40 border border-white/5 rounded-xl hover:border-emerald-500/20 hover:bg-[#161616] transition-all group/coord">
-                  <div className="size-8 bg-neutral-900 border border-white/10 rounded-lg flex items-center justify-center font-bold text-emerald-400">💬</div>
-                  <div>
-                    <span className="text-[9px] text-gray-600 block uppercase font-mono">WHATSAPP</span>
-                    <span className="text-[#E1E0CC] text-xs sm:text-sm font-semibold group-hover/coord:text-neonGreen transition-colors">+91 77440 20601</span>
-                  </div>
-                </a>
-                <a href="https://instagram.com/stixnvibes" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 bg-black/40 border border-white/5 rounded-xl hover:border-pink-500/20 hover:bg-[#161616] transition-all group/coord">
-                  <div className="size-8 bg-neutral-900 border border-white/10 rounded-lg flex items-center justify-center font-bold text-pink-400">📸</div>
-                  <div>
-                    <span className="text-[9px] text-gray-600 block uppercase font-mono">INSTAGRAM</span>
-                    <span className="text-[#E1E0CC] text-xs sm:text-sm font-semibold group-hover/coord:text-pink-400 transition-colors">@stixnvibes</span>
-                  </div>
-                </a>
-                <a href="mailto:hello@stixnvibes.com"
-                  className="flex items-center gap-3 p-3 bg-black/40 border border-white/5 rounded-xl hover:border-[#DEDBC8]/20 hover:bg-[#161616] transition-all group/coord">
-                  <div className="size-8 bg-neutral-900 border border-white/10 rounded-lg flex items-center justify-center font-bold text-amber-100">✉️</div>
-                  <div>
-                    <span className="text-[9px] text-gray-600 block uppercase font-mono">EMAIL</span>
-                    <span className="text-[#E1E0CC] text-xs sm:text-sm font-semibold group-hover/coord:text-primary transition-colors">hello@stixnvibes.com</span>
-                  </div>
-                </a>
+              <div className="space-y-2">
+                {[
+                  { icon: MessageCircle, label: 'WhatsApp', value: '+91 77440 20601', href: 'https://wa.me/917744020601', color: 'text-emerald-600' },
+                  { icon: Camera, label: 'Instagram', value: '@stixnvibes', href: 'https://instagram.com/stixnvibes', color: 'text-pink-500' },
+                  { icon: Mail, label: 'Email', value: 'hello@stixnvibes.com', href: 'mailto:hello@stixnvibes.com', color: 'text-brand-dark' },
+                ].map((ch) => {
+                  const Icon = ch.icon
+                  return (
+                    <a
+                      key={ch.label}
+                      href={ch.href}
+                      target={ch.href.startsWith('mailto') ? undefined : '_blank'}
+                      rel={ch.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+                      className="flex items-center gap-3 p-3 bg-cream-50 border border-black/5 rounded-xl hover:shadow-sm transition-all cursor-pointer group"
+                    >
+                      <div className="w-8 h-8 bg-white border border-black/5 rounded-lg flex items-center justify-center">
+                        <Icon className={`w-4 h-4 ${ch.color}`} />
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-brand-muted block uppercase tracking-wider">{ch.label}</span>
+                        <span className="text-brand-dark text-xs font-semibold group-hover:text-electricBlue transition-colors">{ch.value}</span>
+                      </div>
+                    </a>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -391,5 +395,5 @@ export default function CustomOrders() {
 
       <Footer />
     </div>
-  );
+  )
 }
