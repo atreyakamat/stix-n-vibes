@@ -1,43 +1,88 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-// Refraction/Glass constants
-const GLASS_PANEL = "bg-white/[0.03] backdrop-blur-[32px] border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]"
+import { ArrowLeft } from 'lucide-react';
+import Footer from '../components/Footer';
 
 function NotFound() {
   return (
-    <div className="min-h-screen w-full bg-[#050505] text-white overflow-x-hidden selection:bg-purple-500" style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}>
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-0 w-[800px] h-[800px] bg-red-600/10 rounded-full blur-[120px] animate-pulse" />
-      </div>
-      <div className="relative z-10 flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow flex items-center justify-center px-6 py-24 w-full text-center">
-          <GlassContainer className="p-20 rounded-[4rem]" intensity={1.2}>
-            <h1 className="text-9xl font-black mb-8 tracking-tighter uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-400">404</h1>
-            <h2 className="text-4xl font-black uppercase italic mb-8">Vibe Check Failed</h2>
-            <p className="text-white/50 font-bold mb-12 text-xl">The page you're looking for doesn't exist.</p>
+    <div className="min-h-screen flex flex-col bg-beige">
+      {/* Main content */}
+      <main className="flex-grow flex items-center justify-center px-6 py-24 w-full text-center relative">
+        {/* Subtle noise */}
+        <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 max-w-lg"
+        >
+          {/* Big 404 */}
+          <motion.h1
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="text-[8rem] sm:text-[10rem] font-bold leading-none tracking-tighter text-gray-900/10 select-none"
+          >
+            404
+          </motion.h1>
+
+          {/* Fun sticker pun */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="-mt-8 sm:-mt-12"
+          >
+            <span className="text-5xl mb-4 block">😵</span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+              Oh no, this sticker fell off!
+            </h2>
+            <p className="text-gray-500 text-sm sm:text-base mb-8 max-w-sm mx-auto">
+              Looks like this page peeled away. Don't worry — there are plenty more vibes where that came from.
+            </p>
+
             <Link to="/">
-              <button className="bg-white text-black px-10 py-4 rounded-2xl font-black uppercase italic tracking-widest hover:scale-105 transition-all duration-500">
-                Back to Reality
-              </button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                className="bg-black text-white px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider hover:bg-gray-800 transition-colors flex items-center gap-3 mx-auto cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Home
+              </motion.button>
             </Link>
-          </GlassContainer>
-        </main>
-        <Footer />
-      </div>
+          </motion.div>
+
+          {/* Decorative floating stickers */}
+          <motion.span
+            animate={{ y: [0, -10, 0], rotate: [0, 5, -5, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-4 -left-8 text-3xl opacity-30 select-none"
+          >
+            ⭐
+          </motion.span>
+          <motion.span
+            animate={{ y: [0, -15, 0], rotate: [0, -8, 8, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute top-10 -right-6 text-2xl opacity-25 select-none"
+          >
+            💀
+          </motion.span>
+          <motion.span
+            animate={{ y: [0, -8, 0], rotate: [0, 10, -3, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute bottom-0 left-0 text-2xl opacity-20 select-none"
+          >
+            🌴
+          </motion.span>
+        </motion.div>
+      </main>
+
+      <Footer />
     </div>
   );
 }
-
-// Simple Glass Container for NotFound since it doesn't need mouse tracking logic duplication
-const GlassContainer = ({ children, className }) => (
-  <div className={`bg-white/[0.03] backdrop-blur-[32px] border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] ${className}`}>
-    {children}
-  </div>
-);
 
 export default NotFound;
