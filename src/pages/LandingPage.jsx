@@ -13,6 +13,7 @@ import { SectionHeading } from '../components/SectionHeading'
 import { TrustBadge } from '../components/TrustBadge'
 import { ContactButtons } from '../components/ContactButtons'
 import { Footer } from '../components/Footer'
+import { PageMeta } from '../components/PageMeta'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -121,7 +122,7 @@ function HeroSection() {
 
         {/* WhatsApp tertiary CTA */}
         <motion.a
-          href="https://wa.me/917744020601"
+          href="https://wa.me/917744020601?text=Hey%20Stix%20N%20Vibes!%20%F0%9F%8E%A8%20I%E2%80%99d%20like%20to%20chat%20about%20some%20stickers!"
           target="_blank"
           rel="noopener noreferrer"
           initial={{ opacity: 0 }}
@@ -159,37 +160,37 @@ const showcaseItems = [
     title: 'Late Night Grind',
     desc: 'For coders, students, and dreamers who don\'t sleep. Tech-inspired die-cut vinyl for laptops and monitors.',
     price: 'From ₹299',
-    img: '/images/packs/laptop-pack.png',
+    img: '/images/packs/laptop-pack.webp',
   },
   {
     title: 'Cute Daily Vibes',
     desc: 'Kawaii smiley faces, hearts, and flowers. Perfect for journals, bottles, and aesthetic desk setups.',
     price: 'From ₹249',
-    img: '/images/packs/daily-vibes-pack.png',
+    img: '/images/packs/daily-vibes-pack.webp',
   },
   {
     title: 'Goa Chill Series',
     desc: 'Limited-edition drops celebrating Goan sunsets, beaches, and tropical culture. Local pride.',
     price: 'From ₹199',
-    img: '/images/packs/goa-pack.png',
+    img: '/images/packs/goa-pack.webp',
   },
   {
     title: 'Brand Essentials',
     desc: 'Custom logo stickers, packaging seals, and branded die-cuts. Built for businesses that care.',
     price: 'Custom Pricing',
-    img: '/images/packs/brand-pack.png',
+    img: '/images/packs/brand-pack.webp',
   },
   {
     title: 'College & Events',
     desc: 'High-volume festival bundles for college fests, meetups, and campus events. Bold and energetic.',
     price: 'From ₹149',
-    img: '/images/packs/event-pack.png',
+    img: '/images/packs/event-pack.webp',
   },
   {
     title: 'Street Mode',
     desc: 'Loud, bold, unapologetic. Skateboard culture, graffiti-inspired, urban statement stickers.',
     price: 'From ₹349',
-    img: '/images/packs/street-pack.png',
+    img: '/images/packs/street-pack.webp',
   },
 ]
 
@@ -217,7 +218,7 @@ function ShowcaseSection() {
               description={item.desc}
               price={item.price}
               cta="Buy Now"
-              href="https://wa.me/917744020601"
+              href={`https://wa.me/917744020601?text=${encodeURIComponent(`Hey Stix N Vibes! 🎨 I'd like to buy the "${item.title}" sticker pack!`)}`}
               delay={idx * 0.1}
             />
           ))}
@@ -394,7 +395,7 @@ function SocialProofSection() {
               initial={{ y: 25, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
               transition={{ delay: idx * 0.12, duration: 0.7, ease }}
-              className="bg-white border border-black/5 rounded-sticker p-6 sm:p-8 flex flex-col justify-between shadow-sticker hover:shadow-sticker-hover transition-all duration-500"
+              className="bg-white border border-black/5 hover:border-electricBlue/20 rounded-sticker p-6 sm:p-8 flex flex-col justify-between shadow-sticker hover:shadow-sticker-hover transition-all duration-500"
             >
               <div className="space-y-4">
                 {/* Stars */}
@@ -493,6 +494,7 @@ function FinalCTASection() {
 export default function LandingPage() {
   return (
     <div className="min-h-screen overflow-x-hidden">
+      <PageMeta description="Premium custom stickers for laptops, bottles, cafés, colleges, events, and brands. Waterproof vinyl, bold designs, fast delivery across India." />
       <HeroSection />
       <ShowcaseSection />
       <WhyVibesSection />

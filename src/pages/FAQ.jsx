@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { ChevronDown, MessageCircle, HelpCircle } from 'lucide-react'
 import { SectionHeading } from '../components/SectionHeading'
 import { ContactButtons } from '../components/ContactButtons'
 import { Footer } from '../components/Footer'
+import { PageMeta } from '../components/PageMeta'
 
 const faqData = [
   {
@@ -98,8 +99,37 @@ export default function FAQ() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-60px' })
 
+  useEffect(() => {
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqData.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    }
+
+    const script = document.createElement('script')
+    script.id = 'faq-schema-jsonld'
+    script.type = 'application/ld+json'
+    script.innerHTML = JSON.stringify(schema)
+    document.head.appendChild(script)
+
+    return () => {
+      const existingScript = document.getElementById('faq-schema-jsonld')
+      if (existingScript) {
+        existingScript.remove()
+      }
+    }
+  }, [])
+
   return (
     <div className="min-h-screen select-none">
+      <PageMeta title="FAQ" description="Frequently asked questions about Stix N Vibes sticker custom options, waterproofing, shipping times, bulk rates, B2B pricing, and materials." />
       {/* Header */}
       <section className="bg-cream pt-28 sm:pt-32 pb-8 px-6 relative z-10">
         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />

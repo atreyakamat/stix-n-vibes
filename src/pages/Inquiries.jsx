@@ -4,6 +4,8 @@ import { User, Send, Check, ChevronRight, Sparkles, MessageCircle, Package, Pale
 import { SectionHeading } from '../components/SectionHeading'
 import { ContactButtons } from '../components/ContactButtons'
 import { Footer } from '../components/Footer'
+import { PageMeta } from '../components/PageMeta'
+import { submitFormBackup } from '../lib/formBackup'
 
 const serviceOptions = [
   { id: 'packs', label: 'Sticker Packs', icon: Package, desc: 'Buy curated sticker collections' },
@@ -35,6 +37,15 @@ export default function Inquiries() {
     setIsSubmitted(true)
 
     const serviceName = serviceOptions.find(s => s.id === formData.service)?.label || 'General'
+
+    // Background backup submit
+    submitFormBackup({
+      name: formData.name,
+      email: formData.email,
+      service: serviceName,
+      message: formData.message
+    }, "General Inquiry")
+
     const text = `Hey Stix and Vibes! Inquiry:\n\nName: ${formData.name}\nEmail: ${formData.email}\nService: ${serviceName}\n\nMessage:\n${formData.message}\n\nLet's vibe! 🌴`
     window.open(`https://wa.me/917744020601?text=${encodeURIComponent(text)}`, '_blank')
   }
@@ -45,6 +56,7 @@ export default function Inquiries() {
 
   return (
     <div className="min-h-screen select-none">
+      <PageMeta title="Inquiries" description="Have a custom sticker query, bulk B2B order, or collaboration idea? Get in touch with Stix N Vibes. We'd love to vibe with you." />
       {/* Header */}
       <section className="bg-cream pt-28 sm:pt-32 pb-8 px-6 relative z-10">
         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />

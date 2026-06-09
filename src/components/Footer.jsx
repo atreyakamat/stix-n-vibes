@@ -20,7 +20,7 @@ export function Footer() {
 
   const socialLinks = [
     { label: 'Instagram', href: 'https://instagram.com/stixnvibes', icon: Camera },
-    { label: 'WhatsApp', href: 'https://wa.me/917744020601', icon: MessageCircle },
+    { label: 'WhatsApp', href: 'https://wa.me/917744020601?text=Hey%20Stix%20N%20Vibes!%20%F0%9F%8E%A8%20I%E2%80%99d%20like%20to%20order%20some%20stickers!', icon: MessageCircle },
     { label: 'Email', href: 'mailto:hello@stixnvibes.com', icon: Mail },
   ]
 

@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Settings, Layers, Droplets, Hash, CheckCircle, MessageCircle, Camera, Mail, Monitor, Zap } from 'lucide-react'
+import { Upload, Settings, Layers, Droplets, Hash, CheckCircle, MessageCircle, Camera, Mail, Monitor, Zap, User } from 'lucide-react'
 import { SectionHeading } from '../components/SectionHeading'
 import { Footer } from '../components/Footer'
+import { PageMeta } from '../components/PageMeta'
+import { submitFormBackup } from '../lib/formBackup'
 
 export default function CustomOrders() {
   const [stickerType, setStickerType] = useState('die-cut')
@@ -11,12 +13,14 @@ export default function CustomOrders() {
   const [quantity, setQuantity] = useState(100)
   const [uploadedImage, setUploadedImage] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
+  const [name, setName] = useState('')
+  const [contactInfo, setContactInfo] = useState('')
   const fileInputRef = useRef(null)
 
   const preloadedTemplates = [
-    { name: 'Laptop Pack', url: '/images/packs/laptop-pack.png' },
-    { name: 'Daily Vibes', url: '/images/packs/daily-vibes-pack.png' },
-    { name: 'Goa Series', url: '/images/packs/goa-pack.png' },
+    { name: 'Laptop Pack', url: '/images/packs/laptop-pack.webp' },
+    { name: 'Daily Vibes', url: '/images/packs/daily-vibes-pack.webp' },
+    { name: 'Goa Series', url: '/images/packs/goa-pack.webp' },
   ]
 
   const [selectedPreview, setSelectedPreview] = useState(preloadedTemplates[0].url)
@@ -51,13 +55,32 @@ export default function CustomOrders() {
 
   const handleOrderSubmit = (e) => {
     e.preventDefault()
+    if (!name || !contactInfo) return
     setIsSuccess(true)
+
+    // Compile details
+    const orderDetails = {
+      name,
+      contactInfo,
+      stickerType: stickerType === 'die-cut' ? 'Die-Cut' : 'Kiss-Cut',
+      dimensions: size === '2x2' ? '2"x2"' : size === '3x3' ? '3"x3"' : size === '4x4' ? '4"x4"' : 'Custom',
+      finish: finish.replace('-', ' ').toUpperCase(),
+      quantity: `${quantity} units`,
+      pricePerUnit: `₹${unitPrice.toFixed(2)}`,
+      totalPrice: `₹${subtotal.toLocaleString('en-IN')}`
+    }
+
+    // Background backup submit
+    submitFormBackup(orderDetails, "Custom Sticker Configurator")
+
     const text = `Hey Stix and Vibes! I'd like to Place the Vibe!\n\n` +
-      `Cut Type: ${stickerType === 'die-cut' ? 'Die-Cut' : 'Kiss-Cut'}\n` +
-      `Size: ${size === '2x2' ? '2"x2"' : size === '3x3' ? '3"x3"' : size === '4x4' ? '4"x4"' : 'Custom'}\n` +
-      `Finish: ${finish.replace('-', ' ').toUpperCase()}\n` +
-      `Quantity: ${quantity} units\n` +
-      `Unit: ₹${unitPrice.toFixed(2)} | Total: ₹${subtotal.toLocaleString('en-IN')}\n\n` +
+      `Name: ${name}\n` +
+      `Contact: ${contactInfo}\n` +
+      `Cut Type: ${orderDetails.stickerType}\n` +
+      `Size: ${orderDetails.dimensions}\n` +
+      `Finish: ${orderDetails.finish}\n` +
+      `Quantity: ${orderDetails.quantity}\n` +
+      `Unit: ${orderDetails.pricePerUnit} | Total: ${orderDetails.totalPrice}\n\n` +
       `Let's go! 🌴`
     window.open(`https://wa.me/917744020601?text=${encodeURIComponent(text)}`, '_blank')
   }
@@ -71,6 +94,7 @@ export default function CustomOrders() {
 
   return (
     <div className="min-h-screen select-none">
+      <PageMeta title="Custom Orders" description="Design and configure your own custom die-cut or kiss-cut vinyl stickers. Upload your artwork, choose sizes and finishes, and get volume discounts." />
       {/* Header */}
       <section className="bg-cream pt-28 sm:pt-32 pb-8 px-6 relative z-10">
         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
@@ -255,6 +279,38 @@ export default function CustomOrders() {
                     <span>50</span>
                     <span>100 (10% off) · 250 (20%) · 500 (35%) · 1000+ (50%)</span>
                     <span>2000</span>
+                  </div>
+                </div>
+
+                {/* Step 6: Contact Information */}
+                <div className="space-y-3 pt-4 border-t border-black/5">
+                  <div className="flex items-center gap-2 text-xs uppercase tracking-widest font-semibold text-brand-muted">
+                    <User className="w-4 h-4 text-electricBlue" />
+                    <span>6. Contact Information</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[9px] uppercase tracking-wider text-brand-muted font-semibold block">Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Your Name"
+                        className="w-full bg-cream-50 border border-black/8 p-3 rounded-xl text-sm placeholder:text-cream-500 text-brand-dark focus:outline-none focus:border-electricBlue"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[9px] uppercase tracking-wider text-brand-muted font-semibold block">Email or Phone</label>
+                      <input
+                        type="text"
+                        required
+                        value={contactInfo}
+                        onChange={(e) => setContactInfo(e.target.value)}
+                        placeholder="hello@example.com / Phone"
+                        className="w-full bg-cream-50 border border-black/8 p-3 rounded-xl text-sm placeholder:text-cream-500 text-brand-dark focus:outline-none focus:border-electricBlue"
+                      />
+                    </div>
                   </div>
                 </div>
 

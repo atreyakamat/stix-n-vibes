@@ -157,24 +157,34 @@ export function Header() {
       </AnimatePresence>
 
       {/* ─── MOBILE STICKY BOTTOM CTA BAR ─────────────────────── */}
-      <div className="mobile-sticky-cta lg:hidden">
-        <Link
-          to="/packs"
-          className="flex-1 bg-brand-dark text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-brand-charcoal transition-colors cursor-pointer"
-        >
-          <ShoppingBag className="w-3.5 h-3.5" />
-          Shop Now
-        </Link>
-        <a
-          href="https://wa.me/917744020601"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 bg-emerald-50 text-emerald-700 font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 border border-emerald-200/60 hover:bg-emerald-100 transition-colors cursor-pointer"
-        >
-          <MessageCircle className="w-3.5 h-3.5" />
-          WhatsApp
-        </a>
-      </div>
+      <AnimatePresence>
+        {scrolled && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="mobile-sticky-cta lg:hidden"
+          >
+            <Link
+              to="/packs"
+              className="flex-1 bg-brand-dark text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-brand-charcoal transition-colors cursor-pointer"
+            >
+              <ShoppingBag className="w-3.5 h-3.5" />
+              Shop Now
+            </Link>
+            <a
+              href="https://wa.me/917744020601?text=Hey%20Stix%20N%20Vibes!%20%F0%9F%8E%A8%20I%E2%80%99d%20like%20to%20order%20some%20stickers!"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-emerald-50 text-emerald-700 font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 border border-emerald-200/60 hover:bg-emerald-100 transition-colors cursor-pointer"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              WhatsApp
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

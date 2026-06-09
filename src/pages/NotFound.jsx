@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home, ArrowLeft, Star, Heart, Cloud, Zap, Smile } from 'lucide-react'
+import { PageMeta } from '../components/PageMeta'
 
 const floatingIcons = [
   { Icon: Star, color: '#C7EA46', bg: '#F0FFF4', size: 16, w: 36, top: '15%', left: '10%', delay: 0 },
@@ -14,6 +15,7 @@ const floatingIcons = [
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative bg-cream overflow-hidden px-6 select-none">
+      <PageMeta title="Page Not Found" description="The page you are looking for does not exist on Stix N Vibes. Let's head back home." />
       {/* Paper noise */}
       <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
 

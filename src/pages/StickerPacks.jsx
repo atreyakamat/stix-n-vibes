@@ -5,6 +5,7 @@ import { SectionHeading } from '../components/SectionHeading'
 import { StickerCard } from '../components/StickerCard'
 import { ContactButtons } from '../components/ContactButtons'
 import { Footer } from '../components/Footer'
+import { PageMeta } from '../components/PageMeta'
 
 const categories = ['All', 'Laptop', 'Daily', 'Goa', 'Brand', 'Event', 'Street']
 
@@ -13,7 +14,7 @@ const allPacks = [
     title: 'Late Night Grind',
     desc: 'For coders, students, and dreamers who don\'t sleep. Tech-inspired die-cut vinyl for laptops and monitors.',
     price: 'From ₹299',
-    img: '/images/packs/laptop-pack.png',
+    img: '/images/packs/laptop-pack.webp',
     category: 'Laptop',
     pieces: '10 stickers',
     size: '3" avg',
@@ -22,7 +23,7 @@ const allPacks = [
     title: 'Cute Daily Vibes',
     desc: 'Kawaii smiley faces, hearts, and flowers. Perfect for journals, bottles, and aesthetic desk setups.',
     price: 'From ₹249',
-    img: '/images/packs/daily-vibes-pack.png',
+    img: '/images/packs/daily-vibes-pack.webp',
     category: 'Daily',
     pieces: '12 stickers',
     size: '2" avg',
@@ -31,7 +32,7 @@ const allPacks = [
     title: 'Goa Chill Series',
     desc: 'Limited-edition drops celebrating Goan sunsets, beaches, and tropical culture. Local pride.',
     price: 'From ₹199',
-    img: '/images/packs/goa-pack.png',
+    img: '/images/packs/goa-pack.webp',
     category: 'Goa',
     pieces: '8 stickers',
     size: '3" avg',
@@ -40,7 +41,7 @@ const allPacks = [
     title: 'Brand Essentials',
     desc: 'Custom logo stickers, packaging seals, and branded die-cuts. Built for businesses that care.',
     price: 'Custom Pricing',
-    img: '/images/packs/brand-pack.png',
+    img: '/images/packs/brand-pack.webp',
     category: 'Brand',
     pieces: 'Custom qty',
     size: '1"-6"',
@@ -49,7 +50,7 @@ const allPacks = [
     title: 'College & Events',
     desc: 'High-volume festival bundles for college fests, meetups, and campus events. Bold and energetic.',
     price: 'From ₹149',
-    img: '/images/packs/event-pack.png',
+    img: '/images/packs/event-pack.webp',
     category: 'Event',
     pieces: '15 stickers',
     size: '2"-4"',
@@ -58,7 +59,7 @@ const allPacks = [
     title: 'Street Mode',
     desc: 'Loud, bold, unapologetic. Skateboard culture, graffiti-inspired, urban statement stickers.',
     price: 'From ₹349',
-    img: '/images/packs/street-pack.png',
+    img: '/images/packs/street-pack.webp',
     category: 'Street',
     pieces: '8 stickers',
     size: '4" avg',
@@ -67,7 +68,7 @@ const allPacks = [
     title: 'Soft Aesthetic',
     desc: 'Calm tones, clean energy. Minimalist watercolor florals, moon phases, and gentle gradients.',
     price: 'From ₹279',
-    img: '/images/packs/daily-vibes-pack.png',
+    img: '/images/packs/daily-vibes-pack.webp',
     category: 'Daily',
     pieces: '10 stickers',
     size: '2"-3"',
@@ -76,7 +77,7 @@ const allPacks = [
     title: 'Gym Beast',
     desc: 'Discipline. Hustle. Repeat. Motivational die-cut stickers for water bottles and gym gear.',
     price: 'From ₹229',
-    img: '/images/packs/street-pack.png',
+    img: '/images/packs/street-pack.webp',
     category: 'Street',
     pieces: '8 stickers',
     size: '3" avg',
@@ -92,6 +93,7 @@ export default function StickerPacks() {
 
   return (
     <div className="min-h-screen select-none">
+      <PageMeta title="Sticker Packs" description="Browse our curated collection of premium vinyl sticker packs. Themes include laptops/tech, Goa vibes, daily memes, street art, and aesthetic designs." />
       {/* Header */}
       <section className="bg-cream pt-28 sm:pt-32 pb-8 px-6 relative z-10">
         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
@@ -149,7 +151,7 @@ export default function StickerPacks() {
                     description={pack.desc}
                     price={pack.price}
                     cta="Buy Now"
-                    href="https://wa.me/917744020601"
+                    href={`https://wa.me/917744020601?text=${encodeURIComponent(`Hey Stix N Vibes! 🎨 I'd like to buy the "${pack.title}" sticker pack!`)}`}
                     delay={idx * 0.08}
                   />
                   {/* Meta badges */}

@@ -4,6 +4,8 @@ import { Coffee, Briefcase, Award, Sparkles, ShieldCheck, Truck, Check, Building
 import { SectionHeading } from '../components/SectionHeading'
 import { ContactButtons } from '../components/ContactButtons'
 import { Footer } from '../components/Footer'
+import { PageMeta } from '../components/PageMeta'
+import { submitFormBackup } from '../lib/formBackup'
 
 const collabs = [
   { title: 'Café Takeaway Stickers', desc: 'Brand your counter tables, take-away cups, and packaging boxes. Scratchproof and thermal-resistant.', icon: Coffee, tag: 'Takeaway Branding', accent: 'text-electricBlue' },
@@ -36,12 +38,22 @@ export default function ForBrands() {
     e.preventDefault()
     if (!brandName || !contactInfo) return
     setFormSubmitted(true)
+
+    // Background backup submit
+    submitFormBackup({
+      brandName,
+      category: vibeCategory,
+      quantity: bulkQty,
+      contact: contactInfo
+    }, "B2B Partnership")
+
     const text = `Hey Stix and Vibes! B2B inquiry:\n\nBrand: ${brandName}\nCategory: ${vibeCategory}\nQuantity: ${bulkQty}\nContact: ${contactInfo}\n\nLet's build! 🌴`
     window.open(`https://wa.me/917744020601?text=${encodeURIComponent(text)}`, '_blank')
   }
 
   return (
     <div className="min-h-screen select-none">
+      <PageMeta title="For Brands" description="Custom brand stickers and packaging seals for cafés, workstations, fests, and products. Get bulk discounts and premium vinyl quality." />
       {/* Header */}
       <section className="bg-cream pt-28 sm:pt-32 pb-8 px-6 relative z-10">
         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />

@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion'
 import { Terminal, Flame, Package, HeartHandshake, GraduationCap, Coffee, Gift } from 'lucide-react'
 import { SectionHeading } from '../components/SectionHeading'
 import { Footer } from '../components/Footer'
+import { PageMeta } from '../components/PageMeta'
 
 const audiences = [
   {
@@ -58,6 +59,7 @@ export default function OurStory() {
 
   return (
     <div className="min-h-screen select-none">
+      <PageMeta title="Our Story" description="The story behind Stix N Vibes — a Goa-based creative sticker studio founded by Atreya Kamat and Kritik Sawant." />
       {/* Header */}
       <section className="bg-cream pt-28 sm:pt-32 pb-12 px-6 relative z-10">
         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />

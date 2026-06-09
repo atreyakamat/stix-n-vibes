@@ -4,7 +4,7 @@ import { MessageCircle, Camera, Mail } from 'lucide-react'
 const channels = [
   {
     label: 'WhatsApp',
-    href: 'https://wa.me/917744020601',
+    href: 'https://wa.me/917744020601?text=Hey%20Stix%20N%20Vibes!%20%F0%9F%8E%A8%20I%E2%80%99d%20like%20to%20order%20some%20stickers!',
     icon: MessageCircle,
     color: 'text-emerald-600 hover:text-emerald-700',
     bgHover: 'hover:bg-emerald-50',
