@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import StickerFloatScene from '../components/StickerFloatScene'
+import PremiumHero from '../components/PremiumHero'
 import { Marquee } from '../components/MarqueeComponent'
 
 // Star rating component
@@ -176,60 +176,8 @@ function HomePage() {
         {/* Main Content */}
         <main className="flex flex-col items-center mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Hero Section with Floating Stickers */}
-          <section className="w-full mx-auto py-16 md:py-24 flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 text-center md:text-left md:pr-8">
-              <motion.h1
-                className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                Stickers That Feel <span className="text-[#e92932]">Like You</span>
-              </motion.h1>
-              <motion.p
-                className="text-lg text-gray-600 mb-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-              >
-                From emotional chaos to aesthetic peace, our stickers are made for your vibe.
-              </motion.p>
-              <motion.p
-                className="text-lg text-gray-600 mb-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                Whether you're journaling, branding your cafe, or just being ✨ extra ✨ — we've got a sticker for that.
-              </motion.p>
-              <motion.div
-                className="flex flex-wrap justify-center md:justify-start gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              >
-                <Link to="/shop">
-                  <Button color="red" className="h-12 px-8 text-base">👉 Browse Stickers</Button>
-                </Link>
-                <Link to="/collections">
-                  <Button color="white" className="h-12 px-8 text-base">👉 Explore Collections</Button>
-                </Link>
-                <Link to="/custom">
-                  <Button color="blue" className="h-12 px-8 text-base">👉 Make Your Own</Button>
-                </Link>
-              </motion.div>
-            </div>
-            <motion.div 
-              className="md:w-1/2 mt-8 md:mt-0 flex items-center justify-center"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              style={{ height: "600px" }}
-            >
-              <div className="w-full h-full relative rounded-2xl shadow-xl overflow-hidden">
-                <StickerFloatScene />
-              </div>
-            </motion.div>
+          <section className="w-full py-0">
+            <PremiumHero />
           </section>
           
           {/* Category Highlights Section */}
